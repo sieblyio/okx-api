@@ -51,6 +51,7 @@ export type OrderType =
   | 'optimal_limit_ioc'
   | 'mmp'
   | 'mmp_and_post_only'
+  /** @deprecated Use `rpi`. ELP alias accepted until 2026-10-31. */
   | 'elp'
   /** RPI maker (replaces `elp`; ELP alias accepted until 2026-10-31) */
   | 'rpi';
