@@ -8871,6 +8871,17 @@ export interface WebsocketClientOptions extends WSClientConfigurableOptions {
 export type WsEventInternalSrc = 'event' | 'function';
 
 ================
+File: src/index.ts
+================
+// Top level REST types
+⋮----
+// REST/request
+⋮----
+// REST/response
+⋮----
+//
+
+================
 File: src/types/websockets/ws-request.ts
 ================
 import type { InstrumentType } from '../rest/shared.js';
@@ -9003,6 +9014,7 @@ export type WsPublicOrderBooksChannel =
   | 'books'
   | 'books5'
   | 'bbo-tbt'
+  | 'bbo-rpi-tbt'
   | 'books-l2-tbt'
   | 'books50-l2-tpt'
   /** @deprecated Use `books-rpi`. ELP-only book; retired after 2026-10-31. */
@@ -9190,17 +9202,6 @@ export type WsChannelSubUnSubRequestArg =
   | WsPublicChannelArgStatus
   | WsPublicChannelArgLiquidationOrders
   | WsPublicChannelArgEventContractMarkets;
-
-================
-File: src/index.ts
-================
-// Top level REST types
-⋮----
-// REST/request
-⋮----
-// REST/response
-⋮----
-//
 
 ================
 File: src/types/rest/request/trade.ts
@@ -13918,7 +13919,7 @@ File: package.json
 ================
 {
   "name": "okx-api",
-  "version": "3.2.8",
+  "version": "3.2.9",
   "description": "Complete Node.js SDK for OKX's REST APIs and WebSockets, with TypeScript & end-to-end tests",
   "scripts": {
     "test": "jest",
