@@ -12,7 +12,8 @@ import { neverGuard } from './typeGuards.js';
 
 export const WS_LOGGER_CATEGORY = { category: 'okx-ws' };
 
-// Default WSS port 443. OKX disables WebSocket port 8443 on 31 Oct 2026.
+// Default WSS port 443. OKX disables public WebSocket port 8443 on 31 Oct 2026.
+// Colo connections on 8443 keep working until 16 Nov 2026 (changelog update 16 Oct 2026).
 export const WS_BASE_URL_MAP: Record<
   APIMarket,
   Record<'live' | 'demo', Record<'public' | 'private' | 'business', string>>
