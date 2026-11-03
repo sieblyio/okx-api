@@ -128,6 +128,7 @@ export type WsPublicOrderBooksChannel =
   | 'books'
   | 'books5'
   | 'bbo-tbt'
+  | 'bbo-rpi-tbt'
   | 'books-l2-tbt'
   | 'books50-l2-tpt'
   /** @deprecated Use `books-rpi`. ELP-only book; retired after 2026-10-31. */
