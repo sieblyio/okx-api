@@ -183,6 +183,8 @@ import {
   OrderIdRequest,
   OrderPrecheckRequest,
   OrderRequest,
+  SubmitEasyConvertRequest,
+  SubmitOneClickRepayRequest,
 } from './types/rest/request/trade.js';
 import {
   AccountBalance,
@@ -1156,16 +1158,7 @@ export class RestClient extends BaseRestClient {
    *
    */
   submitEasyConvert(
-    params: (
-      | { fromCcy: string[] }
-      | {
-          /** @deprecated Use fromCcy instead. */
-          fromCcys: string[];
-        }
-    ) & {
-      toCcy: string;
-      source?: string;
-    },
+    params: SubmitEasyConvertRequest,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/v5/trade/easy-convert', {
       fromCcy: 'fromCcy' in params ? params.fromCcy : params.fromCcys,
@@ -1199,15 +1192,7 @@ export class RestClient extends BaseRestClient {
    * The maximum repayment amount is based on the remaining available balance of funding and trading accounts.
    */
   submitOneClickRepay(
-    params: (
-      | { debtCcy: string[] }
-      | {
-          /** @deprecated Use debtCcy instead. */
-          debtCcys: string[];
-        }
-    ) & {
-      repayCcy: string;
-    },
+    params: SubmitOneClickRepayRequest,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/v5/trade/one-click-repay', {
       debtCcy: 'debtCcy' in params ? params.debtCcy : params.debtCcys,
