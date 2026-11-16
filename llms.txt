@@ -1458,6 +1458,183 @@ export interface GetPrivateLeadTraderRanksResult {
 }
 
 ================
+File: src/types/rest/response/private-funding.ts
+================
+import { ASSET_BILL_TYPE } from '../../../constants/funding.js';
+⋮----
+export interface FundingCurrency {
+  ccy: string; // Currency code (e.g., "BTC")
+  name: string; // Currency name
+  logoLink: string; // Currency logo URL
+  chain: string; // Chain name (e.g., "BTC-Bitcoin")
+  ctAddr: string; // Contract address
+  canDep: boolean; // Deposit availability
+  canWd: boolean; // Withdrawal availability
+  canInternal: boolean; // Internal transfer availability
+  depEstOpenTime: string; // Estimated deposit opening time (timestamp)
+  wdEstOpenTime: string; // Estimated withdrawal opening time (timestamp)
+  minDep: string; // Minimum deposit amount
+  minWd: string; // Minimum withdrawal amount
+  minInternal: string; // Minimum internal transfer amount
+  maxWd: string; // Maximum withdrawal amount per transaction
+  wdTickSz: string; // Withdrawal precision (decimal places)
+  wdQuota: string; // 24h withdrawal limit in USD
+  usedWdQuota: string; // Used withdrawal quota in USD
+  fee: string; // Fixed withdrawal fee
+  minFee: string; // Minimum withdrawal fee (deprecated)
+  maxFee: string; // Maximum withdrawal fee (deprecated)
+  minFeeForCtAddr: string; // Minimum contract address withdrawal fee (deprecated)
+  maxFeeForCtAddr: string; // Maximum contract address withdrawal fee (deprecated)
+  burningFeeRate: string; // Burning fee rate (e.g., "0.05" for 5%)
+  mainNet: boolean; // Is main network
+  needTag: boolean; // Requires tag/memo for withdrawal
+  minDepArrivalConfirm: string; // Min confirmations for deposit credit
+  minWdUnlockConfirm: string; // Min confirmations for withdrawal unlock
+  depQuotaFixed: string; // Fixed deposit limit in USD
+  usedDepQuotaFixed: string; // Used fixed deposit quota in USD
+  depQuoteDailyLayer2: string; // Layer2 daily deposit limit
+}
+⋮----
+ccy: string; // Currency code (e.g., "BTC")
+name: string; // Currency name
+logoLink: string; // Currency logo URL
+chain: string; // Chain name (e.g., "BTC-Bitcoin")
+ctAddr: string; // Contract address
+canDep: boolean; // Deposit availability
+canWd: boolean; // Withdrawal availability
+canInternal: boolean; // Internal transfer availability
+depEstOpenTime: string; // Estimated deposit opening time (timestamp)
+wdEstOpenTime: string; // Estimated withdrawal opening time (timestamp)
+minDep: string; // Minimum deposit amount
+minWd: string; // Minimum withdrawal amount
+minInternal: string; // Minimum internal transfer amount
+maxWd: string; // Maximum withdrawal amount per transaction
+wdTickSz: string; // Withdrawal precision (decimal places)
+wdQuota: string; // 24h withdrawal limit in USD
+usedWdQuota: string; // Used withdrawal quota in USD
+fee: string; // Fixed withdrawal fee
+minFee: string; // Minimum withdrawal fee (deprecated)
+maxFee: string; // Maximum withdrawal fee (deprecated)
+minFeeForCtAddr: string; // Minimum contract address withdrawal fee (deprecated)
+maxFeeForCtAddr: string; // Maximum contract address withdrawal fee (deprecated)
+burningFeeRate: string; // Burning fee rate (e.g., "0.05" for 5%)
+mainNet: boolean; // Is main network
+needTag: boolean; // Requires tag/memo for withdrawal
+minDepArrivalConfirm: string; // Min confirmations for deposit credit
+minWdUnlockConfirm: string; // Min confirmations for withdrawal unlock
+depQuotaFixed: string; // Fixed deposit limit in USD
+usedDepQuotaFixed: string; // Used fixed deposit quota in USD
+depQuoteDailyLayer2: string; // Layer2 daily deposit limit
+⋮----
+export interface FundingBalance {
+  availBal: string;
+  bal: string;
+  ccy: string;
+  frozenBal: string;
+}
+⋮----
+export interface AccountAssetValuation {
+  details: {
+    classic: string;
+    earn: string;
+    funding: string;
+    trading: string;
+  };
+  totalBal: string;
+  ts: string;
+}
+⋮----
+export interface FundTransferResult {
+  transId: string;
+  ccy: string;
+  clientId: string;
+  from: string;
+  amt: string;
+  to: string;
+}
+export interface FundTransferState {
+  amt: string;
+  ccy: string;
+  clientId: string;
+  from: string;
+  instId: never; // deprecated
+  state: string;
+  subAcct: string;
+  to: string;
+  toInstId: never; // deprecated
+  transId: string;
+  type: string;
+}
+⋮----
+instId: never; // deprecated
+⋮----
+toInstId: never; // deprecated
+⋮----
+export interface AssetBillDetails {
+  billId: string;
+  ccy: string;
+  clientId: string;
+  balChg: string;
+  bal: string;
+  type: `${ASSET_BILL_TYPE}`;
+  notes: string;
+  ts: string;
+}
+⋮----
+export interface WithdrawResponse {
+  ccy: string;
+  chain: string;
+  amt: string;
+  wdId: string;
+  clientId: string;
+}
+⋮----
+export interface NonTradableAsset {
+  ccy: string;
+  name: string;
+  logoLink: string;
+  bal: string;
+  canWd: boolean;
+  chain: string;
+  minWd: string;
+  wdAll: boolean;
+  fee: string;
+  ctAddr: string;
+  wdTickSz: string;
+  needTag: boolean;
+  burningFeeRate: string;
+  feeCcy: string;
+}
+⋮----
+export interface DepositHistory {
+  ccy: string; // Currency, e.g. BTC
+  chain: string; // Chain name
+  amt: string; // Deposit amount
+  from: string; // Deposit account. If the deposit comes from internal transfer, displays account info (phone/email, masked). Returns "" otherwise.
+  areaCodeFrom: string; // If from is a phone number, this parameter returns area code of the phone number
+  to: string; // Deposit address. If the deposit comes from on-chain, displays the on-chain address. Returns "" otherwise.
+  txId: string; // Hash record of the deposit
+  ts: string; // Timestamp that the deposit record is created, Unix timestamp format in milliseconds, e.g. 1655251200000
+  state: string; // Status of deposit: 0=waiting for confirmation, 1=deposit credited, 2=deposit successful, 8=pending due to temp suspension, 11=match blacklist, 12=account/deposit frozen, 13=sub-account deposit interception, 14=KYC limit
+  depId: string; // Deposit ID
+  fromWdId: string; // Internal transfer initiator's withdrawal ID. If deposit comes from internal transfer, displays the withdrawal ID, returns "" otherwise
+  actualDepBlkConfirm: string; // The actual amount of blockchain confirmed in a single deposit
+}
+⋮----
+ccy: string; // Currency, e.g. BTC
+chain: string; // Chain name
+amt: string; // Deposit amount
+from: string; // Deposit account. If the deposit comes from internal transfer, displays account info (phone/email, masked). Returns "" otherwise.
+areaCodeFrom: string; // If from is a phone number, this parameter returns area code of the phone number
+to: string; // Deposit address. If the deposit comes from on-chain, displays the on-chain address. Returns "" otherwise.
+txId: string; // Hash record of the deposit
+ts: string; // Timestamp that the deposit record is created, Unix timestamp format in milliseconds, e.g. 1655251200000
+state: string; // Status of deposit: 0=waiting for confirmation, 1=deposit credited, 2=deposit successful, 8=pending due to temp suspension, 11=match blacklist, 12=account/deposit frozen, 13=sub-account deposit interception, 14=KYC limit
+depId: string; // Deposit ID
+fromWdId: string; // Internal transfer initiator's withdrawal ID. If deposit comes from internal transfer, displays the withdrawal ID, returns "" otherwise
+actualDepBlkConfirm: string; // The actual amount of blockchain confirmed in a single deposit
+
+================
 File: src/types/rest/response/private-recurring-buy.ts
 ================
 export interface RecurringBuyOrderResult {
@@ -2202,7 +2379,7 @@ constructor(
     options?: WSClientConfigurableOptions &
       Partial<WSAPIClientConfigurableOptions>,
     logger?: DefaultLogger,
-)
+  )
 ⋮----
 public getWSClient(): WebsocketClient
 ⋮----
@@ -2223,7 +2400,7 @@ public setTimeOffsetMs(newOffset: number): void
    */
 submitNewOrder(
     params: WSAPIPlaceOrderRequestV5,
-): Promise<WSAPIResponse<[OrderResult], 'order'>>
+  ): Promise<WSAPIResponse<[OrderResult], 'order'>>
 ⋮----
 /**
    * Submit multiple orders in a batch
@@ -2232,7 +2409,7 @@ submitNewOrder(
    */
 submitMultipleOrders(
     params: WSAPIPlaceOrderRequestV5[],
-): Promise<WSAPIResponse<OrderResult[], 'batch-orders'>>
+  ): Promise<WSAPIResponse<OrderResult[], 'batch-orders'>>
 ⋮----
 /**
    * Cancel a single order
@@ -2241,7 +2418,7 @@ submitMultipleOrders(
    */
 cancelOrder(
     params: OrderIdRequest,
-): Promise<WSAPIResponse<[WSAPICancelOrderResultV5], 'cancel-order'>>
+  ): Promise<WSAPIResponse<[WSAPICancelOrderResultV5], 'cancel-order'>>
 ⋮----
 /**
    * Cancel multiple orders
@@ -2250,7 +2427,7 @@ cancelOrder(
    */
 cancelMultipleOrders(
     params: OrderIdRequest[],
-): Promise<WSAPIResponse<WSAPICancelOrderResultV5[], 'batch-cancel-orders'>>
+  ): Promise<WSAPIResponse<WSAPICancelOrderResultV5[], 'batch-cancel-orders'>>
 ⋮----
 /**
    * Amend a single order
@@ -2259,7 +2436,7 @@ cancelMultipleOrders(
    */
 amendOrder(
     params: WSAPIAmendOrderRequestV5,
-): Promise<WSAPIResponse<[OrderResult], 'amend-order'>>
+  ): Promise<WSAPIResponse<[OrderResult], 'amend-order'>>
 ⋮----
 /**
    * Amend multiple orders
@@ -2268,7 +2445,7 @@ amendOrder(
    */
 amendMultipleOrders(
     params: WSAPIAmendOrderRequestV5[],
-): Promise<WSAPIResponse<[OrderResult], 'batch-amend-orders'>>
+  ): Promise<WSAPIResponse<[OrderResult], 'batch-amend-orders'>>
 ⋮----
 /**
    * Mass cancel orders
@@ -2277,7 +2454,7 @@ amendMultipleOrders(
    */
 massCancelOrders(
     params: WSAPIMassCancelOrdersRequestV5,
-): Promise<WSAPIResponse<[
+  ): Promise<WSAPIResponse<[{ result: boolean }], 'mass-cancel'>>
 ⋮----
 /**
    * Submit a new spread order
@@ -2286,7 +2463,7 @@ massCancelOrders(
    */
 submitSpreadOrder(
     params: WSAPIPlaceSpreadOrderRequestV5,
-): Promise<WSAPIResponse<[WSAPISpreadPlaceOrderResultV5], 'sprd-order'>>
+  ): Promise<WSAPIResponse<[WSAPISpreadPlaceOrderResultV5], 'sprd-order'>>
 ⋮----
 /**
    * Amend a spread order
@@ -2297,12 +2474,7 @@ amendSpreadOrder(
     params: WSAPIAmendSpreadOrderRequestV5,
   ): Promise<
     WSAPIResponse<[WSAPISpreadAmendOrderResultV5], 'sprd-amend-order'>
-  > {
-    return this.wsClient.sendWSAPIRequest(
-      this.getWSClient().getMarketWsKey('business'),
-      'sprd-amend-order',
-      params,
-    );
+  >
 ⋮----
 /**
    * Cancel a spread order
@@ -2313,12 +2485,7 @@ cancelSpreadOrder(
     params: WSAPICancelSpreadOrderRequestV5,
   ): Promise<
     WSAPIResponse<[WSAPISpreadCancelOrderResultV5], 'sprd-cancel-order'>
-  > {
-    return this.wsClient.sendWSAPIRequest(
-      this.getWSClient().getMarketWsKey('business'),
-      'sprd-cancel-order',
-      params,
-    );
+  >
 ⋮----
 /**
    * Mass cancel spread orders
@@ -2327,7 +2494,7 @@ cancelSpreadOrder(
    */
 massCancelSpreadOrders(
     params: WSAPISpreadMassCancelOrdersRequestV5,
-): Promise<WSAPIResponse<[
+  ): Promise<WSAPIResponse<[{ result: boolean }], 'sprd-mass-cancel'>>
 ⋮----
 /**
    *
@@ -2452,7 +2619,7 @@ constructor(options: WSClientConfigurableOptions, logger?: DefaultLogger)
 public subscribe(
     wsEvents: WsChannelSubUnSubRequestArg[] | WsChannelSubUnSubRequestArg,
     isPrivateTopic?: boolean,
-)
+  )
 ⋮----
 // Persist topic for reconnects
 ⋮----
@@ -2468,7 +2635,7 @@ public subscribe(
 public unsubscribe(
     wsTopics: WsChannelSubUnSubRequestArg[] | WsChannelSubUnSubRequestArg,
     isPrivateTopic?: boolean,
-)
+  )
 ⋮----
 // Remove topic from persistence for reconnects
 ⋮----
@@ -2488,11 +2655,11 @@ public connectAll(): Promise<WebSocket | undefined>[]
 ⋮----
 public connectPublic(
     businessEndpoint?: boolean,
-): Promise<WebSocket | undefined>
+  ): Promise<WebSocket | undefined>
 ⋮----
 public connectPrivate(
     businessEndpoint?: boolean,
-): Promise<WebSocket | undefined>
+  ): Promise<WebSocket | undefined>
 ⋮----
 private async connect(wsKey: WsKey): Promise<WebSocket | undefined>
 ⋮----
@@ -2503,14 +2670,14 @@ private parseWsError(context: string, error: any, wsKey: WsKey)
    */
 private async getWsAuthRequest(
     wsKey: WsKey,
-): Promise<Omit<WsAuthRequest, 'id'> | undefined>
+  ): Promise<Omit<WsAuthRequest, 'id'> | undefined>
 ⋮----
 // Filter out failed accounts
 ⋮----
 private async getWsAuthSignature(
     wsKey: WsKey,
     credentials: APICredentials,
-): Promise<
+  ): Promise<{ signature: string; timestamp: string }>
 ⋮----
 // const signatureExpiresAt = timestamp + 5;
 ⋮----
@@ -2542,7 +2709,7 @@ private clearReconnectTimer(wsKey: WsKey)
 private requestSubscribeTopics(
     wsKey: WsKey,
     topics: WsChannelSubUnSubRequestArg[],
-)
+  )
 ⋮----
 /**
    * @private Use the `unsubscribe(topics)` method to unsubscribe from topics. Send WS message to unsubscribe from topics.
@@ -2550,7 +2717,7 @@ private requestSubscribeTopics(
 private requestUnsubscribeTopics(
     wsKey: WsKey,
     topics: WsChannelSubUnSubRequestArg[],
-)
+  )
 ⋮----
 public tryWsSend(wsKey: WsKey, wsMessage: string): void
 ⋮----
@@ -2561,7 +2728,7 @@ private async onWsOpen(
     wsKey: WsKey,
     url: string,
     ws: WebSocket,
-)
+  )
 ⋮----
 // Private websockets require an auth packet to be sent after opening the connection
 ⋮----
@@ -3907,183 +4074,6 @@ export interface AccruedInterestItem {
 }
 
 ================
-File: src/types/rest/response/private-funding.ts
-================
-import { ASSET_BILL_TYPE } from '../../../constants/funding.js';
-⋮----
-export interface FundingCurrency {
-  ccy: string; // Currency code (e.g., "BTC")
-  name: string; // Currency name
-  logoLink: string; // Currency logo URL
-  chain: string; // Chain name (e.g., "BTC-Bitcoin")
-  ctAddr: string; // Contract address
-  canDep: boolean; // Deposit availability
-  canWd: boolean; // Withdrawal availability
-  canInternal: boolean; // Internal transfer availability
-  depEstOpenTime: string; // Estimated deposit opening time (timestamp)
-  wdEstOpenTime: string; // Estimated withdrawal opening time (timestamp)
-  minDep: string; // Minimum deposit amount
-  minWd: string; // Minimum withdrawal amount
-  minInternal: string; // Minimum internal transfer amount
-  maxWd: string; // Maximum withdrawal amount per transaction
-  wdTickSz: string; // Withdrawal precision (decimal places)
-  wdQuota: string; // 24h withdrawal limit in USD
-  usedWdQuota: string; // Used withdrawal quota in USD
-  fee: string; // Fixed withdrawal fee
-  minFee: string; // Minimum withdrawal fee (deprecated)
-  maxFee: string; // Maximum withdrawal fee (deprecated)
-  minFeeForCtAddr: string; // Minimum contract address withdrawal fee (deprecated)
-  maxFeeForCtAddr: string; // Maximum contract address withdrawal fee (deprecated)
-  burningFeeRate: string; // Burning fee rate (e.g., "0.05" for 5%)
-  mainNet: boolean; // Is main network
-  needTag: boolean; // Requires tag/memo for withdrawal
-  minDepArrivalConfirm: string; // Min confirmations for deposit credit
-  minWdUnlockConfirm: string; // Min confirmations for withdrawal unlock
-  depQuotaFixed: string; // Fixed deposit limit in USD
-  usedDepQuotaFixed: string; // Used fixed deposit quota in USD
-  depQuoteDailyLayer2: string; // Layer2 daily deposit limit
-}
-⋮----
-ccy: string; // Currency code (e.g., "BTC")
-name: string; // Currency name
-logoLink: string; // Currency logo URL
-chain: string; // Chain name (e.g., "BTC-Bitcoin")
-ctAddr: string; // Contract address
-canDep: boolean; // Deposit availability
-canWd: boolean; // Withdrawal availability
-canInternal: boolean; // Internal transfer availability
-depEstOpenTime: string; // Estimated deposit opening time (timestamp)
-wdEstOpenTime: string; // Estimated withdrawal opening time (timestamp)
-minDep: string; // Minimum deposit amount
-minWd: string; // Minimum withdrawal amount
-minInternal: string; // Minimum internal transfer amount
-maxWd: string; // Maximum withdrawal amount per transaction
-wdTickSz: string; // Withdrawal precision (decimal places)
-wdQuota: string; // 24h withdrawal limit in USD
-usedWdQuota: string; // Used withdrawal quota in USD
-fee: string; // Fixed withdrawal fee
-minFee: string; // Minimum withdrawal fee (deprecated)
-maxFee: string; // Maximum withdrawal fee (deprecated)
-minFeeForCtAddr: string; // Minimum contract address withdrawal fee (deprecated)
-maxFeeForCtAddr: string; // Maximum contract address withdrawal fee (deprecated)
-burningFeeRate: string; // Burning fee rate (e.g., "0.05" for 5%)
-mainNet: boolean; // Is main network
-needTag: boolean; // Requires tag/memo for withdrawal
-minDepArrivalConfirm: string; // Min confirmations for deposit credit
-minWdUnlockConfirm: string; // Min confirmations for withdrawal unlock
-depQuotaFixed: string; // Fixed deposit limit in USD
-usedDepQuotaFixed: string; // Used fixed deposit quota in USD
-depQuoteDailyLayer2: string; // Layer2 daily deposit limit
-⋮----
-export interface FundingBalance {
-  availBal: string;
-  bal: string;
-  ccy: string;
-  frozenBal: string;
-}
-⋮----
-export interface AccountAssetValuation {
-  details: {
-    classic: string;
-    earn: string;
-    funding: string;
-    trading: string;
-  };
-  totalBal: string;
-  ts: string;
-}
-⋮----
-export interface FundTransferResult {
-  transId: string;
-  ccy: string;
-  clientId: string;
-  from: string;
-  amt: string;
-  to: string;
-}
-export interface FundTransferState {
-  amt: string;
-  ccy: string;
-  clientId: string;
-  from: string;
-  instId: never; // deprecated
-  state: string;
-  subAcct: string;
-  to: string;
-  toInstId: never; // deprecated
-  transId: string;
-  type: string;
-}
-⋮----
-instId: never; // deprecated
-⋮----
-toInstId: never; // deprecated
-⋮----
-export interface AssetBillDetails {
-  billId: string;
-  ccy: string;
-  clientId: string;
-  balChg: string;
-  bal: string;
-  type: `${ASSET_BILL_TYPE}`;
-  notes: string;
-  ts: string;
-}
-⋮----
-export interface WithdrawResponse {
-  ccy: string;
-  chain: string;
-  amt: string;
-  wdId: string;
-  clientId: string;
-}
-⋮----
-export interface NonTradableAsset {
-  ccy: string;
-  name: string;
-  logoLink: string;
-  bal: string;
-  canWd: boolean;
-  chain: string;
-  minWd: string;
-  wdAll: boolean;
-  fee: string;
-  ctAddr: string;
-  wdTickSz: string;
-  needTag: boolean;
-  burningFeeRate: string;
-  feeCcy: string;
-}
-⋮----
-export interface DepositHistory {
-  ccy: string; // Currency, e.g. BTC
-  chain: string; // Chain name
-  amt: string; // Deposit amount
-  from: string; // Deposit account. If the deposit comes from internal transfer, displays account info (phone/email, masked). Returns "" otherwise.
-  areaCodeFrom: string; // If from is a phone number, this parameter returns area code of the phone number
-  to: string; // Deposit address. If the deposit comes from on-chain, displays the on-chain address. Returns "" otherwise.
-  txId: string; // Hash record of the deposit
-  ts: string; // Timestamp that the deposit record is created, Unix timestamp format in milliseconds, e.g. 1655251200000
-  state: string; // Status of deposit: 0=waiting for confirmation, 1=deposit credited, 2=deposit successful, 8=pending due to temp suspension, 11=match blacklist, 12=account/deposit frozen, 13=sub-account deposit interception, 14=KYC limit
-  depId: string; // Deposit ID
-  fromWdId: string; // Internal transfer initiator's withdrawal ID. If deposit comes from internal transfer, displays the withdrawal ID, returns "" otherwise
-  actualDepBlkConfirm: string; // The actual amount of blockchain confirmed in a single deposit
-}
-⋮----
-ccy: string; // Currency, e.g. BTC
-chain: string; // Chain name
-amt: string; // Deposit amount
-from: string; // Deposit account. If the deposit comes from internal transfer, displays account info (phone/email, masked). Returns "" otherwise.
-areaCodeFrom: string; // If from is a phone number, this parameter returns area code of the phone number
-to: string; // Deposit address. If the deposit comes from on-chain, displays the on-chain address. Returns "" otherwise.
-txId: string; // Hash record of the deposit
-ts: string; // Timestamp that the deposit record is created, Unix timestamp format in milliseconds, e.g. 1655251200000
-state: string; // Status of deposit: 0=waiting for confirmation, 1=deposit credited, 2=deposit successful, 8=pending due to temp suspension, 11=match blacklist, 12=account/deposit frozen, 13=sub-account deposit interception, 14=KYC limit
-depId: string; // Deposit ID
-fromWdId: string; // Internal transfer initiator's withdrawal ID. If deposit comes from internal transfer, displays the withdrawal ID, returns "" otherwise
-actualDepBlkConfirm: string; // The actual amount of blockchain confirmed in a single deposit
-
-================
 File: src/types/rest/response/private-okusd.ts
 ================
 export interface OkusdLimitBucket {
@@ -4299,11 +4289,11 @@ public connectAll(): Promise<WSConnectedResult | undefined>[]
 ⋮----
 public connectPublic(
     businessEndpoint?: boolean,
-): Promise<WSConnectedResult | undefined>
+  ): Promise<WSConnectedResult | undefined>
 ⋮----
 public connectPrivate(
     businessEndpoint?: boolean,
-): Promise<WSConnectedResult | undefined>
+  ): Promise<WSConnectedResult | undefined>
 ⋮----
 /**
    * Ensures the WS API connection is active and ready.
@@ -4323,7 +4313,7 @@ public connectWSAPI(): Promise<unknown[]>
 public subscribe(
     wsEvents: WsChannelSubUnSubRequestArg[] | WsChannelSubUnSubRequestArg,
     isPrivateTopic?: boolean,
-): Promise<unknown>[]
+  ): Promise<unknown>[]
 ⋮----
 // Format and batch topic requests by WsKey (resolved dynamically)
 ⋮----
@@ -4337,7 +4327,7 @@ public subscribe(
 public unsubscribe(
     wsEvents: WsChannelSubUnSubRequestArg[] | WsChannelSubUnSubRequestArg,
     isPrivateTopic?: boolean,
-)
+  )
 ⋮----
 // Format and batch topic requests by WsKey (resolved dynamically)
 ⋮----
@@ -4368,7 +4358,7 @@ protected isWsPong(data: any): boolean
 protected isPrivateTopicRequest(
     _request: WsTopicRequest<string>,
     wsKey: WsKey,
-): boolean
+  ): boolean
 ⋮----
 protected getPrivateWSKeys(): WsKey[]
 ⋮----
@@ -4384,7 +4374,7 @@ protected getMaxTopicsPerSubscribeEvent(): number | null
 protected async getWsRequestEvents(
     operation: WSOperation,
     requests: WsTopicRequest<string, object>[],
-): Promise<MidflightWsRequestEvent<WsRequestOperationOKX<object>>[]>
+  ): Promise<MidflightWsRequestEvent<WsRequestOperationOKX<object>>[]>
 ⋮----
 // Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
 ⋮----
@@ -4419,19 +4409,19 @@ private async signMessage(
     secret: string,
     method: SignEncodeMethod,
     algorithm: SignAlgorithm,
-): Promise<string>
+  ): Promise<string>
 ⋮----
 protected async getWsAuthRequestEvent(
     wsKey: WsKey,
     skipIsPublicWsKeyCheck: boolean,
-): Promise<WsRequestOperationOKX<WsAuthRequestArg> | null>
+  ): Promise<WsRequestOperationOKX<WsAuthRequestArg> | null>
 ⋮----
 // Filter out failed accounts
 ⋮----
 private async getWsAuthSignature(
     wsKey: WsKey,
     credentials: APICredentials,
-): Promise<
+  ): Promise<{ signature: string; timestamp: string }>
 ⋮----
 // const signatureExpiresAt = timestamp + 5;
 ⋮----
@@ -4441,7 +4431,7 @@ private async getWsAuthSignature(
 protected resolveEmittableEvents(
     wsKey: WsKey,
     event: MessageEventLike,
-): EmittableEvent[]
+  ): EmittableEvent[]
 ⋮----
 /**
        * WS API response handling
@@ -4508,7 +4498,7 @@ async sendWSAPIRequest<
     operation: TWSOperation,
     params: TWSParams & { signRequest?: boolean },
     requestFlags?: WSAPIRequestFlags,
-): Promise<TWSAPIResponse>
+  ): Promise<TWSAPIResponse>
 ⋮----
 // If demo trading, enforce demo wskey for WS API calls
 ⋮----
@@ -4571,11 +4561,6 @@ File: .npmrc
 ================
 min-release-age=30
 save-exact=true
-
-================
-File: .nvmrc
-================
-v24.18.0
 
 ================
 File: docs/OKX_SDK_QUICKSTART_GUIDE.md
@@ -7652,6 +7637,11 @@ function generateConfig(name)
 // Code is already transpiled from TypeScript, no additional loaders needed
 
 ================
+File: .nvmrc
+================
+v24.22.3
+
+================
 File: src/types/rest/request/account.ts
 ================
 import {
@@ -7903,140 +7893,6 @@ export interface ActivateFeatureRequest {
 }
 ⋮----
 /** `1`: USDC order book trading. Call only when place order returns error 54109. */
-
-================
-File: src/types/rest/request/public.ts
-================
-export interface EconomicCalendarRequest {
-  region?: string;
-  importance?: '1' | '2' | '3';
-  before?: string;
-  after?: string;
-  limit?: string;
-}
-⋮----
-export interface UnitConvertRequest {
-  type?: '1' | '2';
-  instId: string;
-  sz: string;
-  px?: string;
-  unit?: 'coin' | 'usds';
-  opType: 'open' | 'close';
-}
-⋮----
-export interface CandleRequest {
-  instId: string;
-  after?: string;
-  before?: string;
-  bar?: string;
-  limit?: string;
-}
-⋮----
-export interface GetPremiumHistoryRequest {
-  instId: string;
-  after?: string;
-  before?: string;
-  limit?: string;
-}
-⋮----
-export interface GetContractOpenInterestHistoryRequest {
-  instId: string;
-  period?: string;
-  end?: string;
-  begin?: string;
-  limit?: string;
-}
-⋮----
-export interface GetContractTakerVolumeRequest {
-  instId: string;
-  period?: string;
-  unit?: string;
-  end?: string;
-  begin?: string;
-  limit?: string;
-}
-⋮----
-export interface GetTopTradersContractLongShortRatioRequest {
-  instId: string;
-  period?: string;
-  end?: string;
-  begin?: string;
-  limit?: string;
-}
-⋮----
-export interface GetOptionTradesRequest {
-  instId?: string;
-  instFamily?: string;
-  optType?: 'C' | 'P';
-}
-⋮----
-/**
- * @see GET /api/v5/public/market-data-history
- * Module 11: borrowing rate (T+2 typical, UTC+8 for timestamp parsing).
- * Max query range (2026-08-06): 10 days for daily, 10 months for monthly (was 20).
- */
-export interface GetHistoricalMarketDataRequest {
-  /**
-   * 1: trades, 2: 1m candles, 3: funding rate, 4: 400-level book, 5: 5000-level, 6: 50-level (use 4/5), 11: borrowing rate
-   */
-  module: string;
-  instType: 'SPOT' | 'FUTURES' | 'SWAP' | 'OPTION';
-  instIdList?: string;
-  instFamilyList?: string;
-  dateAggrType: 'daily' | 'monthly';
-  begin: string;
-  end: string;
-}
-⋮----
-/**
-   * 1: trades, 2: 1m candles, 3: funding rate, 4: 400-level book, 5: 5000-level, 6: 50-level (use 4/5), 11: borrowing rate
-   */
-⋮----
-/**
- * @see GET /api/v5/public/event-contract/series
- */
-export interface GetEventContractSeriesRequest {
-  seriesId?: string;
-}
-⋮----
-/**
- * @see GET /api/v5/public/event-contract/events
- */
-export interface GetEventContractEventsRequest {
-  seriesId: string;
-  eventId?: string;
-  state?: 'preopen' | 'live' | 'settling' | 'expired' | string;
-  limit?: string;
-  before?: string;
-  after?: string;
-}
-⋮----
-/**
- * @see GET /api/v5/public/event-contract/markets
- */
-export interface GetEventContractMarketsRequest {
-  seriesId: string;
-  eventId?: string;
-  instId?: string;
-  state?: 'preopen' | 'live' | 'settling' | 'expired' | string;
-  limit?: string;
-  before?: string;
-  after?: string;
-}
-⋮----
-export interface GetInsuranceFundRequest {
-  instType?: string;
-  type?:
-    | 'liquidation_balance_deposit'
-    | 'bankruptcy_loss'
-    | 'platform_revenue'
-    | 'adl';
-  instFamily?: string;
-  ccy?: string;
-  before?: string;
-  after?: string;
-  limit?: string;
-}
 
 ================
 File: src/types/rest/response/private-trade.ts
@@ -8477,6 +8333,166 @@ export interface CancelAllAfterResponse {
   triggerTime: string;
   tag: string;
   ts: string;
+}
+
+================
+File: src/types/rest/request/public.ts
+================
+export interface EconomicCalendarRequest {
+  region?: string;
+  importance?: '1' | '2' | '3';
+  before?: string;
+  after?: string;
+  limit?: string;
+}
+⋮----
+export interface UnitConvertRequest {
+  type?: '1' | '2';
+  instId: string;
+  sz: string;
+  px?: string;
+  unit?: 'coin' | 'usds';
+  opType: 'open' | 'close';
+}
+⋮----
+export interface CandleRequest {
+  instId: string;
+  after?: string;
+  before?: string;
+  bar?: string;
+  limit?: string;
+}
+⋮----
+export interface GetPremiumHistoryRequest {
+  instId: string;
+  after?: string;
+  before?: string;
+  limit?: string;
+}
+⋮----
+export interface GetContractOpenInterestHistoryRequest {
+  instId: string;
+  period?: string;
+  end?: string;
+  begin?: string;
+  limit?: string;
+}
+⋮----
+export interface GetContractTakerVolumeRequest {
+  instId: string;
+  period?: string;
+  unit?: string;
+  end?: string;
+  begin?: string;
+  limit?: string;
+}
+⋮----
+export interface GetTopTradersContractLongShortRatioRequest {
+  instId: string;
+  period?: string;
+  end?: string;
+  begin?: string;
+  limit?: string;
+}
+⋮----
+export interface GetOptionTradesRequest {
+  instId?: string;
+  instFamily?: string;
+  optType?: 'C' | 'P';
+}
+⋮----
+/**
+ * @see GET /api/v5/public/market-data-history
+ * Module 11: borrowing rate (T+2 typical, UTC+8 for timestamp parsing).
+ * Max query range (2026-08-06): 10 days for daily, 10 months for monthly (was 20).
+ */
+export interface GetHistoricalMarketDataRequest {
+  /**
+   * 1: trades, 2: 1m candles, 3: funding rate, 4: 400-level book, 5: 5000-level, 6: 50-level (use 4/5), 11: borrowing rate
+   */
+  module: string;
+  instType: 'SPOT' | 'FUTURES' | 'SWAP' | 'OPTION';
+  instIdList?: string;
+  instFamilyList?: string;
+  dateAggrType: 'daily' | 'monthly';
+  begin: string;
+  end: string;
+}
+⋮----
+/**
+   * 1: trades, 2: 1m candles, 3: funding rate, 4: 400-level book, 5: 5000-level, 6: 50-level (use 4/5), 11: borrowing rate
+   */
+⋮----
+/**
+ * @see GET /api/v5/public/event-contract/series
+ */
+export interface GetEventContractSeriesRequest {
+  seriesId?: string;
+}
+⋮----
+/**
+ * @see GET /api/v5/public/event-contract/events
+ */
+export interface GetEventContractEventsRequest {
+  seriesId: string;
+  eventId?: string;
+  state?: 'preopen' | 'live' | 'settling' | 'expired' | string;
+  limit?: string;
+  before?: string;
+  after?: string;
+}
+⋮----
+/**
+ * @see GET /api/v5/public/event-contract/markets
+ */
+export interface GetEventContractMarketsRequest {
+  seriesId: string;
+  eventId?: string;
+  instId?: string;
+  state?: 'preopen' | 'live' | 'settling' | 'expired' | string;
+  limit?: string;
+  before?: string;
+  after?: string;
+}
+⋮----
+/**
+ * @see GET /api/v5/public/corporate-actions
+ */
+export interface GetCorporateActionsRequest {
+  /** Underlying stock ticker. Mutually exclusive with instId. */
+  ticker?: string;
+  /** Instrument ID. Mutually exclusive with ticker. */
+  instId?: string;
+  /** Maximum 100. Default 20. */
+  limit?: string;
+  /** Return records with caEventId earlier than this value, exclusive. */
+  after?: string;
+  /** Return records with caEventId newer than this value, exclusive. */
+  before?: string;
+}
+⋮----
+/** Underlying stock ticker. Mutually exclusive with instId. */
+⋮----
+/** Instrument ID. Mutually exclusive with ticker. */
+⋮----
+/** Maximum 100. Default 20. */
+⋮----
+/** Return records with caEventId earlier than this value, exclusive. */
+⋮----
+/** Return records with caEventId newer than this value, exclusive. */
+⋮----
+export interface GetInsuranceFundRequest {
+  instType?: string;
+  type?:
+    | 'liquidation_balance_deposit'
+    | 'bankruptcy_loss'
+    | 'platform_revenue'
+    | 'adl';
+  instFamily?: string;
+  ccy?: string;
+  before?: string;
+  after?: string;
+  limit?: string;
 }
 
 ================
@@ -9597,6 +9613,31 @@ export interface OrderRequest {
 /** TP/SL / trailing (attach) when placing the parent order */
 ⋮----
 /** Quick margin type */
+⋮----
+export type SubmitEasyConvertRequest = (
+  | { fromCcy: string[] }
+  | {
+      /** @deprecated Use fromCcy instead. */
+      fromCcys: string[];
+    }
+) & {
+  toCcy: string;
+  source?: string;
+};
+⋮----
+/** @deprecated Use fromCcy instead. */
+⋮----
+export type SubmitOneClickRepayRequest = (
+  | { debtCcy: string[] }
+  | {
+      /** @deprecated Use debtCcy instead. */
+      debtCcys: string[];
+    }
+) & {
+  repayCcy: string;
+};
+⋮----
+/** @deprecated Use debtCcy instead. */
 ⋮----
 export interface GetTransactionDetailsArchiveRequest {
   year: string;
@@ -10857,6 +10898,63 @@ export interface EventContractMarket {
 ⋮----
 /** Hit direction when method is `hit`: up | dn | "". */
 ⋮----
+/**
+ * @see GET /api/v5/public/corporate-actions
+ */
+export interface CorporateAction {
+  caEventId: string;
+  eventVersion: string;
+  ticker: string;
+  bbGlobalId: string;
+  exchange: string;
+  /** CASH_DIVIDEND | STOCK_SPLIT | REVERSE_STOCK_SPLIT | STOCK_DIVIDEND | SPINOFF */
+  actionType: string;
+  /** PREDICTABLE | UNPREDICTABLE */
+  caClass: string;
+  /** PENDING | SMALL | MEDIUM | LARGE. Only applicable to cash dividends. */
+  dividendSize: string;
+  /** Only present for cash dividends. Dates are Unix timestamps in milliseconds. */
+  cashDividend?: {
+    gross: string;
+    net: string;
+    ccy: string;
+    exDate: string;
+    recordDate: string;
+    paymentDate: string;
+  };
+  /** Source ratio for stock splits. Empty string otherwise. */
+  ratioFrom: string;
+  /** Target ratio for stock splits. Empty string otherwise. */
+  ratioTo: string;
+  /** upcoming | scheduled | preparing | pre_pause | progressing | completed */
+  status: string;
+  /** Planned cutover time, Unix timestamp in milliseconds. */
+  cutoverTime: string;
+  instruments: {
+    instId: string;
+    /** live | rebase | post_only | suspend */
+    state: string;
+  }[];
+}
+⋮----
+/** CASH_DIVIDEND | STOCK_SPLIT | REVERSE_STOCK_SPLIT | STOCK_DIVIDEND | SPINOFF */
+⋮----
+/** PREDICTABLE | UNPREDICTABLE */
+⋮----
+/** PENDING | SMALL | MEDIUM | LARGE. Only applicable to cash dividends. */
+⋮----
+/** Only present for cash dividends. Dates are Unix timestamps in milliseconds. */
+⋮----
+/** Source ratio for stock splits. Empty string otherwise. */
+⋮----
+/** Target ratio for stock splits. Empty string otherwise. */
+⋮----
+/** upcoming | scheduled | preparing | pre_pause | progressing | completed */
+⋮----
+/** Planned cutover time, Unix timestamp in milliseconds. */
+⋮----
+/** live | rebase | post_only | suspend */
+⋮----
 export interface MmInstrumentType {
   instId: string;
   instType: string;
@@ -10870,2438 +10968,6 @@ export interface DeltaHedgeCurrency {
   ccy: string;
   hedgeCcy: string[];
 }
-
-================
-File: src/rest-client.ts
-================
-import { ASSET_BILL_TYPE } from './constants/funding.js';
-import {
-  ActivateFeatureRequest,
-  BillsHistoryArchiveRequest,
-  ChangePositionMarginRequest,
-  GetAccountBillSubtypesRequest,
-  GetBorrowRepayHistoryRequest,
-  GetFixedLoanBorrowingOrdersListRequest,
-  GetFixedLoanBorrowQuoteRequest,
-  GetHistoricPositionParams,
-  GetInstrumentsRequest,
-  GetMovePositionsHistoryRequest,
-  GetPositionsParams,
-  GetQuickMarginBorrowRepayHistoryRequest,
-  GetVIPInterestRequest,
-  GetVIPLoanOrderDetailRequest,
-  GetVIPLoanOrderListRequest,
-  MovePositionsRequest,
-  PositionBuilderRequest,
-  PrecheckSetDeltaNeutralRequest,
-  QuickMarginBorrowRepayRequest,
-  SetFeeTypeRequest,
-  SetLeverageRequest,
-  SetMMPConfigRequest,
-  SetSettleCurrencyRequest,
-  SetTradingConfigRequest,
-  SubmitFixedLoanBorrowingOrderRequest,
-  UpdateFixedLoanBorrowingOrderRequest,
-  WithdrawalHistoryRequest,
-} from './types/rest/request/account.js';
-import {
-  GetAffiliateCoInviterLinkListRequest,
-  GetAffiliateInviteeListRequest,
-  GetAffiliateLinkListRequest,
-  GetAffiliatePerformanceSummaryRequest,
-  GetAffiliateSubAffiliateListRequest,
-  GetInviteeDetailRequest,
-} from './types/rest/request/affiliate.js';
-import {
-  CancelBlockQuoteRequest,
-  CancelBlockRFQRequest,
-  CancelMultipleBlockQuoteRequest,
-  CancelMultipleBlockRFQRequest,
-  CreateBlockQuoteRequest,
-  CreateBlockRFQRequest,
-  ExecuteBlockQuoteRequest,
-  GetBlockQuoteParams,
-  GetBlockRFQSParams,
-  SetMmpConfigRequest,
-  SetQuoteProductsRequest,
-} from './types/rest/request/block-trading.js';
-import {
-  ConvertQuoteEstimateRequest,
-  ConvertTradeRequest,
-} from './types/rest/request/convert.js';
-import {
-  CloseSubpositionRequest,
-  CopySettingsRequest,
-  GetCopyTradersRequest,
-  GetCTBatchLeverageInfoRequest,
-  GetCTHistoryLeadTradersRequest,
-  GetCTProfitDetailsRequest,
-  GetCurrentSubpositionsRequest,
-  GetLeadTraderPositionsRequest,
-  GetLeadTraderRanksRequest,
-  GetLeadTraderStatsRequest,
-  GetPrivateLeadTraderRanksRequest,
-  GetSubpositionsHistoryRequest,
-  PlaceCTAlgoOrderRequest,
-  SetCTBatchLeverageRequest,
-} from './types/rest/request/copy-trading.js';
-import {
-  GetDcdOrderHistoryRequest,
-  GetDcdOrderStatusRequest,
-  GetDcdProductsRequest,
-  RequestDcdQuoteRequest,
-  RequestDcdRedeemQuoteRequest,
-  SubmitDcdRedeemRequest,
-  SubmitDcdTradeRequest,
-} from './types/rest/request/dual-investment.js';
-import {
-  FundingRateRequest,
-  FundsTransferRequest,
-  GetDepositHistoryRequest,
-  GetDepositWithdrawStatusRequest,
-  GetFundingRateRequest,
-  WithdrawRequest,
-} from './types/rest/request/funding.js';
-import {
-  GetGlpHistoricalPerformanceRequest,
-  GetGlpV2AssessmentDetailsRequest,
-  GetGlpV2PerformanceHistoryRequest,
-} from './types/rest/request/glp.js';
-import {
-  CloseContractGridPositionRequest,
-  GetGridAlgoOrdersRequest,
-  GetRSIBackTestingRequest,
-  GridAlgoOrderRequest,
-  GridAlgoOrderType,
-  MaxGridQuantityRequest,
-  StopGridAlgoOrderRequest,
-} from './types/rest/request/grid-trading.js';
-import {
-  RedeemOkusdRequest,
-  SubscribeOkusdRequest,
-} from './types/rest/request/okusd.js';
-import {
-  CandleRequest,
-  EconomicCalendarRequest,
-  GetContractOpenInterestHistoryRequest,
-  GetContractTakerVolumeRequest,
-  GetEventContractEventsRequest,
-  GetEventContractMarketsRequest,
-  GetEventContractSeriesRequest,
-  GetHistoricalMarketDataRequest,
-  GetInsuranceFundRequest,
-  GetOptionTradesRequest,
-  GetPremiumHistoryRequest,
-  GetTopTradersContractLongShortRatioRequest,
-  UnitConvertRequest,
-} from './types/rest/request/public.js';
-import {
-  AmendRecurringBuyOrderRequest,
-  GetRecurringBuyOrderListRequest,
-  PlaceRecurringBuyOrderRequest,
-} from './types/rest/request/recurring-buy.js';
-import { PaginatedSymbolRequest } from './types/rest/request/shared.js';
-import {
-  AdjustMarginBalanceRequest,
-  AmendTPSLRequest,
-  CancelSubOrderRequest,
-  CreateSignalBotRequest,
-  CreateSignalRequest,
-  GetSignalBotEventHistoryRequest,
-  GetSignalBotPositionHistoryRequest,
-  GetSignalBotRequest,
-  GetSignalBotSubOrdersRequest,
-  GetSignalsRequest,
-  PlaceSubOrderRequest,
-  SetSignalInstrumentsRequest,
-} from './types/rest/request/signal-bot.js';
-import {
-  GetLendingOrderListRequest,
-  GetLendingSubOrderListRequest,
-  LendingOrder,
-} from './types/rest/request/simple-earn.js';
-import {
-  GetActiveSpreadOrdersRequest,
-  GetSpreadCandlesRequest,
-  GetSpreadOrderHistoryArchiveRequest,
-  GetSpreadOrderHistoryRequest,
-  GetSpreadsRequest,
-  GetSpreadTradesRequest,
-  PlaceSpreadOrderRequest,
-  UpdateSpreadOrderRequest,
-} from './types/rest/request/spread-trading.js';
-import {
-  GetStableRewardsApyHistoryRequest,
-  GetStableRewardsBalanceRequest,
-  GetStableRewardsProductInfoRequest,
-  GetStableRewardsSubscribeRedeemHistoryRequest,
-  RequestStableRewardsQuoteRequest,
-  SubmitStableRewardsTradeRequest,
-} from './types/rest/request/stable-rewards.js';
-import {
-  GetManagedSubAccountTransferHistoryRequest,
-  GetSubAccountMaxWithdrawalsRequest,
-  SetSubAccountLoanAllocationRequest,
-  SubAccountTransferRequest,
-} from './types/rest/request/subaccount.js';
-import {
-  AlgoLongHistoryRequest,
-  AlgoOrderDetailsRequest,
-  AlgoOrderRequest,
-  AlgoRecentHistoryRequest,
-  AmendAlgoOrderRequest,
-  AmendOrderRequest,
-  CancelAlgoOrderRequest,
-  ClosePositionRequest,
-  FillsHistoryRequest,
-  OrderHistoryRequest,
-  OrderIdRequest,
-  OrderPrecheckRequest,
-  OrderRequest,
-} from './types/rest/request/trade.js';
-import {
-  AccountBalance,
-  AccountBill,
-  AccountBillTypeDefinition,
-  AccountChangeMarginResult,
-  AccountConfiguration,
-  AccountFeeRate,
-  AccountHistoryBill,
-  AccountInstrument,
-  AccountIsolatedMode,
-  AccountLeverage,
-  AccountLeverageResult,
-  AccountMaxLoan,
-  AccountMaxOrderAmount,
-  AccountMaxTradableAmount,
-  AccountModeResult,
-  AccountPosition,
-  AccountPositionModeResult,
-  AccountPositionRisk,
-  AccountRiskState,
-  AdjustLeverageInfo,
-  AutoLoanResult,
-  BorrowRepayHistoryItem,
-  FixedLoanBorrowingLimit,
-  FixedLoanBorrowQuote,
-  Greeks,
-  HistoricAccountPosition,
-  InterestAccrued,
-  InterestRate,
-  MaxWithdrawal,
-  MMPConfig,
-  MovePositionsResult,
-  PrecheckSetDeltaNeutralResult,
-  QuickMarginBorrowRepayRecord,
-  QuickMarginBorrowRepayResult,
-  SetFeeTypeResult,
-  SetMMPConfigResult,
-  SetSettleCurrencyResult,
-  SetTradingConfigResult,
-  VIPInterest,
-  VIPLoanOrder,
-  VIPLoanOrderDetail,
-} from './types/rest/response/private-account.js';
-import {
-  AffiliateCoInviterLinkListItem,
-  AffiliateInviteeListItem,
-  AffiliateLinkListItem,
-  AffiliatePerformanceSummary,
-  AffiliateSubAffiliateListItem,
-  InviteeDetail,
-} from './types/rest/response/private-affiliate.js';
-import {
-  BlockCounterParty,
-  BlockMakerInstrumentSettings,
-  BlockMMPConfig,
-  BlockRFQResult,
-  BlockTradeResult,
-  CancelBlockQuoteResult,
-  CancelBlockRFQResult,
-  CreateBlockQuoteResult,
-  CreateRFQResult,
-  ExecuteBlockQuoteResult,
-  GetBlockQuoteResult,
-  PublicBlockTrade,
-  SetMmpConfigResult,
-} from './types/rest/response/private-block-trading.js';
-import {
-  CurrentSubposition,
-  GetAccountConfigurationResult,
-  GetCopySettingsResult,
-  GetCopyTradersResult,
-  GetCopyTradingConfigResult,
-  GetCTBatchLeverageInfoResult,
-  GetCTHistoryLeadTradersResult,
-  GetCTMyLeadTradersResult,
-  GetCTProfitDetailsResult,
-  GetCTTotalProfitResult,
-  GetCTUnrealizedProfitResult,
-  GetLeadTraderRanksResult,
-  GetPrivateLeadTraderRanksResult,
-  LeadTraderCurrentPosition,
-  LeadTraderPnl,
-  LeadTraderPositionHistory,
-  LeadTraderPreference,
-  LeadTraderStats,
-  PlaceCTAlgoOrderResult,
-  SetCTBatchLeverageResult,
-  SubpositionsHistory,
-} from './types/rest/response/private-copy-trading.js';
-import {
-  DcdCurrencyPair,
-  DcdOrderHistoryItem,
-  DcdOrderStatus,
-  DcdProduct,
-  DcdQuote,
-  DcdRedeemQuote,
-  DcdRedeemResult,
-  DcdTradeResult,
-} from './types/rest/response/private-dual-investment.js';
-import {
-  AccruedInterestItem,
-  AccruedInterestRequest,
-  AdjustCollateralRequest,
-  CollateralAssetsResponse,
-  GetFlexibleLoanCollateralAssetsRequest,
-  GetLoanInfoRequest,
-  LoanHistoryItem,
-  LoanHistoryRequest,
-  LoanInfo,
-  MaxLoanRequest,
-  MaxLoanResponse,
-} from './types/rest/response/private-flexible-loan.js';
-import {
-  AccountAssetValuation,
-  AssetBillDetails,
-  DepositHistory,
-  FundingBalance,
-  FundingCurrency,
-  FundTransferResult,
-  FundTransferState,
-  NonTradableAsset,
-  WithdrawResponse,
-} from './types/rest/response/private-funding.js';
-import {
-  GlpHistoricalPerformanceItem,
-  GlpTodayPerformance,
-  GlpV2AssessmentDetails,
-  GlpV2Overview,
-  GlpV2PerformanceHistory,
-} from './types/rest/response/private-glp.js';
-import {
-  OkusdLimits,
-  OkusdRedeemResult,
-  OkusdSubscribeResult,
-} from './types/rest/response/private-okusd.js';
-import {
-  RecurringBuyOrder,
-  RecurringBuyOrderResult,
-  RecurringBuySubOrder,
-} from './types/rest/response/private-recurring-buy.js';
-import {
-  CancelSignalBotsResult,
-  CreateSignalBotResult,
-  CreateSignalResult,
-  GetSignalsResult,
-} from './types/rest/response/private-signal-bot.js';
-import {
-  CancelSpreadOrderResponse,
-  PlaceSpreadOrderResponse,
-  PublicSpreadTrade,
-  SpreadCandle,
-  SpreadDetails,
-  SpreadOrder,
-  SpreadOrderBook,
-  SpreadTicker,
-  SpreadTrade,
-  UpdateSpreadOrderResponse,
-} from './types/rest/response/private-spread-trading.js';
-import {
-  StableRewardsApyHistoryItem,
-  StableRewardsBalance,
-  StableRewardsProductInfo,
-  StableRewardsQuote,
-  StableRewardsSubscribeRedeemHistoryItem,
-  StableRewardsTradeResult,
-} from './types/rest/response/private-stable-rewards.js';
-import {
-  ManagedSubAccountTransfer,
-  SubAccount,
-  SubAccountAPIReset,
-  SubAccountBalances,
-  SubAccountMaxWithdrawal,
-  SubAccountTransferResult,
-} from './types/rest/response/private-subaccount.js';
-import {
-  AlgoOrderDetailsResult,
-  AlgoOrderListItem,
-  AlgoOrderResult,
-  AmendAlgoOrderResult,
-  AmendedOrder,
-  CancelAllAfterResponse,
-  CancelledOrderResult,
-  ClosedPositions,
-  HistoricAlgoOrder,
-  HistoricOrder,
-  OrderDetails,
-  OrderFill,
-  OrderListItem,
-  OrderResult,
-} from './types/rest/response/private-trade.js';
-import {
-  Announcement,
-  Candle,
-  CandleNoVolume,
-  DeltaHedgeCurrency,
-  EconomicCalendarData,
-  EstimatedDeliveryExercisePrice,
-  EthStakingProductInfo,
-  EventContractEvent,
-  EventContractMarket,
-  EventContractSeries,
-  FundingRateHistory,
-  IndexTicker,
-  Instrument,
-  InsuranceFund,
-  InterestRateAndLoanQuota,
-  MarketDataHistoryResult,
-  MmInstrumentType,
-  OptionTrade,
-  OptionTrades,
-  OrderBook,
-  OrderBookRpi,
-  PublicBorrowHistoryRecord,
-  PublicFundingRate,
-  SolStakingProductInfo,
-  SystemTime,
-  Ticker,
-  Trade,
-  UnitConvertData,
-} from './types/rest/response/public-data.js';
-import {
-  AccountLevel,
-  APIResponse,
-  ContractGridDirection,
-  GridAlgoSubOrderType,
-  InstrumentType,
-  MarginMode,
-  numberInString,
-  Pagination,
-  PositionSide,
-  PosMode,
-  TimestampObject,
-} from './types/rest/shared.js';
-import BaseRestClient from './util/BaseRestClient.js';
-⋮----
-export class RestClient extends BaseRestClient
-⋮----
-/**
-   *
-   * Custom SDK functions
-   *
-   */
-⋮----
-/**
-   * This method is used to get the latency and time sync between the client and the server.
-   * This is not official API endpoint and is only used for internal testing purposes.
-   * Use this method to check the latency and time sync between the client and the server.
-   * Final values might vary slightly, but it should be within few ms difference.
-   * If you have any suggestions or improvements to this measurement, please create an issue or pull request on GitHub.
-   */
-async fetchLatencySummary(): Promise<any>
-⋮----
-// Adjust server time by adding estimated one-way latency
-⋮----
-// Calculate time difference between adjusted server time and local time
-⋮----
-/**
-   *
-   * OKX misc endpoints
-   *
-   */
-⋮----
-async getServerTime(): Promise<number>
-⋮----
-/**
-   *
-   * Trading account endpoints
-   *
-   */
-⋮----
-getAccountInstruments(
-    params: GetInstrumentsRequest,
-): Promise<AccountInstrument[]>
-⋮----
-getBalance(params?:
-⋮----
-getPositions(params?: GetPositionsParams): Promise<AccountPosition[]>
-⋮----
-getPositionsHistory(
-    params?: GetHistoricPositionParams,
-): Promise<HistoricAccountPosition[]>
-⋮----
-getAccountPositionRisk(params?: {
-    instType?: Omit<'SPOT', InstrumentType>;
-}): Promise<AccountPositionRisk[]>
-⋮----
-/** Up to last 7 days */
-getBills(params?: any): Promise<AccountBill[]>
-⋮----
-/** Last 3 months */
-getBillsArchive(params?: any): Promise<AccountBill[]>
-⋮----
-/**
-   * Bill type ids and subTypes (unified account bill CSV columns reference `type` / `subType`).
-   * @see GET /api/v5/account/subtypes
-   */
-getAccountBillSubtypes(
-    params?: GetAccountBillSubtypesRequest,
-): Promise<AccountBillTypeDefinition[]>
-⋮----
-/**
-   * Apply for bill data since 1 February, 2021 except for the current quarter.
-   * Check the "Get bills details (since 2021)" endpoint in about 2 hours for the download link; in peak load it may take longer, and if still missing after 3 hours contact support.
-   * It is only applicable to the data from the unified account.
-   *
-   * This endpoint submits a request for bill data. You can then use getRequestedBillsHistoryLink to get the link to the bill data.
-   * It may take some time to generate the data.
-   */
-requestBillsHistoryDownloadLink(
-    params: BillsHistoryArchiveRequest,
-): Promise<AccountHistoryBill[]>
-⋮----
-/**
-   * This endpoint returns the link to the bill data which you can request using requestBillsHistoryDownloadLink.
-   */
-getRequestedBillsHistoryLink(
-    params: BillsHistoryArchiveRequest,
-): Promise<AccountHistoryBill[]>
-⋮----
-getAccountConfiguration(): Promise<AccountConfiguration[]>
-⋮----
-setPositionMode(params: {
-    posMode: PosMode;
-}): Promise<AccountPositionModeResult[]>
-⋮----
-setSettleCurrency(
-    params: SetSettleCurrencyRequest,
-): Promise<SetSettleCurrencyResult[]>
-⋮----
-setFeeType(params: SetFeeTypeRequest): Promise<SetFeeTypeResult[]>
-⋮----
-setLeverage(params: SetLeverageRequest): Promise<AccountLeverageResult[]>
-⋮----
-/** Max buy/sell amount or open amount */
-getMaxBuySellAmount(params: {
-    instId: string;
-    tdMode: 'cross' | 'isolated' | 'cash';
-    ccy?: string;
-    px?: string;
-    leverage?: string;
-    unSpotOffset?: boolean;
-    /** EVENTS: `yes` / `no` (required for max size when applicable). */
-    outcome?: string;
-}): Promise<AccountMaxOrderAmount[]>
-⋮----
-/** EVENTS: `yes` / `no` (required for max size when applicable). */
-⋮----
-getMaxAvailableTradableAmount(params: {
-    instId: string;
-    ccy?: string;
-    tdMode: 'cross' | 'isolated' | 'cash';
-    reduceOnly?: boolean;
-    unSpotOffset?: boolean;
-}): Promise<AccountMaxTradableAmount[]>
-⋮----
-changePositionMargin(
-    params: ChangePositionMarginRequest,
-): Promise<AccountChangeMarginResult[]>
-⋮----
-/**
-   * Move positions between accounts under the same master account (VIP6+).
-   * TradeFi positions are not supported (error 70004).
-   * @see POST /api/v5/account/move-positions — 2026-05-15 changelog
-   */
-movePositions(params: MovePositionsRequest): Promise<MovePositionsResult[]>
-⋮----
-/**
-   * Move position history for the last 3 days (VIP6+).
-   * @see GET /api/v5/account/move-positions-history
-   */
-getMovePositionsHistory(
-    params?: GetMovePositionsHistoryRequest,
-): Promise<MovePositionsResult[]>
-⋮----
-getLeverage(params: {
-    instId?: string;
-    ccy?: string;
-    mgnMode: MarginMode;
-}): Promise<AccountLeverage[]>
-⋮----
-/**
-   * @deprecated - will be removed in next major release
-   * Use getLeverage() instead
-   */
-getLeverageV2(params: {
-    instId?: string;
-    ccy?: string;
-    mgnMode: MarginMode;
-}): Promise<AccountLeverage[]>
-⋮----
-getLeverageEstimatedInfo(params: {
-    instType: string;
-    mgnMode: MarginMode;
-    lever: string;
-    instId?: string;
-    ccy?: string;
-    posSide: PositionSide;
-}): Promise<AdjustLeverageInfo[]>
-⋮----
-getMaxLoan(params: {
-    instId: string;
-    mgnMode: MarginMode;
-    mgnCcy?: string;
-    ccy?: string;
-}): Promise<AccountMaxLoan[]>
-⋮----
-getFeeRates(params: {
-    instType: InstrumentType;
-    instId?: string;
-    uly?: string;
-    instFamily?: string;
-    groupId?: string;
-    ruleType?: string;
-}): Promise<AccountFeeRate[]>
-⋮----
-getInterestAccrued(params?: {
-    type?: '1' | '2';
-    ccy?: string;
-    instId?: string;
-    mgnMode?: MarginMode;
-    after?: string;
-    before?: string;
-    limit?: string;
-}): Promise<InterestAccrued[]>
-⋮----
-getInterestRate(params?:
-⋮----
-setGreeksDisplayType(params:
-⋮----
-setIsolatedMode(params: {
-    isoMode: 'automatic' | 'autonomy';
-    type: 'MARGIN' | 'CONTRACTS';
-}): Promise<AccountIsolatedMode[]>
-⋮----
-getMaxWithdrawals(params?:
-⋮----
-getAccountRiskState(): Promise<AccountRiskState[]>
-⋮----
-setAccountCollateralAssets(params: {
-    type: 'all' | 'custom';
-    collateralEnabled: boolean;
-    ccyList?: string[];
-  }): Promise<
-    {
-      type: string;
-      ccyList: string[];
-      collateralEnabled: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/account/set-collateral-assets', params);
-⋮----
-getAccountCollateralAssets(params?: {
-    ccy?: string;
-    collateralEnabled?: boolean;
-  }): Promise<
-    {
-      ccy: string;
-      collateralEnabled: boolean;
-    }[]
-  > {
-    return this.getPrivate('/api/v5/account/collateral-assets', params);
-⋮----
-submitQuickMarginBorrowRepay(
-    params: QuickMarginBorrowRepayRequest,
-): Promise<QuickMarginBorrowRepayResult[]>
-⋮----
-getQuickMarginBorrowRepayHistory(
-    params: GetQuickMarginBorrowRepayHistoryRequest,
-): Promise<QuickMarginBorrowRepayRecord[]>
-⋮----
-borrowRepayVIPLoan(params: {
-    ccy: string;
-    side: 'borrow' | 'repay';
-    amt: numberInString;
-    ordId?: string;
-}): Promise<any[]>
-⋮----
-getVIPLoanBorrowRepayHistory(params?: any): Promise<any[]>
-⋮----
-getVIPInterestAccrued(params: GetVIPInterestRequest): Promise<VIPInterest[]>
-⋮----
-getVIPInterestDeducted(
-    params: GetVIPInterestRequest,
-): Promise<VIPInterest[]>
-⋮----
-getVIPLoanOrders(
-    params: GetVIPLoanOrderListRequest,
-): Promise<VIPLoanOrder[]>
-⋮----
-getVIPLoanOrder(
-    params: GetVIPLoanOrderDetailRequest,
-): Promise<VIPLoanOrderDetail[]>
-⋮----
-getBorrowInterestLimits(params?: {
-    type?: '1' | '2';
-    ccy?: string;
-}): Promise<any[]>
-⋮----
-getFixedLoanBorrowLimit(): Promise<FixedLoanBorrowingLimit[]>
-⋮----
-getFixedLoanBorrowQuote(
-    params: GetFixedLoanBorrowQuoteRequest,
-): Promise<FixedLoanBorrowQuote[]>
-⋮----
-submitFixedLoanBorrowOrder(
-    params: SubmitFixedLoanBorrowingOrderRequest,
-  ): Promise<
-    {
-      ordId: string;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/account/fixed-loan/borrowing-order',
-      params,
-    );
-⋮----
-updateFixedLoanBorrowOrder(
-    params: UpdateFixedLoanBorrowingOrderRequest,
-  ): Promise<
-    {
-      ordId: string;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/account/fixed-loan/amend-borrowing-order',
-      params,
-    );
-⋮----
-manualRenewFixedLoanBorrowOrder(params: {
-    ordId: string;
-    maxRate: string;
-  }): Promise<
-    {
-      ordId: string;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/account/fixed-loan/manual-reborrow',
-      params,
-    );
-⋮----
-repayFixedLoanBorrowOrder(params: { ordId: string }): Promise<
-    {
-      ordId: string;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/account/fixed-loan/repay-borrowing-order',
-      params,
-    );
-⋮----
-convertFixedLoanToMarketLoan(params: { ordId: string }): Promise<
-    {
-      ordId: string;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/account/fixed-loan/convert-to-market-loan',
-      params,
-    );
-⋮----
-reduceFixedLoanLiabilities(params: {
-    ordId: string;
-    pendingRepay: boolean;
-  }): Promise<
-    {
-      ordId: string;
-      pendingRepay: boolean;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/account/fixed-loan/reduce-liabilities',
-      params,
-    );
-⋮----
-getFixedLoanBorrowOrders(
-    params: GetFixedLoanBorrowingOrdersListRequest,
-): Promise<any[]>
-⋮----
-manualBorrowRepay(params: {
-    ccy: string;
-    side: 'borrow' | 'repay';
-    amt: string;
-  }): Promise<
-    {
-      ccy: string;
-      side: 'borrow' | 'repay';
-      amt: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/account/spot-manual-borrow-repay', params);
-⋮----
-setAutoRepay(params: { autoRepay: boolean }): Promise<
-    {
-      autoRepay: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/account/set-auto-repay', params);
-⋮----
-getBorrowRepayHistory(
-    params?: GetBorrowRepayHistoryRequest,
-): Promise<BorrowRepayHistoryItem[]>
-⋮----
-positionBuilder(params: PositionBuilderRequest): Promise<any[]>
-⋮----
-updateRiskOffsetAmount(params: {
-    ccy: string;
-    clSpotInUseAmt: string;
-  }): Promise<
-    {
-      ccy: string;
-      clSpotInUseAmt: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/account/set-riskOffset-amt', params);
-⋮----
-getGreeks(params?:
-⋮----
-getPMLimitation(params: {
-    instType: 'SWAP' | 'FUTURES' | 'OPTION';
-    uly?: string;
-    instFamily?: string;
-}): Promise<any[]>
-⋮----
-updateRiskOffsetType(params: { type: '1' | '2' | '3' | '4' }): Promise<
-    {
-      type: '1' | '2' | '3' | '4';
-    }[]
-  > {
-    return this.postPrivate('/api/v5/account/set-riskOffset-type', params);
-⋮----
-activateOption(): Promise<
-    {
-      ts: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/account/activate-option');
-⋮----
-/**
-   * Activate USDC order book trading after place order returns error 54109.
-   * Shared by the master account and its sub-accounts; one successful call is enough.
-   * Error 51773 means this activation is not supported for the account.
-   */
-activateFeature(
-    params: ActivateFeatureRequest,
-): Promise<Record<string, never>[]>
-⋮----
-setAutoLoan(params:
-⋮----
-presetAccountLevelSwitch(params: {
-    acctLv: '2' | '3' | '4';
-    lever?: string;
-    riskOffsetType?: '1' | '2' | '3' | '4';
-}): Promise<any[]>
-⋮----
-getAccountSwitchPrecheck(params: {
-    acctLv: '1' | '2' | '3' | '4';
-}): Promise<any[]>
-⋮----
-setAccountMode(params: {
-    acctLv: AccountLevel;
-}): Promise<AccountModeResult[]>
-⋮----
-resetMMPStatus(params: { instType?: 'OPTION'; instFamily: string }): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/account/mmp-reset', params);
-⋮----
-setMMPConfig(params: SetMMPConfigRequest): Promise<SetMMPConfigResult[]>
-⋮----
-getMMPConfig(params?:
-⋮----
-setTradingConfig(
-    params: SetTradingConfigRequest,
-): Promise<SetTradingConfigResult[]>
-⋮----
-precheckSetDeltaNeutral(
-    params: PrecheckSetDeltaNeutralRequest,
-): Promise<PrecheckSetDeltaNeutralResult[]>
-⋮----
-/**
-   *
-   * Orderbook trading - trade endpoints
-   *
-   */
-⋮----
-submitOrder(params: OrderRequest): Promise<OrderResult[]>
-⋮----
-submitMultipleOrders(params: OrderRequest[]): Promise<OrderResult[]>
-⋮----
-cancelOrder(params: OrderIdRequest): Promise<CancelledOrderResult[]>
-⋮----
-cancelMultipleOrders(
-    params: OrderIdRequest[],
-): Promise<CancelledOrderResult[]>
-⋮----
-amendOrder(params: AmendOrderRequest): Promise<AmendedOrder[]>
-⋮----
-amendMultipleOrders(params: AmendOrderRequest[]): Promise<AmendedOrder[]>
-⋮----
-closePositions(params: ClosePositionRequest): Promise<ClosedPositions[]>
-⋮----
-getOrderDetails(params: OrderIdRequest): Promise<OrderDetails[]>
-⋮----
-getOrderList(params?: OrderHistoryRequest): Promise<OrderListItem[]>
-⋮----
-/**
-   * Get history for last 7 days
-   */
-getOrderHistory(params: OrderHistoryRequest): Promise<HistoricOrder[]>
-⋮----
-/**
-   * Get history for last 3 months
-   */
-getOrderHistoryArchive(
-    params: OrderHistoryRequest,
-): Promise<HistoricOrder[]>
-⋮----
-/**
-   * Get history for last 7 days
-   */
-getFills(params?: FillsHistoryRequest): Promise<OrderFill[]>
-⋮----
-/**
-   * Get history for last 3 months
-   */
-getFillsHistory(params: FillsHistoryRequest): Promise<OrderFill[]>
-⋮----
-/** Get easy convert currency list */
-getEasyConvertCurrencies(params?:
-⋮----
-/**
-   *
-   * Place easy convert : Convert small currencies to mainstream currencies.
-   * Only applicable to the crypto balance less than $10.
-   *
-   * Maximum 5 currencies can be selected in one order.
-   * If there are multiple currencies, separate them with commas in the "from" field.
-   *
-   */
-submitEasyConvert(params: {
-    fromCcys: string[];
-    toCcy: string;
-    source?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/** Get easy convert history : Get the history and status of easy convert trades. */
-getEasyConvertHistory(params?: Pagination): Promise<APIResponse<any>>
-⋮----
-/**
-   *
-   * Get one-click repay currency list : Get list of debt currency data and repay currencies.
-   * Debt currencies include both cross and isolated debts.
-   */
-getOneClickRepayCurrencyList(params?: {
-    debtType?: 'cross' | 'isolated';
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Trade one-click repay to repay cross debts.
-   * Isolated debts are not applicable.
-   * The maximum repayment amount is based on the remaining available balance of funding and trading accounts.
-   */
-submitOneClickRepay(params: {
-    debtCcys: string[];
-    repayCcy: string;
-}): Promise<APIResponse<any>>
-⋮----
-/** Get the history and status of one-click repay trades. */
-getOneClickRepayHistory(params?: Pagination): Promise<APIResponse<any>>
-⋮----
-cancelMassOrder(params: {
-    instType: string;
-    instFamily: string;
-    lockInterval?: string;
-  }): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/trade/mass-cancel', params);
-⋮----
-cancelAllAfter(params: {
-    timeOut: string;
-    tag?: string;
-}): Promise<CancelAllAfterResponse[]>
-⋮----
-getAccountRateLimit(): Promise<any[]>
-⋮----
-submitOrderPrecheck(params: OrderPrecheckRequest): Promise<any[]>
-⋮----
-/**
-   *
-   * Orderbook trading - Algo trading endpoints
-   *
-   */
-⋮----
-placeAlgoOrder(params: AlgoOrderRequest): Promise<AlgoOrderResult[]>
-⋮----
-cancelAlgoOrder(
-    params: CancelAlgoOrderRequest[],
-): Promise<AlgoOrderResult[]>
-⋮----
-amendAlgoOrder(
-    params: AmendAlgoOrderRequest,
-): Promise<AmendAlgoOrderResult[]>
-⋮----
-cancelAdvanceAlgoOrder(
-    params: CancelAlgoOrderRequest[],
-): Promise<AlgoOrderResult[]>
-⋮----
-getAlgoOrderDetails(
-    params: AlgoOrderDetailsRequest,
-): Promise<AlgoOrderDetailsResult[]>
-⋮----
-getAlgoOrderList(
-    params: AlgoRecentHistoryRequest,
-): Promise<AlgoOrderListItem[]>
-⋮----
-getAlgoOrderHistory(
-    params: AlgoLongHistoryRequest,
-): Promise<HistoricAlgoOrder[]>
-⋮----
-/**
-   *
-   * Orderbook trading - Grid trading endpoints
-   *
-   */
-⋮----
-placeGridAlgoOrder(params: GridAlgoOrderRequest): Promise<any[]>
-⋮----
-amendGridAlgoOrder(params: {
-    algoId: string;
-    instId: string;
-    slTriggerPx?: string;
-    tpTriggerPx?: string;
-    tpRatio?: string;
-    slRatio?: string;
-    triggerParams?: {
-      triggerAction?: string;
-      triggerStrategy?: string;
-      triggerPx?: string;
-      stopType?: string;
-    }[];
-}): Promise<any[]>
-⋮----
-stopGridAlgoOrder(orders: StopGridAlgoOrderRequest[]): Promise<any[]>
-⋮----
-closeGridContractPosition(
-    params: CloseContractGridPositionRequest,
-): Promise<any[]>
-⋮----
-cancelGridContractCloseOrder(params: {
-    algoId: string;
-    ordId: string;
-}): Promise<any[]>
-⋮----
-instantTriggerGridAlgoOrder(params: { algoId: string }): Promise<
-    {
-      algoId: string;
-      algoClOrdId: string;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/tradingBot/grid/order-instant-trigger',
-      params,
-    );
-⋮----
-getGridAlgoOrderList(params: GetGridAlgoOrdersRequest): Promise<any[]>
-⋮----
-getGridAlgoOrderHistory(params: GetGridAlgoOrdersRequest): Promise<any[]>
-⋮----
-getGridAlgoOrderDetails(params: {
-    algoOrdType: GridAlgoOrderType;
-    algoId: string;
-}): Promise<any[]>
-⋮----
-getGridAlgoSubOrders(params: {
-    algoOrdType: GridAlgoOrderType;
-    algoId: string;
-    type: GridAlgoSubOrderType;
-    groupId?: string;
-    after?: numberInString;
-    before?: numberInString;
-    limit?: number;
-}): Promise<any[]>
-⋮----
-getGridAlgoOrderPositions(params: {
-    algoOrdType: 'contract_grid';
-    algoId: string;
-}): Promise<any[]>
-⋮----
-spotGridWithdrawIncome(params:
-⋮----
-computeGridMarginBalance(params: {
-    algoId: string;
-    type: 'add' | 'reduce';
-    amt?: numberInString;
-}): Promise<any[]>
-⋮----
-adjustGridMarginBalance(params: {
-    algoId: string;
-    type: 'add' | 'reduce';
-    amt?: numberInString;
-    percent?: numberInString;
-}): Promise<any[]>
-⋮----
-adjustGridInvestment(params: { algoId: string; amt: string }): Promise<
-    {
-      algoId: string;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/tradingBot/grid/adjust-investment',
-      params,
-    );
-⋮----
-getGridAIParameter(params: {
-    algoOrdType: GridAlgoOrderType;
-    instId: string;
-    direction: ContractGridDirection;
-    duration?: '7D' | '30D' | '180D';
-}): Promise<any[]>
-⋮----
-computeGridMinInvestment(params: {
-    amt: string;
-    ccy: string;
-}): Promise<any[]>
-⋮----
-getRSIBackTesting(params: GetRSIBackTestingRequest): Promise<
-    {
-      triggerNum: string;
-    }[]
-  > {
-    return this.get('/api/v5/tradingBot/public/rsi-back-testing', params);
-⋮----
-getMaxGridQuantity(params: MaxGridQuantityRequest): Promise<
-    {
-      maxGridQty: string;
-    }[]
-  > {
-    return this.get('/api/v5/tradingBot/grid/grid-quantity', params);
-⋮----
-/**
-   *
-   * Orderbook trading - Signal bot trading endpoints
-   *
-   */
-⋮----
-createSignal(params: CreateSignalRequest): Promise<CreateSignalResult[]>
-⋮----
-getSignals(params: GetSignalsRequest): Promise<GetSignalsResult[]>
-⋮----
-createSignalBot(
-    params: CreateSignalBotRequest,
-): Promise<CreateSignalBotResult[]>
-⋮----
-cancelSignalBots(params: {
-    algoId: string;
-}): Promise<CancelSignalBotsResult[]>
-⋮----
-updateSignalMargin(params: AdjustMarginBalanceRequest): Promise<
-    {
-      algoId: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/tradingBot/signal/margin-balance', params);
-⋮----
-updateSignalTPSL(params: AmendTPSLRequest): Promise<
-    {
-      algoId: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/tradingBot/signal/amendTPSL', params);
-⋮----
-setSignalInstruments(params: SetSignalInstrumentsRequest): Promise<
-    {
-      algoId: string;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/tradingBot/signal/set-instruments',
-      params,
-    );
-⋮----
-getSignalBotOrder(params: {
-    algoOrdType: string;
-    algoId: string;
-}): Promise<any[]>
-⋮----
-getActiveSignalBot(params: GetSignalBotRequest): Promise<any[]>
-⋮----
-getSignalBotHistory(params: GetSignalBotRequest): Promise<any[]>
-⋮----
-getSignalBotPositions(params: {
-    algoOrdType: string;
-    algoId: string;
-}): Promise<any[]>
-⋮----
-getSignalBotPositionHistory(
-    params: GetSignalBotPositionHistoryRequest,
-): Promise<any[]>
-⋮----
-closeSignalBotPosition(params: { algoId: string; instId: string }): Promise<
-    {
-      algoId: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/tradingBot/signal/close-position', params);
-⋮----
-placeSignalBotSubOrder(params: PlaceSubOrderRequest): Promise<any[]>
-⋮----
-cancelSubOrder(params: CancelSubOrderRequest): Promise<any[]>
-⋮----
-getSignalBotSubOrders(params: GetSignalBotSubOrdersRequest): Promise<any[]>
-⋮----
-getSignalBotEventHistory(
-    params: GetSignalBotEventHistoryRequest,
-): Promise<any[]>
-⋮----
-/**
-   *
-   * Orderbook trading - Recurring buy endpoints
-   *
-   */
-⋮----
-submitRecurringBuyOrder(
-    params: PlaceRecurringBuyOrderRequest,
-): Promise<RecurringBuyOrderResult[]>
-⋮----
-amendRecurringBuyOrder(
-    params: AmendRecurringBuyOrderRequest,
-): Promise<RecurringBuyOrderResult[]>
-⋮----
-stopRecurringBuyOrder(params: {
-    algoId: string;
-}): Promise<RecurringBuyOrderResult[]>
-⋮----
-getRecurringBuyOrders(
-    params: GetRecurringBuyOrderListRequest,
-): Promise<RecurringBuyOrder[]>
-⋮----
-getRecurringBuyOrderHistory(
-    params: GetRecurringBuyOrderListRequest,
-): Promise<RecurringBuyOrder[]>
-⋮----
-getRecurringBuyOrderDetails(params: {
-    algoId: string;
-}): Promise<RecurringBuyOrder[]>
-⋮----
-getRecurringBuySubOrders(
-    params: GetRecurringBuyOrderListRequest,
-): Promise<RecurringBuySubOrder[]>
-⋮----
-/**
-   *
-   * Orderbook trading - Copy trading endpoints
-   *
-   */
-⋮----
-getCopytradingSubpositions(
-    params?: GetCurrentSubpositionsRequest,
-): Promise<CurrentSubposition[]>
-⋮----
-getCopytradingSubpositionsHistory(
-    params?: GetSubpositionsHistoryRequest,
-): Promise<SubpositionsHistory[]>
-⋮----
-submitCopytradingAlgoOrder(
-    params: PlaceCTAlgoOrderRequest,
-): Promise<PlaceCTAlgoOrderResult[]>
-⋮----
-closeCopytradingSubposition(params: CloseSubpositionRequest): Promise<
-    {
-      subPosId: string;
-      tag: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/copytrading/close-subposition', params);
-⋮----
-getCopytradingInstruments(params?: { instType?: 'SPOT' | 'SWAP' }): Promise<
-    {
-      instId: string;
-      enabled: boolean;
-    }[]
-  > {
-    return this.getPrivate('/api/v5/copytrading/instruments', params);
-⋮----
-setCopytradingInstruments(params: {
-    instType?: 'SPOT' | 'SWAP';
-    instId: string;
-  }): Promise<
-    {
-      instId: string;
-      enabled: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/copytrading/set-instruments', params);
-⋮----
-getCopytradingProfitDetails(
-    params?: GetCTProfitDetailsRequest,
-): Promise<GetCTProfitDetailsResult[]>
-⋮----
-getCopytradingTotalProfit(params?: {
-    instType?: 'SPOT' | 'SWAP';
-}): Promise<GetCTTotalProfitResult[]>
-⋮----
-getCopytradingUnrealizedProfit(params?: {
-    instType?: 'SPOT' | 'SWAP';
-}): Promise<GetCTUnrealizedProfitResult[]>
-⋮----
-getCopytradingTotalUnrealizedProfit(params?: { instType?: 'SWAP' }): Promise<
-    {
-      instType?: 'SWAP';
-      instId: string;
-    }[]
-  > {
-    return this.getPrivate(
-      '/api/v5/copytrading/total-unrealized-profit-sharing',
-      params,
-    );
-⋮----
-applyCopytradingLeadTrading(params: {
-    profitSharingTs: string;
-    totalUnrealizedProfitSharingAmt: string;
-  }): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/copytrading/apply-lead-trading', params);
-⋮----
-stopCopytradingLeadTrading(params?: { instType?: 'SWAP' }): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/copytrading/stop-lead-trading', params);
-⋮----
-updateCopytradingProfitSharing(params: {
-    instType?: 'SWAP';
-    profitSharingRatio: string;
-  }): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/copytrading/amend-profit-sharing-ratio',
-      params,
-    );
-⋮----
-getCopytradingAccount(): Promise<GetAccountConfigurationResult[]>
-⋮----
-setCopytradingFirstCopy(params: CopySettingsRequest): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/copytrading/first-copy-settings', params);
-⋮----
-updateCopytradingCopySettings(params: CopySettingsRequest): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/copytrading/amend-copy-settings', params);
-⋮----
-stopCopytradingCopy(params: {
-    instType?: 'SWAP';
-    uniqueCode: string;
-    subPosCloseType: 'market_close' | 'copy_close' | 'manual_close';
-  }): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/copytrading/stop-copy-trading', params);
-⋮----
-getCopytradingCopySettings(params: {
-    instType?: 'SWAP';
-    uniqueCode: string;
-}): Promise<GetCopySettingsResult[]>
-⋮----
-getCopytradingBatchLeverageInfo(
-    params: GetCTBatchLeverageInfoRequest,
-): Promise<GetCTBatchLeverageInfoResult[]>
-⋮----
-setCopytradingBatchLeverage(
-    params: SetCTBatchLeverageRequest,
-): Promise<SetCTBatchLeverageResult[]>
-⋮----
-getCopytradingMyLeadTraders(params?: {
-    instType?: 'SWAP';
-}): Promise<GetCTMyLeadTradersResult[]>
-⋮----
-getCopytradingLeadTradersHistory(
-    params?: GetCTHistoryLeadTradersRequest,
-): Promise<GetCTHistoryLeadTradersResult[]>
-⋮----
-getCopytradingConfig(params?: {
-    instType?: 'SWAP';
-}): Promise<GetCopyTradingConfigResult[]>
-⋮----
-getCopytradingLeadRanks(
-    params?: GetLeadTraderRanksRequest,
-): Promise<GetLeadTraderRanksResult[]>
-⋮----
-getCopytradingLeadWeeklyPnl(params: {
-    instType?: 'SWAP';
-    uniqueCode: string;
-}): Promise<LeadTraderPnl[]>
-⋮----
-getCopytradingLeadDailyPnl(
-    params: GetLeadTraderStatsRequest,
-): Promise<LeadTraderPnl[]>
-⋮----
-getCopytradingLeadStats(
-    params: GetLeadTraderStatsRequest,
-): Promise<LeadTraderStats[]>
-⋮----
-getCopytradingLeadPreferences(params: {
-    instType?: 'SWAP';
-    uniqueCode: string;
-}): Promise<LeadTraderPreference[]>
-⋮----
-getCopytradingLeadOpenPositions(
-    params: GetLeadTraderPositionsRequest,
-): Promise<LeadTraderCurrentPosition[]>
-⋮----
-getCopytradingLeadPositionHistory(
-    params: GetLeadTraderPositionsRequest,
-): Promise<LeadTraderPositionHistory[]>
-⋮----
-getCopyTraders(
-    params: GetCopyTradersRequest,
-): Promise<GetCopyTradersResult[]>
-⋮----
-getCopytradingLeadPrivateRanks(
-    params?: GetPrivateLeadTraderRanksRequest,
-): Promise<GetPrivateLeadTraderRanksResult[]>
-⋮----
-getCopytradingLeadPrivateWeeklyPnl(params: {
-    instType?: 'SWAP';
-    uniqueCode: string;
-}): Promise<LeadTraderPnl[]>
-⋮----
-getCopytradingPLeadPrivateDailyPnl(
-    params: GetLeadTraderStatsRequest,
-): Promise<LeadTraderPnl[]>
-⋮----
-geCopytradingLeadPrivateStats(
-    params: GetLeadTraderStatsRequest,
-): Promise<LeadTraderStats[]>
-⋮----
-getCopytradingLeadPrivatePreferences(params: {
-    instType?: 'SWAP';
-    uniqueCode: string;
-}): Promise<LeadTraderPreference[]>
-⋮----
-getCopytradingLeadPrivateOpenPositions(
-    params: GetLeadTraderPositionsRequest,
-): Promise<LeadTraderCurrentPosition[]>
-⋮----
-getCopytradingLeadPrivatePositionHistory(
-    params: GetLeadTraderPositionsRequest,
-): Promise<LeadTraderPositionHistory[]>
-⋮----
-getCopyTradersPrivate(
-    params: GetCopyTradersRequest,
-): Promise<GetCopyTradersResult[]>
-⋮----
-/**
-   *
-   * Orderbook trading - Market data endpoints
-   *
-   */
-⋮----
-getTickers(params: {
-    instType: InstrumentType;
-    uly?: string;
-    instFamily?: string;
-}): Promise<Ticker[]>
-⋮----
-getTicker(params:
-⋮----
-getOrderBook(params: {
-    instId: string;
-    sz?: numberInString;
-}): Promise<OrderBook[]>
-⋮----
-getRpiOrderBook(params: {
-    instId: string;
-    sz?: numberInString;
-}): Promise<OrderBookRpi[]>
-⋮----
-getFullOrderBook(params: {
-    instId: string;
-    sz?: string;
-}): Promise<OrderBook[]>
-⋮----
-getCandles(params: CandleRequest): Promise<Candle[]>
-⋮----
-getHistoricCandles(params: CandleRequest): Promise<Candle[]>
-⋮----
-getTrades(params:
-⋮----
-getHistoricTrades(params: {
-    instId: string;
-    after?: numberInString;
-    before?: numberInString;
-    limit?: numberInString;
-    type?: '1' | '2';
-}): Promise<Trade[]>
-⋮----
-getOptionTradesByInstrument(params: {
-    instFamily: string;
-}): Promise<OptionTrade[]>
-⋮----
-getOptionTrades(params: GetOptionTradesRequest): Promise<OptionTrades[]>
-⋮----
-get24hrTotalVolume(): Promise<any[]>
-⋮----
-/**
-   *
-   * Block trading - REST endpoints
-   *
-   */
-⋮----
-getBlockCounterParties(): Promise<BlockCounterParty[]>
-⋮----
-createBlockRFQ(params: CreateBlockRFQRequest): Promise<CreateRFQResult[]>
-⋮----
-cancelBlockRFQ(
-    params: CancelBlockRFQRequest,
-): Promise<CancelBlockRFQResult[]>
-⋮----
-cancelMultipleBlockRFQs(
-    params: CancelMultipleBlockRFQRequest,
-): Promise<CancelBlockRFQResult[]>
-⋮----
-cancelAllRFQs(): Promise<TimestampObject[]>
-⋮----
-executeBlockQuote(
-    params: ExecuteBlockQuoteRequest,
-): Promise<ExecuteBlockQuoteResult[]>
-⋮----
-getQuoteProducts(): Promise<BlockMakerInstrumentSettings[]>
-⋮----
-updateBlockQuoteProducts(params: SetQuoteProductsRequest): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/rfq/maker-instrument-settings', params);
-⋮----
-resetBlockMmp(): Promise<
-    {
-      ts: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/rfq/mmp-reset');
-⋮----
-updateBlockMmpConfig(
-    params: SetMmpConfigRequest,
-): Promise<SetMmpConfigResult[]>
-⋮----
-getBlockMmpConfig(): Promise<BlockMMPConfig[]>
-⋮----
-createBlockQuote(
-    params: CreateBlockQuoteRequest,
-): Promise<CreateBlockQuoteResult[]>
-⋮----
-cancelBlockQuote(
-    params: CancelBlockQuoteRequest,
-): Promise<CancelBlockQuoteResult[]>
-⋮----
-cancelMultipleBlockQuotes(
-    params: CancelMultipleBlockQuoteRequest,
-): Promise<CancelBlockQuoteResult[]>
-⋮----
-cancelAllBlockQuotes(): Promise<TimestampObject[]>
-⋮----
-cancelAllBlockAfter(params: { timeOut: string }): Promise<
-    {
-      triggerTime: string;
-      ts: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/rfq/cancel-all-after', params);
-⋮----
-getBlockRFQs(params?: GetBlockRFQSParams): Promise<BlockRFQResult[]>
-⋮----
-getBlockQuotes(params?: GetBlockQuoteParams): Promise<GetBlockQuoteResult[]>
-⋮----
-getBlockTrades(params?: any): Promise<BlockTradeResult[]>
-⋮----
-getPublicRFQBlockTrades(params?: any): Promise<PublicBlockTrade[]>
-⋮----
-getBlockTickers(params: {
-    instType: InstrumentType;
-    uly?: string;
-}): Promise<any[]>
-⋮----
-getBlockTicker(params:
-⋮----
-getBlockPublicTrades(params: {
-    instId: string;
-}): Promise<PublicBlockTrade[]>
-⋮----
-/**
-   *
-   * Spread trading - REST endpoints
-   *
-   */
-⋮----
-submitSpreadOrder(
-    params: PlaceSpreadOrderRequest,
-): Promise<PlaceSpreadOrderResponse[]>
-⋮----
-cancelSpreadOrder(params?: {
-    ordId?: string;
-    clOrdId?: string;
-}): Promise<CancelSpreadOrderResponse[]>
-⋮----
-cancelAllSpreadOrders(params?: { sprdId?: string }): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/sprd/mass-cancel', params);
-⋮----
-updateSpreadOrder(
-    params: UpdateSpreadOrderRequest,
-): Promise<UpdateSpreadOrderResponse[]>
-⋮----
-getSpreadOrder(params: {
-    ordId?: string;
-    clOrdId?: string;
-}): Promise<SpreadOrder[]>
-⋮----
-getSpreadActiveOrders(
-    params?: GetActiveSpreadOrdersRequest,
-): Promise<SpreadOrder[]>
-⋮----
-getSpreadOrdersRecent(
-    params?: GetSpreadOrderHistoryRequest,
-): Promise<SpreadOrder[]>
-⋮----
-getSpreadOrdersArchive(
-    params?: GetSpreadOrderHistoryArchiveRequest,
-): Promise<SpreadOrder[]>
-⋮----
-getSpreadTrades(params?: GetSpreadTradesRequest): Promise<SpreadTrade[]>
-⋮----
-getSpreads(params?: GetSpreadsRequest): Promise<SpreadDetails[]>
-⋮----
-getSpreadOrderBook(params: {
-    sprdId: string;
-    sz?: string;
-}): Promise<SpreadOrderBook[]>
-⋮----
-getSpreadTicker(params:
-⋮----
-getSpreadPublicTrades(params?: {
-    sprdId?: string;
-}): Promise<PublicSpreadTrade[]>
-⋮----
-getSpreadCandles(params: GetSpreadCandlesRequest): Promise<SpreadCandle[]>
-⋮----
-getSpreadHistoryCandles(
-    params: GetSpreadCandlesRequest,
-): Promise<SpreadCandle[]>
-⋮----
-cancelSpreadAllAfter(params: { timeOut: string }): Promise<
-    {
-      triggerTime: string;
-      ts: string;
-    }[]
-  > {
-    return this.postPrivate('/api/v5/sprd/cancel-all-after', params);
-⋮----
-/**
-   *
-   * Public data - rest endpoints
-   *
-   */
-⋮----
-getInstruments(params: GetInstrumentsRequest): Promise<Instrument[]>
-⋮----
-/**
-   * Prediction / event contract series. Public (no auth required since 2026-05-19).
-   * @see GET /api/v5/public/event-contract/series
-   */
-getEventContractSeries(
-    params?: GetEventContractSeriesRequest,
-): Promise<EventContractSeries[]>
-⋮----
-/**
-   * Events for a series. Public (no auth required since 2026-05-19).
-   * @see GET /api/v5/public/event-contract/events
-   */
-getEventContractEvents(
-    params: GetEventContractEventsRequest,
-): Promise<EventContractEvent[]>
-⋮----
-/**
-   * Markets for events. Public (no auth required since 2026-05-19).
-   * @see GET /api/v5/public/event-contract/markets
-   */
-getEventContractMarkets(
-    params: GetEventContractMarketsRequest,
-): Promise<EventContractMarket[]>
-⋮----
-getDeliveryExerciseHistory(params: any): Promise<any[]>
-⋮----
-getOpenInterest(params: any): Promise<any[]>
-⋮----
-getFundingRate(params: GetFundingRateRequest): Promise<PublicFundingRate[]>
-⋮----
-getFundingRateHistory(
-    params: FundingRateRequest,
-): Promise<FundingRateHistory[]>
-⋮----
-getMinMaxLimitPrice(params: any): Promise<any[]>
-⋮----
-getOptionMarketData(params: any): Promise<any[]>
-⋮----
-/**
-   * Estimated delivery or exercise price (FUTURES / OPTION / EVENTS; REST returns one row with `settlePx`).
-   * The value is only meaningful shortly before delivery/exercise. The window used for the index mean is 30 minutes (since 2026-03-18; 200ms sampling).
-   */
-getEstimatedDeliveryExercisePrice(params: {
-    instId: string;
-}): Promise<EstimatedDeliveryExercisePrice[]>
-⋮----
-getDiscountRateAndInterestFreeQuota(params: any): Promise<any[]>
-⋮----
-getSystemTime(params: any): Promise<SystemTime[]>
-⋮----
-getHistoricalMarketData(
-    params: GetHistoricalMarketDataRequest,
-): Promise<MarketDataHistoryResult[]>
-⋮----
-getMarkPrice(params: any): Promise<any[]>
-⋮----
-getPositionTiers(params: any): Promise<any[]>
-⋮----
-getInterestRateAndLoanQuota(): Promise<InterestRateAndLoanQuota[]>
-⋮----
-getVIPInterestRateAndLoanQuota(params: any): Promise<any[]>
-⋮----
-getUnderlying(params: any): Promise<any[]>
-⋮----
-getInsuranceFund(params?: GetInsuranceFundRequest): Promise<InsuranceFund[]>
-⋮----
-getMmInstrumentTypes(params?: {
-    instType?: 'SPOT' | 'SWAP';
-    instId?: string;
-}): Promise<MmInstrumentType[]>
-⋮----
-getDeltaHedgeCurrencies(params?: {
-    ccy?: string;
-}): Promise<DeltaHedgeCurrency[]>
-⋮----
-getUnitConvert(params: UnitConvertRequest): Promise<UnitConvertData[]>
-⋮----
-getOptionTickBands(params: {
-    instType: string;
-    instFamily?: string;
-}): Promise<any[]>
-⋮----
-getPremiumHistory(params: GetPremiumHistoryRequest): Promise<any[]>
-⋮----
-getIndexTickers(params?: {
-    quoteCcy?: string;
-    instId?: string;
-}): Promise<IndexTicker[]>
-⋮----
-getIndexCandles(params: CandleRequest): Promise<CandleNoVolume[]>
-⋮----
-getHistoricIndexCandles(params: CandleRequest): Promise<CandleNoVolume[]>
-⋮----
-getMarkPriceCandles(params: CandleRequest): Promise<CandleNoVolume[]>
-⋮----
-getHistoricMarkPriceCandles(
-    params: CandleRequest,
-): Promise<CandleNoVolume[]>
-⋮----
-getOracle(): Promise<any[]>
-⋮----
-getExchangeRate(): Promise<any[]>
-⋮----
-getIndexComponents(params:
-⋮----
-getEconomicCalendar(
-    params: EconomicCalendarRequest,
-): Promise<EconomicCalendarData[]>
-⋮----
-getPublicBlockTrades(params:
-⋮----
-/**
-   *
-   * Trading statistics - REST endpoints
-   *
-   */
-⋮----
-getSupportCoin(): Promise<any[]>
-⋮----
-getOpenInterestHistory(
-    params: GetContractOpenInterestHistoryRequest,
-): Promise<any[]>
-⋮----
-getTakerVolume(params: {
-    instType: string;
-    ccy: string;
-    period?: string;
-    end?: string;
-    begin?: string;
-}): Promise<any[]>
-⋮----
-getContractTakerVolume(
-    params: GetContractTakerVolumeRequest,
-): Promise<any[]>
-⋮----
-getMarginLendingRatio(params: {
-    ccy: string;
-    begin?: numberInString;
-    end?: numberInString;
-    period: '5m' | '1H' | '1D';
-}): Promise<any[]>
-⋮----
-getTopTradersAccountRatio(
-    params: GetTopTradersContractLongShortRatioRequest,
-): Promise<any[]>
-⋮----
-getTopTradersContractPositionRatio(
-    params: GetTopTradersContractLongShortRatioRequest,
-): Promise<any[]>
-⋮----
-getLongShortContractRatio(
-    params: GetTopTradersContractLongShortRatioRequest,
-): Promise<any[]>
-⋮----
-getLongShortRatio(params: {
-    ccy: string;
-    begin?: numberInString;
-    end?: numberInString;
-    period: '5m' | '1H' | '1D';
-}): Promise<any[]>
-⋮----
-getContractsOpenInterestAndVolume(params: {
-    ccy: string;
-    begin?: numberInString;
-    end?: numberInString;
-    period: '5m' | '1H' | '1D';
-}): Promise<any[]>
-⋮----
-getOptionsOpenInterestAndVolume(params: {
-    ccy: string;
-    period: '8H' | '1D';
-}): Promise<any[]>
-⋮----
-getPutCallRatio(params: {
-    ccy: string;
-    period: '8H' | '1D';
-}): Promise<any[]>
-⋮----
-getOpenInterestAndVolumeExpiry(params: {
-    ccy: string;
-    period: '8H' | '1D';
-}): Promise<any[]>
-⋮----
-getOpenInterestAndVolumeStrike(params: {
-    ccy: string;
-    expTime: string;
-    period?: '8H' | '1D';
-}): Promise<any[]>
-⋮----
-getTakerFlow(params:
-⋮----
-/**
-   *
-   * Funding account - REST endpoints
-   *
-   */
-⋮----
-getCurrencies(params?:
-⋮----
-getBalances(params?:
-⋮----
-getNonTradableAssets(params?:
-⋮----
-getAccountAssetValuation(params?: {
-    ccy?: string;
-}): Promise<AccountAssetValuation[]>
-⋮----
-fundsTransfer(params: FundsTransferRequest): Promise<FundTransferResult[]>
-⋮----
-/** Either parameter transId or clientId is required. */
-getFundsTransferState(params?: {
-    transId?: string;
-    clientId?: string;
-    type?: '0' | '1' | '2';
-}): Promise<FundTransferState[]>
-⋮----
-/**
-   * Query the billing record in the past month.
-   */
-getAssetBillsDetails(params?: {
-    ccy?: string;
-    type?: `${ASSET_BILL_TYPE}`;
-    clientId?: string;
-    /** Third-party custody type. Defaults to 1 (Copper) if not specified. */
-    thirdPartyType?: '1' | '2' | '5' | '6';
-    after?: numberInString;
-    before?: numberInString;
-    limit?: numberInString;
-}): Promise<AssetBillDetails[]>
-⋮----
-/** Third-party custody type. Defaults to 1 (Copper) if not specified. */
-⋮----
-/**
-   * Query the billing records of all time since 1 February, 2021.
-   *
-   *  ⚠️ IMPORTANT: Data updates occur every 30 seconds. Update frequency may vary based on data volume - please be aware of potential delays during high-traffic periods.
-   *
-   * Rate Limit: 1 Requests per second
-   * @param params
-   * @returns
-   */
-getAssetBillsHistoric(params?: {
-    ccy?: string;
-    type?: `${ASSET_BILL_TYPE}`;
-    clientId?: string;
-    /** Third-party custody type. Defaults to 1 (Copper) if not specified. @see 2026-06-05 changelog */
-    thirdPartyType?: '1' | '2' | '5' | '6';
-    after?: numberInString;
-    before?: numberInString;
-    limit?: numberInString;
-    pagingType?: '0' | '1';
-}): Promise<AssetBillDetails[]>
-⋮----
-/** Third-party custody type. Defaults to 1 (Copper) if not specified. @see 2026-06-05 changelog */
-⋮----
-getLightningDeposits(params: {
-    ccy: string;
-    amt: numberInString;
-    to?: '6' | '18';
-}): Promise<any[]>
-⋮----
-getDepositAddress(params:
-⋮----
-getDepositHistory(
-    params?: GetDepositHistoryRequest,
-): Promise<DepositHistory[]>
-⋮----
-submitWithdraw(params: WithdrawRequest): Promise<WithdrawResponse[]>
-⋮----
-submitWithdrawLightning(params: {
-    ccy: string;
-    invoice: string;
-    memo?: string;
-}): Promise<any[]>
-⋮----
-cancelWithdrawal(params:
-⋮----
-getWithdrawalHistory(params?: WithdrawalHistoryRequest): Promise<any[]>
-⋮----
-getDepositWithdrawStatus(
-    params: GetDepositWithdrawStatusRequest,
-): Promise<any[]>
-⋮----
-getExchanges(): Promise<any[]>
-⋮----
-applyForMonthlyStatement(params?:
-⋮----
-getMonthlyStatement(params:
-⋮----
-getConvertCurrencies(): Promise<any[]>
-⋮----
-getConvertCurrencyPair(params: {
-    fromCcy: string;
-    toCcy: string;
-    /** 0: standard convert (default), 1: large order convert for VIP */
-    convertMode?: '0' | '1';
-}): Promise<any[]>
-⋮----
-/** 0: standard convert (default), 1: large order convert for VIP */
-⋮----
-estimateConvertQuote(params: ConvertQuoteEstimateRequest): Promise<any[]>
-⋮----
-convertTrade(params: ConvertTradeRequest): Promise<any[]>
-⋮----
-getConvertHistory(params?: any): Promise<any[]>
-⋮----
-/**
-   *
-   * Subaccount - REST endpoints
-   *
-   */
-⋮----
-/** View sub-account list */
-getSubAccountList(params?: any): Promise<SubAccount[]>
-⋮----
-resetSubAccountAPIKey(params: {
-    subAcct: string;
-    apiKey: string;
-    label?: string;
-    perm?: string;
-    ip?: string;
-}): Promise<SubAccountAPIReset[]>
-⋮----
-getSubAccountBalances(params: {
-    subAcct: string;
-}): Promise<SubAccountBalances[]>
-⋮----
-getSubAccountFundingBalances(params: {
-    subAcct: string;
-    ccy?: string;
-}): Promise<FundingBalance[]>
-⋮----
-getSubAccountMaxWithdrawal(
-    params: GetSubAccountMaxWithdrawalsRequest,
-): Promise<SubAccountMaxWithdrawal[]>
-⋮----
-/** History of sub-account transfer */
-getSubAccountTransferHistory(params?: {
-    ccy?: string;
-    type?: '0' | '1';
-    subAcct?: string;
-    after?: string;
-    before?: string;
-    limit?: string;
-}): Promise<any[]>
-⋮----
-getManagedSubAccountTransferHistory(
-    params: GetManagedSubAccountTransferHistoryRequest,
-): Promise<ManagedSubAccountTransfer[]>
-⋮----
-/** Master accounts manage the transfers between sub-accounts */
-transferSubAccountBalance(
-    params: SubAccountTransferRequest,
-): Promise<SubAccountTransferResult[]>
-⋮----
-setSubAccountTransferOutPermission(params: {
-    subAcct: string;
-    canTransOut: boolean;
-}): Promise<any[]>
-⋮----
-getSubAccountCustodyTradingList(params?: {
-    subAcct?: string;
-}): Promise<any[]>
-⋮----
-setSubAccountLoanAllocation(
-    params: SetSubAccountLoanAllocationRequest,
-  ): Promise<
-    {
-      result: boolean;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/account/subaccount/set-loan-allocation',
-      params,
-    );
-⋮----
-getSubAccountBorrowInterestAndLimit(params: {
-    subAcct: string;
-    ccy?: string;
-}): Promise<any[]>
-⋮----
-/**
-   *
-   * Financial product - on chain earn endpoints
-   *
-   */
-⋮----
-/** Get earn offers */
-getStakingOffers(params?: {
-    productId?: string;
-    protocolType?: 'staking' | 'defi';
-    ccy?: string;
-}): Promise<any[]>
-⋮----
-submitStake(params: {
-    productId: string;
-    investData: {
-      ccy: string;
-      amt: string;
-    }[];
-    term?: string;
-}): Promise<any[]>
-⋮----
-redeemStake(params: {
-    ordId: string;
-    protocolType: 'staking' | 'defi';
-    allowEarlyRedeem?: boolean;
-}): Promise<any[]>
-⋮----
-cancelStakingRequest(params: {
-    ordId: string;
-    protocolType: 'staking' | 'defi';
-}): Promise<any[]>
-⋮----
-/** Earn/staking get active orders */
-getActiveStakingOrders(params?: {
-    productId?: string;
-    protocolType?: 'staking' | 'defi';
-    ccy?: string;
-    state?: '8' | '13' | '9' | '1' | '2';
-}): Promise<any[]>
-⋮----
-/** Earn/staking get order history */
-getStakingOrderHistory(params?: {
-    productId?: string;
-    protocolType?: string;
-    ccy?: string;
-    after?: string;
-    before?: string;
-    limit?: string;
-}): Promise<any[]>
-⋮----
-/**
-   *
-   * Financial product - ETH staking endpoints
-   *
-   */
-⋮----
-getETHStakingProductInfo(): Promise<EthStakingProductInfo[]>
-⋮----
-getSOLStakingProductInfo(): Promise<SolStakingProductInfo>
-⋮----
-purchaseETHStaking(params:
-⋮----
-redeemETHStaking(params:
-⋮----
-getETHStakingBalance(): Promise<any[]>
-⋮----
-getETHStakingHistory(params: {
-    type?: 'purchase' | 'redeem';
-    status?: 'pending' | 'success' | 'failed' | 'cancelled';
-    after?: string;
-    before?: string;
-    limit?: string;
-}): Promise<any[]>
-⋮----
-cancelRedeemETHStaking(params: { ordId: string }): Promise<
-    {
-      ordId: string;
-    }[]
-  > {
-    return this.postPrivate(
-      '/api/v5/finance/staking-defi/eth/cancel-redeem',
-      params,
-    );
-⋮----
-getAPYHistory(params:
-⋮----
-/**
-   *
-   * Financial product - simple earn flexible endpoints
-   *
-   */
-⋮----
-getSavingBalance(params?:
-⋮----
-savingsPurchaseRedemption(params: {
-    ccy: string;
-    amt: numberInString;
-    side: 'purchase' | 'redempt';
-    rate: numberInString;
-}): Promise<any[]>
-⋮----
-setLendingRate(params: {
-    ccy: string;
-    rate: numberInString;
-}): Promise<any[]>
-⋮----
-getLendingHistory(params?: PaginatedSymbolRequest): Promise<any[]>
-⋮----
-getPublicBorrowInfo(params?:
-⋮----
-getPublicBorrowHistory(
-    params?: PaginatedSymbolRequest,
-): Promise<PublicBorrowHistoryRecord[]>
-⋮----
-/**
-   *
-   * Financial product - simple earn fixed endpoints
-   *
-   */
-⋮----
-getLendingOffers(params?:
-⋮----
-getLendingAPYHistory(params:
-⋮----
-getLendingVolume(params:
-⋮----
-placeLendingOrder(params: LendingOrder): Promise<any[]>
-⋮----
-amendLendingOrder(params: LendingOrder): Promise<any[]>
-⋮----
-getLendingOrders(params: GetLendingOrderListRequest): Promise<any[]>
-⋮----
-getLendingSubOrders(params: GetLendingSubOrderListRequest): Promise<any[]>
-⋮----
-/**
-   *
-   * Financial product - Flexible loan endpoints
-   *
-   */
-⋮----
-getBorrowableCurrencies(): Promise<
-    {
-      borrowCcy: string;
-    }[]
-  > {
-    return this.get('/api/v5/finance/flexible-loan/borrow-currencies');
-⋮----
-getCollateralAssets(
-    params?: GetFlexibleLoanCollateralAssetsRequest,
-): Promise<CollateralAssetsResponse[]>
-⋮----
-getMaxLoanAmount(params: MaxLoanRequest): Promise<MaxLoanResponse[]>
-⋮----
-adjustCollateral(params: AdjustCollateralRequest): Promise<[]>
-⋮----
-getLoanInfo(params?: GetLoanInfoRequest): Promise<LoanInfo[]>
-⋮----
-getLoanHistory(params?: LoanHistoryRequest): Promise<LoanHistoryItem[]>
-⋮----
-getAccruedInterest(
-    params?: AccruedInterestRequest,
-): Promise<AccruedInterestItem[]>
-⋮----
-/**
-   *
-   * Financial product — dual investment (DCD) endpoints
-   * @see https://www.okx.com/docs-v5/en/ (2026-03-13 release)
-   *
-   */
-⋮----
-getDcdCurrencyPairs(): Promise<DcdCurrencyPair[]>
-⋮----
-getDcdProducts(params: GetDcdProductsRequest): Promise<DcdProduct[]>
-⋮----
-requestDcdQuote(params: RequestDcdQuoteRequest): Promise<DcdQuote[]>
-⋮----
-submitDcdTrade(params: SubmitDcdTradeRequest): Promise<DcdTradeResult[]>
-⋮----
-requestDcdRedeemQuote(
-    params: RequestDcdRedeemQuoteRequest,
-): Promise<DcdRedeemQuote[]>
-⋮----
-submitDcdRedeem(params: SubmitDcdRedeemRequest): Promise<DcdRedeemResult[]>
-⋮----
-getDcdOrderStatus(
-    params: GetDcdOrderStatusRequest,
-): Promise<DcdOrderStatus[]>
-⋮----
-getDcdOrderHistory(
-    params?: GetDcdOrderHistoryRequest,
-): Promise<DcdOrderHistoryItem[]>
-⋮----
-/**
-   *
-   * Financial product — stable rewards endpoints
-   * @see https://www.okx.com/docs-v5/en/ (2026-04-24 release)
-   *
-   */
-⋮----
-getStableRewardsProductInfo(
-    params: GetStableRewardsProductInfoRequest,
-): Promise<StableRewardsProductInfo[]>
-⋮----
-/** @deprecated Decommissioned 2026-07-14. Use order book trading APIs. */
-requestStableRewardsQuote(
-    params: RequestStableRewardsQuoteRequest,
-): Promise<StableRewardsQuote[]>
-⋮----
-/** @deprecated Decommissioned 2026-07-14. Use order book trading APIs. */
-submitStableRewardsTrade(
-    params: SubmitStableRewardsTradeRequest,
-): Promise<StableRewardsTradeResult[]>
-⋮----
-getStableRewardsBalance(
-    params?: GetStableRewardsBalanceRequest,
-): Promise<StableRewardsBalance[]>
-⋮----
-getStableRewardsApyHistory(
-    params: GetStableRewardsApyHistoryRequest,
-): Promise<StableRewardsApyHistoryItem[]>
-⋮----
-/** @deprecated Decommissioned 2026-07-14. Use order book trading APIs. */
-getStableRewardsSubscribeRedeemHistory(
-    params: GetStableRewardsSubscribeRedeemHistoryRequest,
-): Promise<StableRewardsSubscribeRedeemHistoryItem[]>
-⋮----
-/**
-   *
-   * Financial product — OKUSD endpoints
-   *
-   */
-⋮----
-getOkusdLimits(): Promise<OkusdLimits[]>
-⋮----
-subscribeOkusd(
-    params: SubscribeOkusdRequest,
-): Promise<OkusdSubscribeResult[]>
-⋮----
-redeemOkusd(params: RedeemOkusdRequest): Promise<OkusdRedeemResult[]>
-⋮----
-/**
-   *
-   * GLP performance endpoints (market makers)
-   *
-   */
-⋮----
-getGlpTodayPerformance(): Promise<GlpTodayPerformance[]>
-⋮----
-getGlpHistoricalPerformance(
-    params: GetGlpHistoricalPerformanceRequest,
-): Promise<GlpHistoricalPerformanceItem[]>
-⋮----
-/**
-   *
-   * GLP API v2
-   * @see https://www.okx.com/docs-v5/en/ (2026-09-29)
-   *
-   */
-⋮----
-/**
-   * Active GLP enrollments, current and estimated tiers, tier requirements, and week-to-date performance.
-   * A sub-account API key returns the master account's GLP data. No request parameters.
-   * @see GET /api/v5/users/glp/v2/overview
-   */
-getGlpV2Overview(): Promise<GlpV2Overview[]>
-⋮----
-/**
-   * Daily and week-to-date performance for one GLP product and trading side in the current assessment period.
-   * A sub-account API key returns the master account's GLP data.
-   * @see GET /api/v5/users/glp/v2/details
-   */
-getGlpV2AssessmentDetails(
-    params: GetGlpV2AssessmentDetailsRequest,
-): Promise<GlpV2AssessmentDetails[]>
-⋮----
-/**
-   * Weekly assessment results, tier outcomes, and performance for one GLP product and trading side.
-   * A sub-account API key returns the master account's GLP data.
-   * @see GET /api/v5/users/glp/v2/history/performance
-   */
-getGlpV2PerformanceHistory(
-    params: GetGlpV2PerformanceHistoryRequest,
-): Promise<GlpV2PerformanceHistory[]>
-⋮----
-/**
-   *
-   * Affiliate endpoints
-   * @see https://www.okx.com/docs-v5/en/ (2026-05-08 release)
-   *
-   */
-⋮----
-getAffiliatePerformanceSummary(
-    params?: GetAffiliatePerformanceSummaryRequest,
-): Promise<AffiliatePerformanceSummary[]>
-⋮----
-getInviteeDetail(params: GetInviteeDetailRequest): Promise<InviteeDetail[]>
-⋮----
-getAffiliateInviteeList(
-    params?: GetAffiliateInviteeListRequest,
-): Promise<AffiliateInviteeListItem[]>
-⋮----
-getAffiliateLinkList(
-    params?: GetAffiliateLinkListRequest,
-): Promise<AffiliateLinkListItem[]>
-⋮----
-getAffiliateCoInviterLinkList(
-    params?: GetAffiliateCoInviterLinkListRequest,
-): Promise<AffiliateCoInviterLinkListItem[]>
-⋮----
-getAffiliateSubAffiliateList(
-    params?: GetAffiliateSubAffiliateListRequest,
-): Promise<AffiliateSubAffiliateListItem[]>
-⋮----
-getAffiliateRebateInfo(params:
-⋮----
-/**
-   *
-   * Status endpoints (public)
-   *
-   */
-⋮----
-getSystemStatus(params: {
-    state?: 'scheduled' | 'ongoing' | 'pre_open' | 'completed' | 'canceled';
-}): Promise<any[]>
-⋮----
-/**
-   *
-   * Announcement endpoints
-   *
-   */
-⋮----
-getAnnouncements(params?: { annType?: string; page?: string }): Promise<
-    {
-      totalPage: string;
-      details: Announcement[];
-    }[]
-  > {
-    return this.get('/api/v5/support/announcements', params);
-⋮----
-getAnnouncementTypes(): Promise<
-    {
-      annType: string;
-      annTypeDesc: string;
-    }[]
-  > {
-    return this.get('/api/v5/support/announcement-types');
-⋮----
-/**
-   *
-   * Broker endpoints (private)
-   *
-   */
-⋮----
-createSubAccount(params: {
-    subAcct: string;
-    label?: string;
-    clientIP?: string;
-    mainAcct: string;
-}): Promise<any[]>
-⋮----
-deleteSubAccount(params:
-⋮----
-createSubAccountAPIKey(params: {
-    subAcct: string;
-    label: string;
-    passphrase: string;
-    ip?: string;
-    perm?: string;
-}): Promise<any[]>
 
 ================
 File: README.md
@@ -13915,11 +11581,2370 @@ The following represents some of the known public projects that use this SDK on 
 <!-- template_star_history_end -->
 
 ================
+File: src/rest-client.ts
+================
+import { ASSET_BILL_TYPE } from './constants/funding.js';
+import {
+  ActivateFeatureRequest,
+  BillsHistoryArchiveRequest,
+  ChangePositionMarginRequest,
+  GetAccountBillSubtypesRequest,
+  GetBorrowRepayHistoryRequest,
+  GetFixedLoanBorrowingOrdersListRequest,
+  GetFixedLoanBorrowQuoteRequest,
+  GetHistoricPositionParams,
+  GetInstrumentsRequest,
+  GetMovePositionsHistoryRequest,
+  GetPositionsParams,
+  GetQuickMarginBorrowRepayHistoryRequest,
+  GetVIPInterestRequest,
+  GetVIPLoanOrderDetailRequest,
+  GetVIPLoanOrderListRequest,
+  MovePositionsRequest,
+  PositionBuilderRequest,
+  PrecheckSetDeltaNeutralRequest,
+  QuickMarginBorrowRepayRequest,
+  SetFeeTypeRequest,
+  SetLeverageRequest,
+  SetMMPConfigRequest,
+  SetSettleCurrencyRequest,
+  SetTradingConfigRequest,
+  SubmitFixedLoanBorrowingOrderRequest,
+  UpdateFixedLoanBorrowingOrderRequest,
+  WithdrawalHistoryRequest,
+} from './types/rest/request/account.js';
+import {
+  GetAffiliateCoInviterLinkListRequest,
+  GetAffiliateInviteeListRequest,
+  GetAffiliateLinkListRequest,
+  GetAffiliatePerformanceSummaryRequest,
+  GetAffiliateSubAffiliateListRequest,
+  GetInviteeDetailRequest,
+} from './types/rest/request/affiliate.js';
+import {
+  CancelBlockQuoteRequest,
+  CancelBlockRFQRequest,
+  CancelMultipleBlockQuoteRequest,
+  CancelMultipleBlockRFQRequest,
+  CreateBlockQuoteRequest,
+  CreateBlockRFQRequest,
+  ExecuteBlockQuoteRequest,
+  GetBlockQuoteParams,
+  GetBlockRFQSParams,
+  SetMmpConfigRequest,
+  SetQuoteProductsRequest,
+} from './types/rest/request/block-trading.js';
+import {
+  ConvertQuoteEstimateRequest,
+  ConvertTradeRequest,
+} from './types/rest/request/convert.js';
+import {
+  CloseSubpositionRequest,
+  CopySettingsRequest,
+  GetCopyTradersRequest,
+  GetCTBatchLeverageInfoRequest,
+  GetCTHistoryLeadTradersRequest,
+  GetCTProfitDetailsRequest,
+  GetCurrentSubpositionsRequest,
+  GetLeadTraderPositionsRequest,
+  GetLeadTraderRanksRequest,
+  GetLeadTraderStatsRequest,
+  GetPrivateLeadTraderRanksRequest,
+  GetSubpositionsHistoryRequest,
+  PlaceCTAlgoOrderRequest,
+  SetCTBatchLeverageRequest,
+} from './types/rest/request/copy-trading.js';
+import {
+  GetDcdOrderHistoryRequest,
+  GetDcdOrderStatusRequest,
+  GetDcdProductsRequest,
+  RequestDcdQuoteRequest,
+  RequestDcdRedeemQuoteRequest,
+  SubmitDcdRedeemRequest,
+  SubmitDcdTradeRequest,
+} from './types/rest/request/dual-investment.js';
+import {
+  FundingRateRequest,
+  FundsTransferRequest,
+  GetDepositHistoryRequest,
+  GetDepositWithdrawStatusRequest,
+  GetFundingRateRequest,
+  WithdrawRequest,
+} from './types/rest/request/funding.js';
+import {
+  GetGlpHistoricalPerformanceRequest,
+  GetGlpV2AssessmentDetailsRequest,
+  GetGlpV2PerformanceHistoryRequest,
+} from './types/rest/request/glp.js';
+import {
+  CloseContractGridPositionRequest,
+  GetGridAlgoOrdersRequest,
+  GetRSIBackTestingRequest,
+  GridAlgoOrderRequest,
+  GridAlgoOrderType,
+  MaxGridQuantityRequest,
+  StopGridAlgoOrderRequest,
+} from './types/rest/request/grid-trading.js';
+import {
+  RedeemOkusdRequest,
+  SubscribeOkusdRequest,
+} from './types/rest/request/okusd.js';
+import {
+  CandleRequest,
+  EconomicCalendarRequest,
+  GetContractOpenInterestHistoryRequest,
+  GetContractTakerVolumeRequest,
+  GetCorporateActionsRequest,
+  GetEventContractEventsRequest,
+  GetEventContractMarketsRequest,
+  GetEventContractSeriesRequest,
+  GetHistoricalMarketDataRequest,
+  GetInsuranceFundRequest,
+  GetOptionTradesRequest,
+  GetPremiumHistoryRequest,
+  GetTopTradersContractLongShortRatioRequest,
+  UnitConvertRequest,
+} from './types/rest/request/public.js';
+import {
+  AmendRecurringBuyOrderRequest,
+  GetRecurringBuyOrderListRequest,
+  PlaceRecurringBuyOrderRequest,
+} from './types/rest/request/recurring-buy.js';
+import { PaginatedSymbolRequest } from './types/rest/request/shared.js';
+import {
+  AdjustMarginBalanceRequest,
+  AmendTPSLRequest,
+  CancelSubOrderRequest,
+  CreateSignalBotRequest,
+  CreateSignalRequest,
+  GetSignalBotEventHistoryRequest,
+  GetSignalBotPositionHistoryRequest,
+  GetSignalBotRequest,
+  GetSignalBotSubOrdersRequest,
+  GetSignalsRequest,
+  PlaceSubOrderRequest,
+  SetSignalInstrumentsRequest,
+} from './types/rest/request/signal-bot.js';
+import {
+  GetLendingOrderListRequest,
+  GetLendingSubOrderListRequest,
+  LendingOrder,
+} from './types/rest/request/simple-earn.js';
+import {
+  GetActiveSpreadOrdersRequest,
+  GetSpreadCandlesRequest,
+  GetSpreadOrderHistoryArchiveRequest,
+  GetSpreadOrderHistoryRequest,
+  GetSpreadsRequest,
+  GetSpreadTradesRequest,
+  PlaceSpreadOrderRequest,
+  UpdateSpreadOrderRequest,
+} from './types/rest/request/spread-trading.js';
+import {
+  GetStableRewardsApyHistoryRequest,
+  GetStableRewardsBalanceRequest,
+  GetStableRewardsProductInfoRequest,
+  GetStableRewardsSubscribeRedeemHistoryRequest,
+  RequestStableRewardsQuoteRequest,
+  SubmitStableRewardsTradeRequest,
+} from './types/rest/request/stable-rewards.js';
+import {
+  GetManagedSubAccountTransferHistoryRequest,
+  GetSubAccountMaxWithdrawalsRequest,
+  SetSubAccountLoanAllocationRequest,
+  SubAccountTransferRequest,
+} from './types/rest/request/subaccount.js';
+import {
+  AlgoLongHistoryRequest,
+  AlgoOrderDetailsRequest,
+  AlgoOrderRequest,
+  AlgoRecentHistoryRequest,
+  AmendAlgoOrderRequest,
+  AmendOrderRequest,
+  CancelAlgoOrderRequest,
+  ClosePositionRequest,
+  FillsHistoryRequest,
+  OrderHistoryRequest,
+  OrderIdRequest,
+  OrderPrecheckRequest,
+  OrderRequest,
+  SubmitEasyConvertRequest,
+  SubmitOneClickRepayRequest,
+} from './types/rest/request/trade.js';
+import {
+  AccountBalance,
+  AccountBill,
+  AccountBillTypeDefinition,
+  AccountChangeMarginResult,
+  AccountConfiguration,
+  AccountFeeRate,
+  AccountHistoryBill,
+  AccountInstrument,
+  AccountIsolatedMode,
+  AccountLeverage,
+  AccountLeverageResult,
+  AccountMaxLoan,
+  AccountMaxOrderAmount,
+  AccountMaxTradableAmount,
+  AccountModeResult,
+  AccountPosition,
+  AccountPositionModeResult,
+  AccountPositionRisk,
+  AccountRiskState,
+  AdjustLeverageInfo,
+  AutoLoanResult,
+  BorrowRepayHistoryItem,
+  FixedLoanBorrowingLimit,
+  FixedLoanBorrowQuote,
+  Greeks,
+  HistoricAccountPosition,
+  InterestAccrued,
+  InterestRate,
+  MaxWithdrawal,
+  MMPConfig,
+  MovePositionsResult,
+  PrecheckSetDeltaNeutralResult,
+  QuickMarginBorrowRepayRecord,
+  QuickMarginBorrowRepayResult,
+  SetFeeTypeResult,
+  SetMMPConfigResult,
+  SetSettleCurrencyResult,
+  SetTradingConfigResult,
+  VIPInterest,
+  VIPLoanOrder,
+  VIPLoanOrderDetail,
+} from './types/rest/response/private-account.js';
+import {
+  AffiliateCoInviterLinkListItem,
+  AffiliateInviteeListItem,
+  AffiliateLinkListItem,
+  AffiliatePerformanceSummary,
+  AffiliateSubAffiliateListItem,
+  InviteeDetail,
+} from './types/rest/response/private-affiliate.js';
+import {
+  BlockCounterParty,
+  BlockMakerInstrumentSettings,
+  BlockMMPConfig,
+  BlockRFQResult,
+  BlockTradeResult,
+  CancelBlockQuoteResult,
+  CancelBlockRFQResult,
+  CreateBlockQuoteResult,
+  CreateRFQResult,
+  ExecuteBlockQuoteResult,
+  GetBlockQuoteResult,
+  PublicBlockTrade,
+  SetMmpConfigResult,
+} from './types/rest/response/private-block-trading.js';
+import {
+  CurrentSubposition,
+  GetAccountConfigurationResult,
+  GetCopySettingsResult,
+  GetCopyTradersResult,
+  GetCopyTradingConfigResult,
+  GetCTBatchLeverageInfoResult,
+  GetCTHistoryLeadTradersResult,
+  GetCTMyLeadTradersResult,
+  GetCTProfitDetailsResult,
+  GetCTTotalProfitResult,
+  GetCTUnrealizedProfitResult,
+  GetLeadTraderRanksResult,
+  GetPrivateLeadTraderRanksResult,
+  LeadTraderCurrentPosition,
+  LeadTraderPnl,
+  LeadTraderPositionHistory,
+  LeadTraderPreference,
+  LeadTraderStats,
+  PlaceCTAlgoOrderResult,
+  SetCTBatchLeverageResult,
+  SubpositionsHistory,
+} from './types/rest/response/private-copy-trading.js';
+import {
+  DcdCurrencyPair,
+  DcdOrderHistoryItem,
+  DcdOrderStatus,
+  DcdProduct,
+  DcdQuote,
+  DcdRedeemQuote,
+  DcdRedeemResult,
+  DcdTradeResult,
+} from './types/rest/response/private-dual-investment.js';
+import {
+  AccruedInterestItem,
+  AccruedInterestRequest,
+  AdjustCollateralRequest,
+  CollateralAssetsResponse,
+  GetFlexibleLoanCollateralAssetsRequest,
+  GetLoanInfoRequest,
+  LoanHistoryItem,
+  LoanHistoryRequest,
+  LoanInfo,
+  MaxLoanRequest,
+  MaxLoanResponse,
+} from './types/rest/response/private-flexible-loan.js';
+import {
+  AccountAssetValuation,
+  AssetBillDetails,
+  DepositHistory,
+  FundingBalance,
+  FundingCurrency,
+  FundTransferResult,
+  FundTransferState,
+  NonTradableAsset,
+  WithdrawResponse,
+} from './types/rest/response/private-funding.js';
+import {
+  GlpHistoricalPerformanceItem,
+  GlpTodayPerformance,
+  GlpV2AssessmentDetails,
+  GlpV2Overview,
+  GlpV2PerformanceHistory,
+} from './types/rest/response/private-glp.js';
+import {
+  OkusdLimits,
+  OkusdRedeemResult,
+  OkusdSubscribeResult,
+} from './types/rest/response/private-okusd.js';
+import {
+  RecurringBuyOrder,
+  RecurringBuyOrderResult,
+  RecurringBuySubOrder,
+} from './types/rest/response/private-recurring-buy.js';
+import {
+  CancelSignalBotsResult,
+  CreateSignalBotResult,
+  CreateSignalResult,
+  GetSignalsResult,
+} from './types/rest/response/private-signal-bot.js';
+import {
+  CancelSpreadOrderResponse,
+  PlaceSpreadOrderResponse,
+  PublicSpreadTrade,
+  SpreadCandle,
+  SpreadDetails,
+  SpreadOrder,
+  SpreadOrderBook,
+  SpreadTicker,
+  SpreadTrade,
+  UpdateSpreadOrderResponse,
+} from './types/rest/response/private-spread-trading.js';
+import {
+  StableRewardsApyHistoryItem,
+  StableRewardsBalance,
+  StableRewardsProductInfo,
+  StableRewardsQuote,
+  StableRewardsSubscribeRedeemHistoryItem,
+  StableRewardsTradeResult,
+} from './types/rest/response/private-stable-rewards.js';
+import {
+  ManagedSubAccountTransfer,
+  SubAccount,
+  SubAccountAPIReset,
+  SubAccountBalances,
+  SubAccountMaxWithdrawal,
+  SubAccountTransferResult,
+} from './types/rest/response/private-subaccount.js';
+import {
+  AlgoOrderDetailsResult,
+  AlgoOrderListItem,
+  AlgoOrderResult,
+  AmendAlgoOrderResult,
+  AmendedOrder,
+  CancelAllAfterResponse,
+  CancelledOrderResult,
+  ClosedPositions,
+  HistoricAlgoOrder,
+  HistoricOrder,
+  OrderDetails,
+  OrderFill,
+  OrderListItem,
+  OrderResult,
+} from './types/rest/response/private-trade.js';
+import {
+  Announcement,
+  Candle,
+  CandleNoVolume,
+  CorporateAction,
+  DeltaHedgeCurrency,
+  EconomicCalendarData,
+  EstimatedDeliveryExercisePrice,
+  EthStakingProductInfo,
+  EventContractEvent,
+  EventContractMarket,
+  EventContractSeries,
+  FundingRateHistory,
+  IndexTicker,
+  Instrument,
+  InsuranceFund,
+  InterestRateAndLoanQuota,
+  MarketDataHistoryResult,
+  MmInstrumentType,
+  OptionTrade,
+  OptionTrades,
+  OrderBook,
+  OrderBookRpi,
+  PublicBorrowHistoryRecord,
+  PublicFundingRate,
+  SolStakingProductInfo,
+  SystemTime,
+  Ticker,
+  Trade,
+  UnitConvertData,
+} from './types/rest/response/public-data.js';
+import {
+  AccountLevel,
+  APIResponse,
+  ContractGridDirection,
+  GridAlgoSubOrderType,
+  InstrumentType,
+  MarginMode,
+  numberInString,
+  Pagination,
+  PositionSide,
+  PosMode,
+  TimestampObject,
+} from './types/rest/shared.js';
+import BaseRestClient from './util/BaseRestClient.js';
+⋮----
+export class RestClient extends BaseRestClient
+⋮----
+/**
+   *
+   * Custom SDK functions
+   *
+   */
+⋮----
+/**
+   * This method is used to get the latency and time sync between the client and the server.
+   * This is not official API endpoint and is only used for internal testing purposes.
+   * Use this method to check the latency and time sync between the client and the server.
+   * Final values might vary slightly, but it should be within few ms difference.
+   * If you have any suggestions or improvements to this measurement, please create an issue or pull request on GitHub.
+   */
+async fetchLatencySummary(): Promise<any>
+⋮----
+// Adjust server time by adding estimated one-way latency
+⋮----
+// Calculate time difference between adjusted server time and local time
+⋮----
+/**
+   *
+   * OKX misc endpoints
+   *
+   */
+⋮----
+async getServerTime(): Promise<number>
+⋮----
+/**
+   *
+   * Trading account endpoints
+   *
+   */
+⋮----
+getAccountInstruments(
+    params: GetInstrumentsRequest,
+  ): Promise<AccountInstrument[]>
+⋮----
+getBalance(params?: { ccy?: string }): Promise<AccountBalance[]>
+⋮----
+getPositions(params?: GetPositionsParams): Promise<AccountPosition[]>
+⋮----
+getPositionsHistory(
+    params?: GetHistoricPositionParams,
+  ): Promise<HistoricAccountPosition[]>
+⋮----
+getAccountPositionRisk(params?: {
+    instType?: Omit<'SPOT', InstrumentType>;
+  }): Promise<AccountPositionRisk[]>
+⋮----
+/** Up to last 7 days */
+getBills(params?: any): Promise<AccountBill[]>
+⋮----
+/** Last 3 months */
+getBillsArchive(params?: any): Promise<AccountBill[]>
+⋮----
+/**
+   * Bill type ids and subTypes (unified account bill CSV columns reference `type` / `subType`).
+   * @see GET /api/v5/account/subtypes
+   */
+getAccountBillSubtypes(
+    params?: GetAccountBillSubtypesRequest,
+  ): Promise<AccountBillTypeDefinition[]>
+⋮----
+/**
+   * Apply for bill data since 1 February, 2021 except for the current quarter.
+   * Check the "Get bills details (since 2021)" endpoint in about 2 hours for the download link; in peak load it may take longer, and if still missing after 3 hours contact support.
+   * It is only applicable to the data from the unified account.
+   *
+   * This endpoint submits a request for bill data. You can then use getRequestedBillsHistoryLink to get the link to the bill data.
+   * It may take some time to generate the data.
+   */
+requestBillsHistoryDownloadLink(
+    params: BillsHistoryArchiveRequest,
+  ): Promise<AccountHistoryBill[]>
+⋮----
+/**
+   * This endpoint returns the link to the bill data which you can request using requestBillsHistoryDownloadLink.
+   */
+getRequestedBillsHistoryLink(
+    params: BillsHistoryArchiveRequest,
+  ): Promise<AccountHistoryBill[]>
+⋮----
+getAccountConfiguration(): Promise<AccountConfiguration[]>
+⋮----
+setPositionMode(params: {
+    posMode: PosMode;
+  }): Promise<AccountPositionModeResult[]>
+⋮----
+setSettleCurrency(
+    params: SetSettleCurrencyRequest,
+  ): Promise<SetSettleCurrencyResult[]>
+⋮----
+setFeeType(params: SetFeeTypeRequest): Promise<SetFeeTypeResult[]>
+⋮----
+setLeverage(params: SetLeverageRequest): Promise<AccountLeverageResult[]>
+⋮----
+/** Max buy/sell amount or open amount */
+getMaxBuySellAmount(params: {
+    instId: string;
+    tdMode: 'cross' | 'isolated' | 'cash';
+    ccy?: string;
+    px?: string;
+    leverage?: string;
+    unSpotOffset?: boolean;
+    /** EVENTS: `yes` / `no` (required for max size when applicable). */
+    outcome?: string;
+  }): Promise<AccountMaxOrderAmount[]>
+⋮----
+/** EVENTS: `yes` / `no` (required for max size when applicable). */
+⋮----
+getMaxAvailableTradableAmount(params: {
+    instId: string;
+    ccy?: string;
+    tdMode: 'cross' | 'isolated' | 'cash';
+    reduceOnly?: boolean;
+    unSpotOffset?: boolean;
+  }): Promise<AccountMaxTradableAmount[]>
+⋮----
+changePositionMargin(
+    params: ChangePositionMarginRequest,
+  ): Promise<AccountChangeMarginResult[]>
+⋮----
+/**
+   * Move positions between accounts under the same master account (VIP6+).
+   * TradeFi positions are not supported (error 70004).
+   * @see POST /api/v5/account/move-positions — 2026-05-15 changelog
+   */
+movePositions(params: MovePositionsRequest): Promise<MovePositionsResult[]>
+⋮----
+/**
+   * Move position history for the last 3 days (VIP6+).
+   * @see GET /api/v5/account/move-positions-history
+   */
+getMovePositionsHistory(
+    params?: GetMovePositionsHistoryRequest,
+  ): Promise<MovePositionsResult[]>
+⋮----
+getLeverage(params: {
+    instId?: string;
+    ccy?: string;
+    mgnMode: MarginMode;
+  }): Promise<AccountLeverage[]>
+⋮----
+/**
+   * @deprecated - will be removed in next major release
+   * Use getLeverage() instead
+   */
+getLeverageV2(params: {
+    instId?: string;
+    ccy?: string;
+    mgnMode: MarginMode;
+  }): Promise<AccountLeverage[]>
+⋮----
+getLeverageEstimatedInfo(params: {
+    instType: string;
+    mgnMode: MarginMode;
+    lever: string;
+    instId?: string;
+    ccy?: string;
+    posSide: PositionSide;
+  }): Promise<AdjustLeverageInfo[]>
+⋮----
+getMaxLoan(params: {
+    instId: string;
+    mgnMode: MarginMode;
+    mgnCcy?: string;
+    ccy?: string;
+  }): Promise<AccountMaxLoan[]>
+⋮----
+getFeeRates(params: {
+    instType: InstrumentType;
+    instId?: string;
+    uly?: string;
+    instFamily?: string;
+    groupId?: string;
+    ruleType?: string;
+  }): Promise<AccountFeeRate[]>
+⋮----
+getInterestAccrued(params?: {
+    type?: '1' | '2';
+    ccy?: string;
+    instId?: string;
+    mgnMode?: MarginMode;
+    after?: string;
+    before?: string;
+    limit?: string;
+  }): Promise<InterestAccrued[]>
+⋮----
+getInterestRate(params?: { ccy?: string }): Promise<InterestRate[]>
+⋮----
+setGreeksDisplayType(params: { greeksType: 'PA' | 'BS' }): Promise<Greeks[]>
+⋮----
+setIsolatedMode(params: {
+    isoMode: 'automatic' | 'autonomy';
+    type: 'MARGIN' | 'CONTRACTS';
+  }): Promise<AccountIsolatedMode[]>
+⋮----
+getMaxWithdrawals(params?: { ccy?: string }): Promise<MaxWithdrawal[]>
+⋮----
+getAccountRiskState(): Promise<AccountRiskState[]>
+⋮----
+setAccountCollateralAssets(params: {
+    type: 'all' | 'custom';
+    collateralEnabled: boolean;
+    ccyList?: string[];
+  }): Promise<
+    {
+      type: string;
+      ccyList: string[];
+      collateralEnabled: boolean;
+    }[]
+  >
+⋮----
+getAccountCollateralAssets(params?: {
+    ccy?: string;
+    collateralEnabled?: boolean;
+  }): Promise<
+    {
+      ccy: string;
+      collateralEnabled: boolean;
+    }[]
+  >
+⋮----
+submitQuickMarginBorrowRepay(
+    params: QuickMarginBorrowRepayRequest,
+  ): Promise<QuickMarginBorrowRepayResult[]>
+⋮----
+getQuickMarginBorrowRepayHistory(
+    params: GetQuickMarginBorrowRepayHistoryRequest,
+  ): Promise<QuickMarginBorrowRepayRecord[]>
+⋮----
+borrowRepayVIPLoan(params: {
+    ccy: string;
+    side: 'borrow' | 'repay';
+    amt: numberInString;
+    ordId?: string;
+  }): Promise<any[]>
+⋮----
+getVIPLoanBorrowRepayHistory(params?: any): Promise<any[]>
+⋮----
+getVIPInterestAccrued(params: GetVIPInterestRequest): Promise<VIPInterest[]>
+⋮----
+getVIPInterestDeducted(
+    params: GetVIPInterestRequest,
+  ): Promise<VIPInterest[]>
+⋮----
+getVIPLoanOrders(
+    params: GetVIPLoanOrderListRequest,
+  ): Promise<VIPLoanOrder[]>
+⋮----
+getVIPLoanOrder(
+    params: GetVIPLoanOrderDetailRequest,
+  ): Promise<VIPLoanOrderDetail[]>
+⋮----
+getBorrowInterestLimits(params?: {
+    type?: '1' | '2';
+    ccy?: string;
+  }): Promise<any[]>
+⋮----
+getFixedLoanBorrowLimit(): Promise<FixedLoanBorrowingLimit[]>
+⋮----
+getFixedLoanBorrowQuote(
+    params: GetFixedLoanBorrowQuoteRequest,
+  ): Promise<FixedLoanBorrowQuote[]>
+⋮----
+submitFixedLoanBorrowOrder(
+    params: SubmitFixedLoanBorrowingOrderRequest,
+  ): Promise<
+    {
+      ordId: string;
+    }[]
+  >
+⋮----
+updateFixedLoanBorrowOrder(
+    params: UpdateFixedLoanBorrowingOrderRequest,
+  ): Promise<
+    {
+      ordId: string;
+    }[]
+  >
+⋮----
+manualRenewFixedLoanBorrowOrder(params: {
+    ordId: string;
+    maxRate: string;
+  }): Promise<
+    {
+      ordId: string;
+    }[]
+  >
+⋮----
+repayFixedLoanBorrowOrder(params: { ordId: string }): Promise<
+    {
+      ordId: string;
+    }[]
+  >
+⋮----
+convertFixedLoanToMarketLoan(params: { ordId: string }): Promise<
+    {
+      ordId: string;
+    }[]
+  >
+⋮----
+reduceFixedLoanLiabilities(params: {
+    ordId: string;
+    pendingRepay: boolean;
+  }): Promise<
+    {
+      ordId: string;
+      pendingRepay: boolean;
+    }[]
+  >
+⋮----
+getFixedLoanBorrowOrders(
+    params: GetFixedLoanBorrowingOrdersListRequest,
+  ): Promise<any[]>
+⋮----
+manualBorrowRepay(params: {
+    ccy: string;
+    side: 'borrow' | 'repay';
+    amt: string;
+  }): Promise<
+    {
+      ccy: string;
+      side: 'borrow' | 'repay';
+      amt: string;
+    }[]
+  >
+⋮----
+setAutoRepay(params: { autoRepay: boolean }): Promise<
+    {
+      autoRepay: boolean;
+    }[]
+  >
+⋮----
+getBorrowRepayHistory(
+    params?: GetBorrowRepayHistoryRequest,
+  ): Promise<BorrowRepayHistoryItem[]>
+⋮----
+positionBuilder(params: PositionBuilderRequest): Promise<any[]>
+⋮----
+updateRiskOffsetAmount(params: {
+    ccy: string;
+    clSpotInUseAmt: string;
+  }): Promise<
+    {
+      ccy: string;
+      clSpotInUseAmt: string;
+    }[]
+  >
+⋮----
+getGreeks(params?: { ccy?: string }): Promise<any[]>
+⋮----
+getPMLimitation(params: {
+    instType: 'SWAP' | 'FUTURES' | 'OPTION';
+    uly?: string;
+    instFamily?: string;
+  }): Promise<any[]>
+⋮----
+updateRiskOffsetType(params: { type: '1' | '2' | '3' | '4' }): Promise<
+    {
+      type: '1' | '2' | '3' | '4';
+    }[]
+  >
+⋮----
+activateOption(): Promise<
+    {
+      ts: string;
+    }[]
+  >
+⋮----
+/**
+   * Activate USDC order book trading after place order returns error 54109.
+   * Shared by the master account and its sub-accounts; one successful call is enough.
+   * Error 51773 means this activation is not supported for the account.
+   */
+activateFeature(
+    params: ActivateFeatureRequest,
+  ): Promise<Record<string, never>[]>
+⋮----
+setAutoLoan(params: { autoLoan: boolean }): Promise<AutoLoanResult[]>
+⋮----
+presetAccountLevelSwitch(params: {
+    acctLv: '2' | '3' | '4';
+    lever?: string;
+    riskOffsetType?: '1' | '2' | '3' | '4';
+  }): Promise<any[]>
+⋮----
+getAccountSwitchPrecheck(params: {
+    acctLv: '1' | '2' | '3' | '4';
+  }): Promise<any[]>
+⋮----
+setAccountMode(params: {
+    acctLv: AccountLevel;
+  }): Promise<AccountModeResult[]>
+⋮----
+resetMMPStatus(params: { instType?: 'OPTION'; instFamily: string }): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+setMMPConfig(params: SetMMPConfigRequest): Promise<SetMMPConfigResult[]>
+⋮----
+getMMPConfig(params?: { instFamily?: string }): Promise<MMPConfig[]>
+⋮----
+setTradingConfig(
+    params: SetTradingConfigRequest,
+  ): Promise<SetTradingConfigResult[]>
+⋮----
+precheckSetDeltaNeutral(
+    params: PrecheckSetDeltaNeutralRequest,
+  ): Promise<PrecheckSetDeltaNeutralResult[]>
+⋮----
+/**
+   *
+   * Orderbook trading - trade endpoints
+   *
+   */
+⋮----
+submitOrder(params: OrderRequest): Promise<OrderResult[]>
+⋮----
+submitMultipleOrders(params: OrderRequest[]): Promise<OrderResult[]>
+⋮----
+cancelOrder(params: OrderIdRequest): Promise<CancelledOrderResult[]>
+⋮----
+cancelMultipleOrders(
+    params: OrderIdRequest[],
+  ): Promise<CancelledOrderResult[]>
+⋮----
+amendOrder(params: AmendOrderRequest): Promise<AmendedOrder[]>
+⋮----
+amendMultipleOrders(params: AmendOrderRequest[]): Promise<AmendedOrder[]>
+⋮----
+closePositions(params: ClosePositionRequest): Promise<ClosedPositions[]>
+⋮----
+getOrderDetails(params: OrderIdRequest): Promise<OrderDetails[]>
+⋮----
+getOrderList(params?: OrderHistoryRequest): Promise<OrderListItem[]>
+⋮----
+/**
+   * Get history for last 7 days
+   */
+getOrderHistory(params: OrderHistoryRequest): Promise<HistoricOrder[]>
+⋮----
+/**
+   * Get history for last 3 months
+   */
+getOrderHistoryArchive(
+    params: OrderHistoryRequest,
+  ): Promise<HistoricOrder[]>
+⋮----
+/**
+   * Get history for last 7 days
+   */
+getFills(params?: FillsHistoryRequest): Promise<OrderFill[]>
+⋮----
+/**
+   * Get history for last 3 months
+   */
+getFillsHistory(params: FillsHistoryRequest): Promise<OrderFill[]>
+⋮----
+/** Get easy convert currency list */
+getEasyConvertCurrencies(params?: { source?: string }): Promise<any>
+⋮----
+/**
+   *
+   * Place easy convert : Convert small currencies to mainstream currencies.
+   * Only applicable to the crypto balance less than $10.
+   *
+   * Maximum 5 currencies can be selected in one order.
+   * Supply currencies as an array in the "fromCcy" field.
+   *
+   */
+submitEasyConvert(
+    params: SubmitEasyConvertRequest,
+  ): Promise<APIResponse<any>>
+⋮----
+/** Get easy convert history : Get the history and status of easy convert trades. */
+getEasyConvertHistory(params?: Pagination): Promise<APIResponse<any>>
+⋮----
+/**
+   *
+   * Get one-click repay currency list : Get list of debt currency data and repay currencies.
+   * Debt currencies include both cross and isolated debts.
+   */
+getOneClickRepayCurrencyList(params?: {
+    debtType?: 'cross' | 'isolated';
+  }): Promise<APIResponse<any>>
+⋮----
+/**
+   * Trade one-click repay to repay cross debts.
+   * Isolated debts are not applicable.
+   * The maximum repayment amount is based on the remaining available balance of funding and trading accounts.
+   */
+submitOneClickRepay(
+    params: SubmitOneClickRepayRequest,
+  ): Promise<APIResponse<any>>
+⋮----
+/** Get the history and status of one-click repay trades. */
+getOneClickRepayHistory(params?: Pagination): Promise<APIResponse<any>>
+⋮----
+cancelMassOrder(params: {
+    instType: string;
+    instFamily: string;
+    lockInterval?: string;
+  }): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+cancelAllAfter(params: {
+    timeOut: string;
+    tag?: string;
+  }): Promise<CancelAllAfterResponse[]>
+⋮----
+getAccountRateLimit(): Promise<any[]>
+⋮----
+submitOrderPrecheck(params: OrderPrecheckRequest): Promise<any[]>
+⋮----
+/**
+   *
+   * Orderbook trading - Algo trading endpoints
+   *
+   */
+⋮----
+placeAlgoOrder(params: AlgoOrderRequest): Promise<AlgoOrderResult[]>
+⋮----
+cancelAlgoOrder(
+    params: CancelAlgoOrderRequest[],
+  ): Promise<AlgoOrderResult[]>
+⋮----
+amendAlgoOrder(
+    params: AmendAlgoOrderRequest,
+  ): Promise<AmendAlgoOrderResult[]>
+⋮----
+cancelAdvanceAlgoOrder(
+    params: CancelAlgoOrderRequest[],
+  ): Promise<AlgoOrderResult[]>
+⋮----
+getAlgoOrderDetails(
+    params: AlgoOrderDetailsRequest,
+  ): Promise<AlgoOrderDetailsResult[]>
+⋮----
+getAlgoOrderList(
+    params: AlgoRecentHistoryRequest,
+  ): Promise<AlgoOrderListItem[]>
+⋮----
+getAlgoOrderHistory(
+    params: AlgoLongHistoryRequest,
+  ): Promise<HistoricAlgoOrder[]>
+⋮----
+/**
+   *
+   * Orderbook trading - Grid trading endpoints
+   *
+   */
+⋮----
+placeGridAlgoOrder(params: GridAlgoOrderRequest): Promise<any[]>
+⋮----
+amendGridAlgoOrder(params: {
+    algoId: string;
+    instId: string;
+    slTriggerPx?: string;
+    tpTriggerPx?: string;
+    tpRatio?: string;
+    slRatio?: string;
+    triggerParams?: {
+      triggerAction?: string;
+      triggerStrategy?: string;
+      triggerPx?: string;
+      stopType?: string;
+    }[];
+  }): Promise<any[]>
+⋮----
+stopGridAlgoOrder(orders: StopGridAlgoOrderRequest[]): Promise<any[]>
+⋮----
+closeGridContractPosition(
+    params: CloseContractGridPositionRequest,
+  ): Promise<any[]>
+⋮----
+cancelGridContractCloseOrder(params: {
+    algoId: string;
+    ordId: string;
+  }): Promise<any[]>
+⋮----
+instantTriggerGridAlgoOrder(params: { algoId: string }): Promise<
+    {
+      algoId: string;
+      algoClOrdId: string;
+    }[]
+  >
+⋮----
+getGridAlgoOrderList(params: GetGridAlgoOrdersRequest): Promise<any[]>
+⋮----
+getGridAlgoOrderHistory(params: GetGridAlgoOrdersRequest): Promise<any[]>
+⋮----
+getGridAlgoOrderDetails(params: {
+    algoOrdType: GridAlgoOrderType;
+    algoId: string;
+  }): Promise<any[]>
+⋮----
+getGridAlgoSubOrders(params: {
+    algoOrdType: GridAlgoOrderType;
+    algoId: string;
+    type: GridAlgoSubOrderType;
+    groupId?: string;
+    after?: numberInString;
+    before?: numberInString;
+    limit?: number;
+  }): Promise<any[]>
+⋮----
+getGridAlgoOrderPositions(params: {
+    algoOrdType: 'contract_grid';
+    algoId: string;
+  }): Promise<any[]>
+⋮----
+spotGridWithdrawIncome(params: { algoId: string }): Promise<any[]>
+⋮----
+computeGridMarginBalance(params: {
+    algoId: string;
+    type: 'add' | 'reduce';
+    amt?: numberInString;
+  }): Promise<any[]>
+⋮----
+adjustGridMarginBalance(params: {
+    algoId: string;
+    type: 'add' | 'reduce';
+    amt?: numberInString;
+    percent?: numberInString;
+  }): Promise<any[]>
+⋮----
+adjustGridInvestment(params: { algoId: string; amt: string }): Promise<
+    {
+      algoId: string;
+    }[]
+  >
+⋮----
+getGridAIParameter(params: {
+    algoOrdType: GridAlgoOrderType;
+    instId: string;
+    direction: ContractGridDirection;
+    duration?: '7D' | '30D' | '180D';
+  }): Promise<any[]>
+⋮----
+computeGridMinInvestment(params: {
+    amt: string;
+    ccy: string;
+  }): Promise<any[]>
+⋮----
+getRSIBackTesting(params: GetRSIBackTestingRequest): Promise<
+    {
+      triggerNum: string;
+    }[]
+  >
+⋮----
+getMaxGridQuantity(params: MaxGridQuantityRequest): Promise<
+    {
+      maxGridQty: string;
+    }[]
+  >
+⋮----
+/**
+   *
+   * Orderbook trading - Signal bot trading endpoints
+   *
+   */
+⋮----
+createSignal(params: CreateSignalRequest): Promise<CreateSignalResult[]>
+⋮----
+getSignals(params: GetSignalsRequest): Promise<GetSignalsResult[]>
+⋮----
+createSignalBot(
+    params: CreateSignalBotRequest,
+  ): Promise<CreateSignalBotResult[]>
+⋮----
+cancelSignalBots(params: {
+    algoId: string;
+  }): Promise<CancelSignalBotsResult[]>
+⋮----
+updateSignalMargin(params: AdjustMarginBalanceRequest): Promise<
+    {
+      algoId: string;
+    }[]
+  >
+⋮----
+updateSignalTPSL(params: AmendTPSLRequest): Promise<
+    {
+      algoId: string;
+    }[]
+  >
+⋮----
+setSignalInstruments(params: SetSignalInstrumentsRequest): Promise<
+    {
+      algoId: string;
+    }[]
+  >
+⋮----
+getSignalBotOrder(params: {
+    algoOrdType: string;
+    algoId: string;
+  }): Promise<any[]>
+⋮----
+getActiveSignalBot(params: GetSignalBotRequest): Promise<any[]>
+⋮----
+getSignalBotHistory(params: GetSignalBotRequest): Promise<any[]>
+⋮----
+getSignalBotPositions(params: {
+    algoOrdType: string;
+    algoId: string;
+  }): Promise<any[]>
+⋮----
+getSignalBotPositionHistory(
+    params: GetSignalBotPositionHistoryRequest,
+  ): Promise<any[]>
+⋮----
+closeSignalBotPosition(params: { algoId: string; instId: string }): Promise<
+    {
+      algoId: string;
+    }[]
+  >
+⋮----
+placeSignalBotSubOrder(params: PlaceSubOrderRequest): Promise<any[]>
+⋮----
+cancelSubOrder(params: CancelSubOrderRequest): Promise<any[]>
+⋮----
+getSignalBotSubOrders(params: GetSignalBotSubOrdersRequest): Promise<any[]>
+⋮----
+getSignalBotEventHistory(
+    params: GetSignalBotEventHistoryRequest,
+  ): Promise<any[]>
+⋮----
+/**
+   *
+   * Orderbook trading - Recurring buy endpoints
+   *
+   */
+⋮----
+submitRecurringBuyOrder(
+    params: PlaceRecurringBuyOrderRequest,
+  ): Promise<RecurringBuyOrderResult[]>
+⋮----
+amendRecurringBuyOrder(
+    params: AmendRecurringBuyOrderRequest,
+  ): Promise<RecurringBuyOrderResult[]>
+⋮----
+stopRecurringBuyOrder(params: {
+    algoId: string;
+  }): Promise<RecurringBuyOrderResult[]>
+⋮----
+getRecurringBuyOrders(
+    params: GetRecurringBuyOrderListRequest,
+  ): Promise<RecurringBuyOrder[]>
+⋮----
+getRecurringBuyOrderHistory(
+    params: GetRecurringBuyOrderListRequest,
+  ): Promise<RecurringBuyOrder[]>
+⋮----
+getRecurringBuyOrderDetails(params: {
+    algoId: string;
+  }): Promise<RecurringBuyOrder[]>
+⋮----
+getRecurringBuySubOrders(
+    params: GetRecurringBuyOrderListRequest,
+  ): Promise<RecurringBuySubOrder[]>
+⋮----
+/**
+   *
+   * Orderbook trading - Copy trading endpoints
+   *
+   */
+⋮----
+getCopytradingSubpositions(
+    params?: GetCurrentSubpositionsRequest,
+  ): Promise<CurrentSubposition[]>
+⋮----
+getCopytradingSubpositionsHistory(
+    params?: GetSubpositionsHistoryRequest,
+  ): Promise<SubpositionsHistory[]>
+⋮----
+submitCopytradingAlgoOrder(
+    params: PlaceCTAlgoOrderRequest,
+  ): Promise<PlaceCTAlgoOrderResult[]>
+⋮----
+closeCopytradingSubposition(params: CloseSubpositionRequest): Promise<
+    {
+      subPosId: string;
+      tag: string;
+    }[]
+  >
+⋮----
+getCopytradingInstruments(params?: { instType?: 'SPOT' | 'SWAP' }): Promise<
+    {
+      instId: string;
+      enabled: boolean;
+    }[]
+  >
+⋮----
+setCopytradingInstruments(params: {
+    instType?: 'SPOT' | 'SWAP';
+    instId: string;
+  }): Promise<
+    {
+      instId: string;
+      enabled: boolean;
+    }[]
+  >
+⋮----
+getCopytradingProfitDetails(
+    params?: GetCTProfitDetailsRequest,
+  ): Promise<GetCTProfitDetailsResult[]>
+⋮----
+getCopytradingTotalProfit(params?: {
+    instType?: 'SPOT' | 'SWAP';
+  }): Promise<GetCTTotalProfitResult[]>
+⋮----
+getCopytradingUnrealizedProfit(params?: {
+    instType?: 'SPOT' | 'SWAP';
+  }): Promise<GetCTUnrealizedProfitResult[]>
+⋮----
+getCopytradingTotalUnrealizedProfit(params?: { instType?: 'SWAP' }): Promise<
+    {
+      instType?: 'SWAP';
+      instId: string;
+    }[]
+  >
+⋮----
+applyCopytradingLeadTrading(params: {
+    profitSharingTs: string;
+    totalUnrealizedProfitSharingAmt: string;
+  }): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+stopCopytradingLeadTrading(params?: { instType?: 'SWAP' }): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+updateCopytradingProfitSharing(params: {
+    instType?: 'SWAP';
+    profitSharingRatio: string;
+  }): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+getCopytradingAccount(): Promise<GetAccountConfigurationResult[]>
+⋮----
+setCopytradingFirstCopy(params: CopySettingsRequest): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+updateCopytradingCopySettings(params: CopySettingsRequest): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+stopCopytradingCopy(params: {
+    instType?: 'SWAP';
+    uniqueCode: string;
+    subPosCloseType: 'market_close' | 'copy_close' | 'manual_close';
+  }): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+getCopytradingCopySettings(params: {
+    instType?: 'SWAP';
+    uniqueCode: string;
+  }): Promise<GetCopySettingsResult[]>
+⋮----
+getCopytradingBatchLeverageInfo(
+    params: GetCTBatchLeverageInfoRequest,
+  ): Promise<GetCTBatchLeverageInfoResult[]>
+⋮----
+setCopytradingBatchLeverage(
+    params: SetCTBatchLeverageRequest,
+  ): Promise<SetCTBatchLeverageResult[]>
+⋮----
+getCopytradingMyLeadTraders(params?: {
+    instType?: 'SWAP';
+  }): Promise<GetCTMyLeadTradersResult[]>
+⋮----
+getCopytradingLeadTradersHistory(
+    params?: GetCTHistoryLeadTradersRequest,
+  ): Promise<GetCTHistoryLeadTradersResult[]>
+⋮----
+getCopytradingConfig(params?: {
+    instType?: 'SWAP';
+  }): Promise<GetCopyTradingConfigResult[]>
+⋮----
+getCopytradingLeadRanks(
+    params?: GetLeadTraderRanksRequest,
+  ): Promise<GetLeadTraderRanksResult[]>
+⋮----
+getCopytradingLeadWeeklyPnl(params: {
+    instType?: 'SWAP';
+    uniqueCode: string;
+  }): Promise<LeadTraderPnl[]>
+⋮----
+getCopytradingLeadDailyPnl(
+    params: GetLeadTraderStatsRequest,
+  ): Promise<LeadTraderPnl[]>
+⋮----
+getCopytradingLeadStats(
+    params: GetLeadTraderStatsRequest,
+  ): Promise<LeadTraderStats[]>
+⋮----
+getCopytradingLeadPreferences(params: {
+    instType?: 'SWAP';
+    uniqueCode: string;
+  }): Promise<LeadTraderPreference[]>
+⋮----
+getCopytradingLeadOpenPositions(
+    params: GetLeadTraderPositionsRequest,
+  ): Promise<LeadTraderCurrentPosition[]>
+⋮----
+getCopytradingLeadPositionHistory(
+    params: GetLeadTraderPositionsRequest,
+  ): Promise<LeadTraderPositionHistory[]>
+⋮----
+getCopyTraders(
+    params: GetCopyTradersRequest,
+  ): Promise<GetCopyTradersResult[]>
+⋮----
+getCopytradingLeadPrivateRanks(
+    params?: GetPrivateLeadTraderRanksRequest,
+  ): Promise<GetPrivateLeadTraderRanksResult[]>
+⋮----
+getCopytradingLeadPrivateWeeklyPnl(params: {
+    instType?: 'SWAP';
+    uniqueCode: string;
+  }): Promise<LeadTraderPnl[]>
+⋮----
+getCopytradingPLeadPrivateDailyPnl(
+    params: GetLeadTraderStatsRequest,
+  ): Promise<LeadTraderPnl[]>
+⋮----
+geCopytradingLeadPrivateStats(
+    params: GetLeadTraderStatsRequest,
+  ): Promise<LeadTraderStats[]>
+⋮----
+getCopytradingLeadPrivatePreferences(params: {
+    instType?: 'SWAP';
+    uniqueCode: string;
+  }): Promise<LeadTraderPreference[]>
+⋮----
+getCopytradingLeadPrivateOpenPositions(
+    params: GetLeadTraderPositionsRequest,
+  ): Promise<LeadTraderCurrentPosition[]>
+⋮----
+getCopytradingLeadPrivatePositionHistory(
+    params: GetLeadTraderPositionsRequest,
+  ): Promise<LeadTraderPositionHistory[]>
+⋮----
+getCopyTradersPrivate(
+    params: GetCopyTradersRequest,
+  ): Promise<GetCopyTradersResult[]>
+⋮----
+/**
+   *
+   * Orderbook trading - Market data endpoints
+   *
+   */
+⋮----
+getTickers(params: {
+    instType: InstrumentType;
+    uly?: string;
+    instFamily?: string;
+  }): Promise<Ticker[]>
+⋮----
+getTicker(params: { instId: string }): Promise<Ticker[]>
+⋮----
+getOrderBook(params: {
+    instId: string;
+    sz?: numberInString;
+  }): Promise<OrderBook[]>
+⋮----
+getRpiOrderBook(params: {
+    instId: string;
+    sz?: numberInString;
+  }): Promise<OrderBookRpi[]>
+⋮----
+getFullOrderBook(params: {
+    instId: string;
+    sz?: string;
+  }): Promise<OrderBook[]>
+⋮----
+getCandles(params: CandleRequest): Promise<Candle[]>
+⋮----
+getHistoricCandles(params: CandleRequest): Promise<Candle[]>
+⋮----
+getTrades(params: { instId: string; limit?: number }): Promise<Trade[]>
+⋮----
+getHistoricTrades(params: {
+    instId: string;
+    after?: numberInString;
+    before?: numberInString;
+    limit?: numberInString;
+    type?: '1' | '2';
+  }): Promise<Trade[]>
+⋮----
+getOptionTradesByInstrument(params: {
+    instFamily: string;
+  }): Promise<OptionTrade[]>
+⋮----
+getOptionTrades(params: GetOptionTradesRequest): Promise<OptionTrades[]>
+⋮----
+get24hrTotalVolume(): Promise<any[]>
+⋮----
+/**
+   *
+   * Block trading - REST endpoints
+   *
+   */
+⋮----
+getBlockCounterParties(): Promise<BlockCounterParty[]>
+⋮----
+createBlockRFQ(params: CreateBlockRFQRequest): Promise<CreateRFQResult[]>
+⋮----
+cancelBlockRFQ(
+    params: CancelBlockRFQRequest,
+  ): Promise<CancelBlockRFQResult[]>
+⋮----
+cancelMultipleBlockRFQs(
+    params: CancelMultipleBlockRFQRequest,
+  ): Promise<CancelBlockRFQResult[]>
+⋮----
+cancelAllRFQs(): Promise<TimestampObject[]>
+⋮----
+executeBlockQuote(
+    params: ExecuteBlockQuoteRequest,
+  ): Promise<ExecuteBlockQuoteResult[]>
+⋮----
+getQuoteProducts(): Promise<BlockMakerInstrumentSettings[]>
+⋮----
+updateBlockQuoteProducts(params: SetQuoteProductsRequest): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+resetBlockMmp(): Promise<
+    {
+      ts: string;
+    }[]
+  >
+⋮----
+updateBlockMmpConfig(
+    params: SetMmpConfigRequest,
+  ): Promise<SetMmpConfigResult[]>
+⋮----
+getBlockMmpConfig(): Promise<BlockMMPConfig[]>
+⋮----
+createBlockQuote(
+    params: CreateBlockQuoteRequest,
+  ): Promise<CreateBlockQuoteResult[]>
+⋮----
+cancelBlockQuote(
+    params: CancelBlockQuoteRequest,
+  ): Promise<CancelBlockQuoteResult[]>
+⋮----
+cancelMultipleBlockQuotes(
+    params: CancelMultipleBlockQuoteRequest,
+  ): Promise<CancelBlockQuoteResult[]>
+⋮----
+cancelAllBlockQuotes(): Promise<TimestampObject[]>
+⋮----
+cancelAllBlockAfter(params: { timeOut: string }): Promise<
+    {
+      triggerTime: string;
+      ts: string;
+    }[]
+  >
+⋮----
+getBlockRFQs(params?: GetBlockRFQSParams): Promise<BlockRFQResult[]>
+⋮----
+getBlockQuotes(params?: GetBlockQuoteParams): Promise<GetBlockQuoteResult[]>
+⋮----
+getBlockTrades(params?: any): Promise<BlockTradeResult[]>
+⋮----
+getPublicRFQBlockTrades(params?: any): Promise<PublicBlockTrade[]>
+⋮----
+getBlockTickers(params: {
+    instType: InstrumentType;
+    uly?: string;
+  }): Promise<any[]>
+⋮----
+getBlockTicker(params: { instId: string }): Promise<any[]>
+⋮----
+getBlockPublicTrades(params: {
+    instId: string;
+  }): Promise<PublicBlockTrade[]>
+⋮----
+/**
+   *
+   * Spread trading - REST endpoints
+   *
+   */
+⋮----
+submitSpreadOrder(
+    params: PlaceSpreadOrderRequest,
+  ): Promise<PlaceSpreadOrderResponse[]>
+⋮----
+cancelSpreadOrder(params?: {
+    ordId?: string;
+    clOrdId?: string;
+  }): Promise<CancelSpreadOrderResponse[]>
+⋮----
+cancelAllSpreadOrders(params?: { sprdId?: string }): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+updateSpreadOrder(
+    params: UpdateSpreadOrderRequest,
+  ): Promise<UpdateSpreadOrderResponse[]>
+⋮----
+getSpreadOrder(params: {
+    ordId?: string;
+    clOrdId?: string;
+  }): Promise<SpreadOrder[]>
+⋮----
+getSpreadActiveOrders(
+    params?: GetActiveSpreadOrdersRequest,
+  ): Promise<SpreadOrder[]>
+⋮----
+getSpreadOrdersRecent(
+    params?: GetSpreadOrderHistoryRequest,
+  ): Promise<SpreadOrder[]>
+⋮----
+getSpreadOrdersArchive(
+    params?: GetSpreadOrderHistoryArchiveRequest,
+  ): Promise<SpreadOrder[]>
+⋮----
+getSpreadTrades(params?: GetSpreadTradesRequest): Promise<SpreadTrade[]>
+⋮----
+getSpreads(params?: GetSpreadsRequest): Promise<SpreadDetails[]>
+⋮----
+getSpreadOrderBook(params: {
+    sprdId: string;
+    sz?: string;
+  }): Promise<SpreadOrderBook[]>
+⋮----
+getSpreadTicker(params: { sprdId: string }): Promise<SpreadTicker[]>
+⋮----
+getSpreadPublicTrades(params?: {
+    sprdId?: string;
+  }): Promise<PublicSpreadTrade[]>
+⋮----
+getSpreadCandles(params: GetSpreadCandlesRequest): Promise<SpreadCandle[]>
+⋮----
+getSpreadHistoryCandles(
+    params: GetSpreadCandlesRequest,
+  ): Promise<SpreadCandle[]>
+⋮----
+cancelSpreadAllAfter(params: { timeOut: string }): Promise<
+    {
+      triggerTime: string;
+      ts: string;
+    }[]
+  >
+⋮----
+/**
+   *
+   * Public data - rest endpoints
+   *
+   */
+⋮----
+getInstruments(params: GetInstrumentsRequest): Promise<Instrument[]>
+⋮----
+/**
+   * Prediction / event contract series. Public (no auth required since 2026-05-19).
+   * @see GET /api/v5/public/event-contract/series
+   */
+getEventContractSeries(
+    params?: GetEventContractSeriesRequest,
+  ): Promise<EventContractSeries[]>
+⋮----
+/**
+   * Events for a series. Public (no auth required since 2026-05-19).
+   * @see GET /api/v5/public/event-contract/events
+   */
+getEventContractEvents(
+    params: GetEventContractEventsRequest,
+  ): Promise<EventContractEvent[]>
+⋮----
+/**
+   * Corporate actions for underlying stocks and affected OKX instruments.
+   * @see GET /api/v5/public/corporate-actions
+   */
+getCorporateActions(
+    params?: GetCorporateActionsRequest,
+  ): Promise<CorporateAction[]>
+⋮----
+/**
+   * Markets for events. Public (no auth required since 2026-05-19).
+   * @see GET /api/v5/public/event-contract/markets
+   */
+getEventContractMarkets(
+    params: GetEventContractMarketsRequest,
+  ): Promise<EventContractMarket[]>
+⋮----
+getDeliveryExerciseHistory(params: any): Promise<any[]>
+⋮----
+getOpenInterest(params: any): Promise<any[]>
+⋮----
+getFundingRate(params: GetFundingRateRequest): Promise<PublicFundingRate[]>
+⋮----
+getFundingRateHistory(
+    params: FundingRateRequest,
+  ): Promise<FundingRateHistory[]>
+⋮----
+getMinMaxLimitPrice(params: any): Promise<any[]>
+⋮----
+getOptionMarketData(params: any): Promise<any[]>
+⋮----
+/**
+   * Estimated delivery or exercise price (FUTURES / OPTION / EVENTS; REST returns one row with `settlePx`).
+   * The value is only meaningful shortly before delivery/exercise. The window used for the index mean is 30 minutes (since 2026-03-18; 200ms sampling).
+   */
+getEstimatedDeliveryExercisePrice(params: {
+    instId: string;
+  }): Promise<EstimatedDeliveryExercisePrice[]>
+⋮----
+getDiscountRateAndInterestFreeQuota(params: any): Promise<any[]>
+⋮----
+getSystemTime(params: any): Promise<SystemTime[]>
+⋮----
+getHistoricalMarketData(
+    params: GetHistoricalMarketDataRequest,
+  ): Promise<MarketDataHistoryResult[]>
+⋮----
+getMarkPrice(params: any): Promise<any[]>
+⋮----
+getPositionTiers(params: any): Promise<any[]>
+⋮----
+getInterestRateAndLoanQuota(): Promise<InterestRateAndLoanQuota[]>
+⋮----
+getVIPInterestRateAndLoanQuota(params: any): Promise<any[]>
+⋮----
+getUnderlying(params: any): Promise<any[]>
+⋮----
+getInsuranceFund(params?: GetInsuranceFundRequest): Promise<InsuranceFund[]>
+⋮----
+getMmInstrumentTypes(params?: {
+    instType?: 'SPOT' | 'SWAP';
+    instId?: string;
+  }): Promise<MmInstrumentType[]>
+⋮----
+getDeltaHedgeCurrencies(params?: {
+    ccy?: string;
+  }): Promise<DeltaHedgeCurrency[]>
+⋮----
+getUnitConvert(params: UnitConvertRequest): Promise<UnitConvertData[]>
+⋮----
+getOptionTickBands(params: {
+    instType: string;
+    instFamily?: string;
+  }): Promise<any[]>
+⋮----
+getPremiumHistory(params: GetPremiumHistoryRequest): Promise<any[]>
+⋮----
+getIndexTickers(params?: {
+    quoteCcy?: string;
+    instId?: string;
+  }): Promise<IndexTicker[]>
+⋮----
+getIndexCandles(params: CandleRequest): Promise<CandleNoVolume[]>
+⋮----
+getHistoricIndexCandles(params: CandleRequest): Promise<CandleNoVolume[]>
+⋮----
+getMarkPriceCandles(params: CandleRequest): Promise<CandleNoVolume[]>
+⋮----
+getHistoricMarkPriceCandles(
+    params: CandleRequest,
+  ): Promise<CandleNoVolume[]>
+⋮----
+getOracle(): Promise<any[]>
+⋮----
+getExchangeRate(): Promise<any[]>
+⋮----
+getIndexComponents(params: { index: string }): Promise<any[]>
+⋮----
+getEconomicCalendar(
+    params: EconomicCalendarRequest,
+  ): Promise<EconomicCalendarData[]>
+⋮----
+getPublicBlockTrades(params: { instId: string }): Promise<any[]>
+⋮----
+/**
+   *
+   * Trading statistics - REST endpoints
+   *
+   */
+⋮----
+getSupportCoin(): Promise<any[]>
+⋮----
+getOpenInterestHistory(
+    params: GetContractOpenInterestHistoryRequest,
+  ): Promise<any[]>
+⋮----
+getTakerVolume(params: {
+    instType: string;
+    ccy: string;
+    period?: string;
+    end?: string;
+    begin?: string;
+  }): Promise<any[]>
+⋮----
+getContractTakerVolume(
+    params: GetContractTakerVolumeRequest,
+  ): Promise<any[]>
+⋮----
+getMarginLendingRatio(params: {
+    ccy: string;
+    begin?: numberInString;
+    end?: numberInString;
+    period: '5m' | '1H' | '1D';
+  }): Promise<any[]>
+⋮----
+getTopTradersAccountRatio(
+    params: GetTopTradersContractLongShortRatioRequest,
+  ): Promise<any[]>
+⋮----
+getTopTradersContractPositionRatio(
+    params: GetTopTradersContractLongShortRatioRequest,
+  ): Promise<any[]>
+⋮----
+getLongShortContractRatio(
+    params: GetTopTradersContractLongShortRatioRequest,
+  ): Promise<any[]>
+⋮----
+getLongShortRatio(params: {
+    ccy: string;
+    begin?: numberInString;
+    end?: numberInString;
+    period: '5m' | '1H' | '1D';
+  }): Promise<any[]>
+⋮----
+getContractsOpenInterestAndVolume(params: {
+    ccy: string;
+    begin?: numberInString;
+    end?: numberInString;
+    period: '5m' | '1H' | '1D';
+  }): Promise<any[]>
+⋮----
+getOptionsOpenInterestAndVolume(params: {
+    ccy: string;
+    period: '8H' | '1D';
+  }): Promise<any[]>
+⋮----
+getPutCallRatio(params: {
+    ccy: string;
+    period: '8H' | '1D';
+  }): Promise<any[]>
+⋮----
+getOpenInterestAndVolumeExpiry(params: {
+    ccy: string;
+    period: '8H' | '1D';
+  }): Promise<any[]>
+⋮----
+getOpenInterestAndVolumeStrike(params: {
+    ccy: string;
+    expTime: string;
+    period?: '8H' | '1D';
+  }): Promise<any[]>
+⋮----
+getTakerFlow(params: { ccy: string; period: '8H' | '1D' }): Promise<any[]>
+⋮----
+/**
+   *
+   * Funding account - REST endpoints
+   *
+   */
+⋮----
+getCurrencies(params?: { ccy?: string }): Promise<FundingCurrency[]>
+⋮----
+getBalances(params?: { ccy?: string }): Promise<FundingBalance[]>
+⋮----
+getNonTradableAssets(params?: { ccy?: string }): Promise<NonTradableAsset[]>
+⋮----
+getAccountAssetValuation(params?: {
+    ccy?: string;
+  }): Promise<AccountAssetValuation[]>
+⋮----
+fundsTransfer(params: FundsTransferRequest): Promise<FundTransferResult[]>
+⋮----
+/** Either parameter transId or clientId is required. */
+getFundsTransferState(params?: {
+    transId?: string;
+    clientId?: string;
+    type?: '0' | '1' | '2';
+  }): Promise<FundTransferState[]>
+⋮----
+/**
+   * Query the billing record in the past month.
+   */
+getAssetBillsDetails(params?: {
+    ccy?: string;
+    type?: `${ASSET_BILL_TYPE}`;
+    clientId?: string;
+    /** Third-party custody type. Defaults to 1 (Copper) if not specified. */
+    thirdPartyType?: '1' | '2' | '5' | '6';
+    after?: numberInString;
+    before?: numberInString;
+    limit?: numberInString;
+  }): Promise<AssetBillDetails[]>
+⋮----
+/** Third-party custody type. Defaults to 1 (Copper) if not specified. */
+⋮----
+/**
+   * Query the billing records of all time since 1 February, 2021.
+   *
+   *  ⚠️ IMPORTANT: Data updates occur every 30 seconds. Update frequency may vary based on data volume - please be aware of potential delays during high-traffic periods.
+   *
+   * Rate Limit: 1 Requests per second
+   * @param params
+   * @returns
+   */
+getAssetBillsHistoric(params?: {
+    ccy?: string;
+    type?: `${ASSET_BILL_TYPE}`;
+    clientId?: string;
+    /** Third-party custody type. Defaults to 1 (Copper) if not specified. @see 2026-06-05 changelog */
+    thirdPartyType?: '1' | '2' | '5' | '6';
+    after?: numberInString;
+    before?: numberInString;
+    limit?: numberInString;
+    pagingType?: '0' | '1';
+  }): Promise<AssetBillDetails[]>
+⋮----
+/** Third-party custody type. Defaults to 1 (Copper) if not specified. @see 2026-06-05 changelog */
+⋮----
+getLightningDeposits(params: {
+    ccy: string;
+    amt: numberInString;
+    to?: '6' | '18';
+  }): Promise<any[]>
+⋮----
+getDepositAddress(params: { ccy: string }): Promise<any[]>
+⋮----
+getDepositHistory(
+    params?: GetDepositHistoryRequest,
+  ): Promise<DepositHistory[]>
+⋮----
+submitWithdraw(params: WithdrawRequest): Promise<WithdrawResponse[]>
+⋮----
+submitWithdrawLightning(params: {
+    ccy: string;
+    invoice: string;
+    memo?: string;
+  }): Promise<any[]>
+⋮----
+cancelWithdrawal(params: { wdId: string }): Promise<any[]>
+⋮----
+getWithdrawalHistory(params?: WithdrawalHistoryRequest): Promise<any[]>
+⋮----
+getDepositWithdrawStatus(
+    params: GetDepositWithdrawStatusRequest,
+  ): Promise<any[]>
+⋮----
+getExchanges(): Promise<any[]>
+⋮----
+applyForMonthlyStatement(params?: { month?: string }): Promise<any[]>
+⋮----
+getMonthlyStatement(params: { month: string }): Promise<any[]>
+⋮----
+getConvertCurrencies(): Promise<any[]>
+⋮----
+getConvertCurrencyPair(params: {
+    fromCcy: string;
+    toCcy: string;
+    /** 0: standard convert (default), 1: large order convert for VIP */
+    convertMode?: '0' | '1';
+  }): Promise<any[]>
+⋮----
+/** 0: standard convert (default), 1: large order convert for VIP */
+⋮----
+estimateConvertQuote(params: ConvertQuoteEstimateRequest): Promise<any[]>
+⋮----
+convertTrade(params: ConvertTradeRequest): Promise<any[]>
+⋮----
+getConvertHistory(params?: any): Promise<any[]>
+⋮----
+/**
+   *
+   * Subaccount - REST endpoints
+   *
+   */
+⋮----
+/** View sub-account list */
+getSubAccountList(params?: any): Promise<SubAccount[]>
+⋮----
+resetSubAccountAPIKey(params: {
+    subAcct: string;
+    apiKey: string;
+    label?: string;
+    perm?: string;
+    ip?: string;
+  }): Promise<SubAccountAPIReset[]>
+⋮----
+getSubAccountBalances(params: {
+    subAcct: string;
+  }): Promise<SubAccountBalances[]>
+⋮----
+getSubAccountFundingBalances(params: {
+    subAcct: string;
+    ccy?: string;
+  }): Promise<FundingBalance[]>
+⋮----
+getSubAccountMaxWithdrawal(
+    params: GetSubAccountMaxWithdrawalsRequest,
+  ): Promise<SubAccountMaxWithdrawal[]>
+⋮----
+/** History of sub-account transfer */
+getSubAccountTransferHistory(params?: {
+    ccy?: string;
+    type?: '0' | '1';
+    subAcct?: string;
+    after?: string;
+    before?: string;
+    limit?: string;
+  }): Promise<any[]>
+⋮----
+getManagedSubAccountTransferHistory(
+    params: GetManagedSubAccountTransferHistoryRequest,
+  ): Promise<ManagedSubAccountTransfer[]>
+⋮----
+/** Master accounts manage the transfers between sub-accounts */
+transferSubAccountBalance(
+    params: SubAccountTransferRequest,
+  ): Promise<SubAccountTransferResult[]>
+⋮----
+setSubAccountTransferOutPermission(params: {
+    subAcct: string;
+    canTransOut: boolean;
+  }): Promise<any[]>
+⋮----
+getSubAccountCustodyTradingList(params?: {
+    subAcct?: string;
+  }): Promise<any[]>
+⋮----
+setSubAccountLoanAllocation(
+    params: SetSubAccountLoanAllocationRequest,
+  ): Promise<
+    {
+      result: boolean;
+    }[]
+  >
+⋮----
+getSubAccountBorrowInterestAndLimit(params: {
+    subAcct: string;
+    ccy?: string;
+  }): Promise<any[]>
+⋮----
+/**
+   *
+   * Financial product - on chain earn endpoints
+   *
+   */
+⋮----
+/** Get earn offers */
+getStakingOffers(params?: {
+    productId?: string;
+    protocolType?: 'staking' | 'defi';
+    ccy?: string;
+  }): Promise<any[]>
+⋮----
+submitStake(params: {
+    productId: string;
+    investData: {
+      ccy: string;
+      amt: string;
+    }[];
+    term?: string;
+  }): Promise<any[]>
+⋮----
+redeemStake(params: {
+    ordId: string;
+    protocolType: 'staking' | 'defi';
+    allowEarlyRedeem?: boolean;
+  }): Promise<any[]>
+⋮----
+cancelStakingRequest(params: {
+    ordId: string;
+    protocolType: 'staking' | 'defi';
+  }): Promise<any[]>
+⋮----
+/** Earn/staking get active orders */
+getActiveStakingOrders(params?: {
+    productId?: string;
+    protocolType?: 'staking' | 'defi';
+    ccy?: string;
+    state?: '8' | '13' | '9' | '1' | '2';
+  }): Promise<any[]>
+⋮----
+/** Earn/staking get order history */
+getStakingOrderHistory(params?: {
+    productId?: string;
+    protocolType?: string;
+    ccy?: string;
+    after?: string;
+    before?: string;
+    limit?: string;
+  }): Promise<any[]>
+⋮----
+/**
+   *
+   * Financial product - ETH staking endpoints
+   *
+   */
+⋮----
+getETHStakingProductInfo(): Promise<EthStakingProductInfo[]>
+⋮----
+getSOLStakingProductInfo(): Promise<SolStakingProductInfo>
+⋮----
+purchaseETHStaking(params: { amt: string }): Promise<any[]>
+⋮----
+redeemETHStaking(params: { amt: string }): Promise<any[]>
+⋮----
+getETHStakingBalance(): Promise<any[]>
+⋮----
+getETHStakingHistory(params: {
+    type?: 'purchase' | 'redeem';
+    status?: 'pending' | 'success' | 'failed' | 'cancelled';
+    after?: string;
+    before?: string;
+    limit?: string;
+  }): Promise<any[]>
+⋮----
+cancelRedeemETHStaking(params: { ordId: string }): Promise<
+    {
+      ordId: string;
+    }[]
+  >
+⋮----
+getAPYHistory(params: { days: string }): Promise<any[]>
+⋮----
+/**
+   *
+   * Financial product - simple earn flexible endpoints
+   *
+   */
+⋮----
+getSavingBalance(params?: { ccy?: string }): Promise<any[]>
+⋮----
+savingsPurchaseRedemption(params: {
+    ccy: string;
+    amt: numberInString;
+    side: 'purchase' | 'redempt';
+    rate: numberInString;
+  }): Promise<any[]>
+⋮----
+setLendingRate(params: {
+    ccy: string;
+    rate: numberInString;
+  }): Promise<any[]>
+⋮----
+getLendingHistory(params?: PaginatedSymbolRequest): Promise<any[]>
+⋮----
+getPublicBorrowInfo(params?: { ccy?: string }): Promise<any[]>
+⋮----
+getPublicBorrowHistory(
+    params?: PaginatedSymbolRequest,
+  ): Promise<PublicBorrowHistoryRecord[]>
+⋮----
+/**
+   *
+   * Financial product - simple earn fixed endpoints
+   *
+   */
+⋮----
+getLendingOffers(params?: { ccy?: string; term?: string }): Promise<any[]>
+⋮----
+getLendingAPYHistory(params: { ccy: string; term: string }): Promise<any[]>
+⋮----
+getLendingVolume(params: { ccy: string; term: string }): Promise<any[]>
+⋮----
+placeLendingOrder(params: LendingOrder): Promise<any[]>
+⋮----
+amendLendingOrder(params: LendingOrder): Promise<any[]>
+⋮----
+getLendingOrders(params: GetLendingOrderListRequest): Promise<any[]>
+⋮----
+getLendingSubOrders(params: GetLendingSubOrderListRequest): Promise<any[]>
+⋮----
+/**
+   *
+   * Financial product - Flexible loan endpoints
+   *
+   */
+⋮----
+getBorrowableCurrencies(): Promise<
+    {
+      borrowCcy: string;
+    }[]
+  >
+⋮----
+getCollateralAssets(
+    params?: GetFlexibleLoanCollateralAssetsRequest,
+  ): Promise<CollateralAssetsResponse[]>
+⋮----
+getMaxLoanAmount(params: MaxLoanRequest): Promise<MaxLoanResponse[]>
+⋮----
+adjustCollateral(params: AdjustCollateralRequest): Promise<[]>
+⋮----
+getLoanInfo(params?: GetLoanInfoRequest): Promise<LoanInfo[]>
+⋮----
+getLoanHistory(params?: LoanHistoryRequest): Promise<LoanHistoryItem[]>
+⋮----
+getAccruedInterest(
+    params?: AccruedInterestRequest,
+  ): Promise<AccruedInterestItem[]>
+⋮----
+/**
+   *
+   * Financial product — dual investment (DCD) endpoints
+   * @see https://www.okx.com/docs-v5/en/ (2026-03-13 release)
+   *
+   */
+⋮----
+getDcdCurrencyPairs(): Promise<DcdCurrencyPair[]>
+⋮----
+getDcdProducts(params: GetDcdProductsRequest): Promise<DcdProduct[]>
+⋮----
+requestDcdQuote(params: RequestDcdQuoteRequest): Promise<DcdQuote[]>
+⋮----
+submitDcdTrade(params: SubmitDcdTradeRequest): Promise<DcdTradeResult[]>
+⋮----
+requestDcdRedeemQuote(
+    params: RequestDcdRedeemQuoteRequest,
+  ): Promise<DcdRedeemQuote[]>
+⋮----
+submitDcdRedeem(params: SubmitDcdRedeemRequest): Promise<DcdRedeemResult[]>
+⋮----
+getDcdOrderStatus(
+    params: GetDcdOrderStatusRequest,
+  ): Promise<DcdOrderStatus[]>
+⋮----
+getDcdOrderHistory(
+    params?: GetDcdOrderHistoryRequest,
+  ): Promise<DcdOrderHistoryItem[]>
+⋮----
+/**
+   *
+   * Financial product — stable rewards endpoints
+   * @see https://www.okx.com/docs-v5/en/ (2026-04-24 release)
+   *
+   */
+⋮----
+getStableRewardsProductInfo(
+    params: GetStableRewardsProductInfoRequest,
+  ): Promise<StableRewardsProductInfo[]>
+⋮----
+/** @deprecated Decommissioned 2026-07-14. Use order book trading APIs. */
+requestStableRewardsQuote(
+    params: RequestStableRewardsQuoteRequest,
+  ): Promise<StableRewardsQuote[]>
+⋮----
+/** @deprecated Decommissioned 2026-07-14. Use order book trading APIs. */
+submitStableRewardsTrade(
+    params: SubmitStableRewardsTradeRequest,
+  ): Promise<StableRewardsTradeResult[]>
+⋮----
+getStableRewardsBalance(
+    params?: GetStableRewardsBalanceRequest,
+  ): Promise<StableRewardsBalance[]>
+⋮----
+getStableRewardsApyHistory(
+    params: GetStableRewardsApyHistoryRequest,
+  ): Promise<StableRewardsApyHistoryItem[]>
+⋮----
+/** @deprecated Decommissioned 2026-07-14. Use order book trading APIs. */
+getStableRewardsSubscribeRedeemHistory(
+    params: GetStableRewardsSubscribeRedeemHistoryRequest,
+  ): Promise<StableRewardsSubscribeRedeemHistoryItem[]>
+⋮----
+/**
+   *
+   * Financial product — OKUSD endpoints
+   *
+   */
+⋮----
+getOkusdLimits(): Promise<OkusdLimits[]>
+⋮----
+subscribeOkusd(
+    params: SubscribeOkusdRequest,
+  ): Promise<OkusdSubscribeResult[]>
+⋮----
+redeemOkusd(params: RedeemOkusdRequest): Promise<OkusdRedeemResult[]>
+⋮----
+/**
+   *
+   * GLP performance endpoints (market makers)
+   *
+   */
+⋮----
+getGlpTodayPerformance(): Promise<GlpTodayPerformance[]>
+⋮----
+getGlpHistoricalPerformance(
+    params: GetGlpHistoricalPerformanceRequest,
+  ): Promise<GlpHistoricalPerformanceItem[]>
+⋮----
+/**
+   *
+   * GLP API v2
+   * @see https://www.okx.com/docs-v5/en/ (2026-09-29)
+   *
+   */
+⋮----
+/**
+   * Active GLP enrollments, current and estimated tiers, tier requirements, and week-to-date performance.
+   * A sub-account API key returns the master account's GLP data. No request parameters.
+   * @see GET /api/v5/users/glp/v2/overview
+   */
+getGlpV2Overview(): Promise<GlpV2Overview[]>
+⋮----
+/**
+   * Daily and week-to-date performance for one GLP product and trading side in the current assessment period.
+   * A sub-account API key returns the master account's GLP data.
+   * @see GET /api/v5/users/glp/v2/details
+   */
+getGlpV2AssessmentDetails(
+    params: GetGlpV2AssessmentDetailsRequest,
+  ): Promise<GlpV2AssessmentDetails[]>
+⋮----
+/**
+   * Weekly assessment results, tier outcomes, and performance for one GLP product and trading side.
+   * A sub-account API key returns the master account's GLP data.
+   * @see GET /api/v5/users/glp/v2/history/performance
+   */
+getGlpV2PerformanceHistory(
+    params: GetGlpV2PerformanceHistoryRequest,
+  ): Promise<GlpV2PerformanceHistory[]>
+⋮----
+/**
+   *
+   * Affiliate endpoints
+   * @see https://www.okx.com/docs-v5/en/ (2026-05-08 release)
+   *
+   */
+⋮----
+getAffiliatePerformanceSummary(
+    params?: GetAffiliatePerformanceSummaryRequest,
+  ): Promise<AffiliatePerformanceSummary[]>
+⋮----
+getInviteeDetail(params: GetInviteeDetailRequest): Promise<InviteeDetail[]>
+⋮----
+getAffiliateInviteeList(
+    params?: GetAffiliateInviteeListRequest,
+  ): Promise<AffiliateInviteeListItem[]>
+⋮----
+getAffiliateLinkList(
+    params?: GetAffiliateLinkListRequest,
+  ): Promise<AffiliateLinkListItem[]>
+⋮----
+getAffiliateCoInviterLinkList(
+    params?: GetAffiliateCoInviterLinkListRequest,
+  ): Promise<AffiliateCoInviterLinkListItem[]>
+⋮----
+getAffiliateSubAffiliateList(
+    params?: GetAffiliateSubAffiliateListRequest,
+  ): Promise<AffiliateSubAffiliateListItem[]>
+⋮----
+getAffiliateRebateInfo(params: { apiKey: string }): Promise<any[]>
+⋮----
+/**
+   *
+   * Status endpoints (public)
+   *
+   */
+⋮----
+getSystemStatus(params: {
+    state?: 'scheduled' | 'ongoing' | 'pre_open' | 'completed' | 'canceled';
+  }): Promise<any[]>
+⋮----
+/**
+   *
+   * Announcement endpoints
+   *
+   */
+⋮----
+getAnnouncements(params?: { annType?: string; page?: string }): Promise<
+    {
+      totalPage: string;
+      details: Announcement[];
+    }[]
+  >
+⋮----
+getAnnouncementTypes(): Promise<
+    {
+      annType: string;
+      annTypeDesc: string;
+    }[]
+  >
+⋮----
+/**
+   *
+   * Broker endpoints (private)
+   *
+   */
+⋮----
+createSubAccount(params: {
+    subAcct: string;
+    label?: string;
+    clientIP?: string;
+    mainAcct: string;
+  }): Promise<any[]>
+⋮----
+deleteSubAccount(params: { subAcct: string }): Promise<any[]>
+⋮----
+createSubAccountAPIKey(params: {
+    subAcct: string;
+    label: string;
+    passphrase: string;
+    ip?: string;
+    perm?: string;
+  }): Promise<any[]>
+
+================
 File: package.json
 ================
 {
   "name": "okx-api",
-  "version": "3.2.9",
+  "version": "3.2.10",
   "description": "Complete Node.js SDK for OKX's REST APIs and WebSockets, with TypeScript & end-to-end tests",
   "scripts": {
     "test": "jest",
