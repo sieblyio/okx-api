@@ -1,7 +1,7 @@
 # Node.js & Typescript OKX (OKEX) API & WebSocket SDK
 
 [![E2E Tests](https://github.com/sieblyio/okx-api/actions/workflows/e2etest.yml/badge.svg?branch=master)](https://github.com/sieblyio/okx-api/actions/workflows/e2etest.yml)
-[![OKX Tutorial](https://img.shields.io/badge/OKX%20Tutorial-siebly.io-blue)](https://siebly.io/sdk/okx/javascript/tutorial)
+[![OKX Documentation](https://img.shields.io/badge/OKX%20Documentation-siebly.io-blue)](https://sieblyio.github.io/docs/okx/)
 [![npm downloads](https://img.shields.io/npm/dt/okx-api)][1]
 [![npm version](https://img.shields.io/npm/v/okx-api)][1]
 [![npm size](https://img.shields.io/bundlephobia/min/okx-api/latest)][1]
@@ -44,8 +44,8 @@ Complete, updated & performant Node.js SDK for the OKX(OKEX) APIs and WebSockets
     - End to end types.
     - See [examples/ws-api-client.ts](./examples/ws-api-client.ts) for a demonstration.
 - Browser support (via webpack bundle - see "Browser Usage" below).
-- QuickStart Guide: https://siebly.io/sdk/okx/javascript
-- OKX JavaScript Tutorial: https://siebly.io/sdk/okx/javascript/tutorial
+- QuickStart Guide: https://sieblyio.github.io/docs/okx/getting-started
+- OKX SDK Documentation: https://sieblyio.github.io/docs/okx/
 
 ## Table of Contents
 
