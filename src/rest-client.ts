@@ -109,6 +109,7 @@ import {
   EconomicCalendarRequest,
   GetContractOpenInterestHistoryRequest,
   GetContractTakerVolumeRequest,
+  GetCorporateActionsRequest,
   GetEventContractEventsRequest,
   GetEventContractMarketsRequest,
   GetEventContractSeriesRequest,
@@ -377,6 +378,7 @@ import {
   Announcement,
   Candle,
   CandleNoVolume,
+  CorporateAction,
   DeltaHedgeCurrency,
   EconomicCalendarData,
   EstimatedDeliveryExercisePrice,
@@ -1150,15 +1152,26 @@ export class RestClient extends BaseRestClient {
    * Only applicable to the crypto balance less than $10.
    *
    * Maximum 5 currencies can be selected in one order.
-   * If there are multiple currencies, separate them with commas in the "from" field.
+   * Supply currencies as an array in the "fromCcy" field.
    *
    */
-  submitEasyConvert(params: {
-    fromCcys: string[];
-    toCcy: string;
-    source?: string;
-  }): Promise<APIResponse<any>> {
-    return this.postPrivate('/api/v5/trade/easy-convert', params);
+  submitEasyConvert(
+    params: (
+      | { fromCcy: string[] }
+      | {
+          /** @deprecated Use fromCcy instead. */
+          fromCcys: string[];
+        }
+    ) & {
+      toCcy: string;
+      source?: string;
+    },
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/v5/trade/easy-convert', {
+      fromCcy: 'fromCcy' in params ? params.fromCcy : params.fromCcys,
+      toCcy: params.toCcy,
+      source: params.source,
+    });
   }
 
   /** Get easy convert history : Get the history and status of easy convert trades. */
@@ -1185,11 +1198,21 @@ export class RestClient extends BaseRestClient {
    * Isolated debts are not applicable.
    * The maximum repayment amount is based on the remaining available balance of funding and trading accounts.
    */
-  submitOneClickRepay(params: {
-    debtCcys: string[];
-    repayCcy: string;
-  }): Promise<APIResponse<any>> {
-    return this.postPrivate('/api/v5/trade/one-click-repay', params);
+  submitOneClickRepay(
+    params: (
+      | { debtCcy: string[] }
+      | {
+          /** @deprecated Use debtCcy instead. */
+          debtCcys: string[];
+        }
+    ) & {
+      repayCcy: string;
+    },
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/v5/trade/one-click-repay', {
+      debtCcy: 'debtCcy' in params ? params.debtCcy : params.debtCcys,
+      repayCcy: params.repayCcy,
+    });
   }
 
   /** Get the history and status of one-click repay trades. */
@@ -2260,6 +2283,16 @@ export class RestClient extends BaseRestClient {
     params: GetEventContractEventsRequest,
   ): Promise<EventContractEvent[]> {
     return this.get('/api/v5/public/event-contract/events', params);
+  }
+
+  /**
+   * Corporate actions for underlying stocks and affected OKX instruments.
+   * @see GET /api/v5/public/corporate-actions
+   */
+  getCorporateActions(
+    params?: GetCorporateActionsRequest,
+  ): Promise<CorporateAction[]> {
+    return this.get('/api/v5/public/corporate-actions', params);
   }
 
   /**

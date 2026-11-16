@@ -111,6 +111,22 @@ export interface GetEventContractMarketsRequest {
   after?: string;
 }
 
+/**
+ * @see GET /api/v5/public/corporate-actions
+ */
+export interface GetCorporateActionsRequest {
+  /** Underlying stock ticker. Mutually exclusive with instId. */
+  ticker?: string;
+  /** Instrument ID. Mutually exclusive with ticker. */
+  instId?: string;
+  /** Maximum 100. Default 20. */
+  limit?: string;
+  /** Return records with caEventId earlier than this value, exclusive. */
+  after?: string;
+  /** Return records with caEventId newer than this value, exclusive. */
+  before?: string;
+}
+
 export interface GetInsuranceFundRequest {
   instType?: string;
   type?:

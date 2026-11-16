@@ -441,6 +441,45 @@ export interface EventContractMarket {
   disputed: boolean;
 }
 
+/**
+ * @see GET /api/v5/public/corporate-actions
+ */
+export interface CorporateAction {
+  caEventId: string;
+  eventVersion: string;
+  ticker: string;
+  bbGlobalId: string;
+  exchange: string;
+  /** CASH_DIVIDEND | STOCK_SPLIT | REVERSE_STOCK_SPLIT | STOCK_DIVIDEND | SPINOFF */
+  actionType: string;
+  /** PREDICTABLE | UNPREDICTABLE */
+  caClass: string;
+  /** PENDING | SMALL | MEDIUM | LARGE. Only applicable to cash dividends. */
+  dividendSize: string;
+  /** Only present for cash dividends. Dates are Unix timestamps in milliseconds. */
+  cashDividend?: {
+    gross: string;
+    net: string;
+    ccy: string;
+    exDate: string;
+    recordDate: string;
+    paymentDate: string;
+  };
+  /** Source ratio for stock splits. Empty string otherwise. */
+  ratioFrom: string;
+  /** Target ratio for stock splits. Empty string otherwise. */
+  ratioTo: string;
+  /** upcoming | scheduled | preparing | pre_pause | progressing | completed */
+  status: string;
+  /** Planned cutover time, Unix timestamp in milliseconds. */
+  cutoverTime: string;
+  instruments: {
+    instId: string;
+    /** live | rebase | post_only | suspend */
+    state: string;
+  }[];
+}
+
 export interface MmInstrumentType {
   instId: string;
   instType: string;
