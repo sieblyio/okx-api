@@ -1160,11 +1160,7 @@ export class RestClient extends BaseRestClient {
   submitEasyConvert(
     params: SubmitEasyConvertRequest,
   ): Promise<APIResponse<any>> {
-    return this.postPrivate('/api/v5/trade/easy-convert', {
-      fromCcy: 'fromCcy' in params ? params.fromCcy : params.fromCcys,
-      toCcy: params.toCcy,
-      source: params.source,
-    });
+    return this.postPrivate('/api/v5/trade/easy-convert', params);
   }
 
   /** Get easy convert history : Get the history and status of easy convert trades. */
@@ -1190,14 +1186,12 @@ export class RestClient extends BaseRestClient {
    * Trade one-click repay to repay cross debts.
    * Isolated debts are not applicable.
    * The maximum repayment amount is based on the remaining available balance of funding and trading accounts.
+   * Supply debt currencies as an array in the "debtCcy" field.
    */
   submitOneClickRepay(
     params: SubmitOneClickRepayRequest,
   ): Promise<APIResponse<any>> {
-    return this.postPrivate('/api/v5/trade/one-click-repay', {
-      debtCcy: 'debtCcy' in params ? params.debtCcy : params.debtCcys,
-      repayCcy: params.repayCcy,
-    });
+    return this.postPrivate('/api/v5/trade/one-click-repay', params);
   }
 
   /** Get the history and status of one-click repay trades. */

@@ -309,26 +309,16 @@ export interface OrderRequest {
   quickMgnType?: 'manual' | 'auto_borrow' | 'auto_repay';
 }
 
-export type SubmitEasyConvertRequest = (
-  | { fromCcy: string[] }
-  | {
-      /** @deprecated Use fromCcy instead. */
-      fromCcys: string[];
-    }
-) & {
+export interface SubmitEasyConvertRequest {
+  fromCcy: string[];
   toCcy: string;
   source?: string;
-};
+}
 
-export type SubmitOneClickRepayRequest = (
-  | { debtCcy: string[] }
-  | {
-      /** @deprecated Use debtCcy instead. */
-      debtCcys: string[];
-    }
-) & {
+export interface SubmitOneClickRepayRequest {
+  debtCcy: string[];
   repayCcy: string;
-};
+}
 
 export interface GetTransactionDetailsArchiveRequest {
   year: string;
