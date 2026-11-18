@@ -211,7 +211,7 @@ describe('Private REST API Endpoints (POST)', () => {
       try {
         expect(
           await api.submitEasyConvert({
-            fromCcys: ['BTC'],
+            fromCcy: ['BTC'],
             toCcy: 'USDT',
           }),
         ).toBeFalsy();
@@ -229,7 +229,7 @@ describe('Private REST API Endpoints (POST)', () => {
       try {
         expect(
           await api.submitOneClickRepay({
-            debtCcys: ['BTC'],
+            debtCcy: ['BTC'],
             repayCcy: 'USDT',
           }),
         ).toBeFalsy();

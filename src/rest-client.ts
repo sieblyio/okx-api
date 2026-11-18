@@ -109,6 +109,7 @@ import {
   EconomicCalendarRequest,
   GetContractOpenInterestHistoryRequest,
   GetContractTakerVolumeRequest,
+  GetCorporateActionsRequest,
   GetEventContractEventsRequest,
   GetEventContractMarketsRequest,
   GetEventContractSeriesRequest,
@@ -182,6 +183,8 @@ import {
   OrderIdRequest,
   OrderPrecheckRequest,
   OrderRequest,
+  SubmitEasyConvertRequest,
+  SubmitOneClickRepayRequest,
 } from './types/rest/request/trade.js';
 import {
   AccountBalance,
@@ -377,6 +380,7 @@ import {
   Announcement,
   Candle,
   CandleNoVolume,
+  CorporateAction,
   DeltaHedgeCurrency,
   EconomicCalendarData,
   EstimatedDeliveryExercisePrice,
@@ -1150,14 +1154,12 @@ export class RestClient extends BaseRestClient {
    * Only applicable to the crypto balance less than $10.
    *
    * Maximum 5 currencies can be selected in one order.
-   * If there are multiple currencies, separate them with commas in the "from" field.
+   * Supply currencies as an array in the "fromCcy" field.
    *
    */
-  submitEasyConvert(params: {
-    fromCcys: string[];
-    toCcy: string;
-    source?: string;
-  }): Promise<APIResponse<any>> {
+  submitEasyConvert(
+    params: SubmitEasyConvertRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/v5/trade/easy-convert', params);
   }
 
@@ -1184,11 +1186,11 @@ export class RestClient extends BaseRestClient {
    * Trade one-click repay to repay cross debts.
    * Isolated debts are not applicable.
    * The maximum repayment amount is based on the remaining available balance of funding and trading accounts.
+   * Supply debt currencies as an array in the "debtCcy" field.
    */
-  submitOneClickRepay(params: {
-    debtCcys: string[];
-    repayCcy: string;
-  }): Promise<APIResponse<any>> {
+  submitOneClickRepay(
+    params: SubmitOneClickRepayRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/v5/trade/one-click-repay', params);
   }
 
@@ -2260,6 +2262,16 @@ export class RestClient extends BaseRestClient {
     params: GetEventContractEventsRequest,
   ): Promise<EventContractEvent[]> {
     return this.get('/api/v5/public/event-contract/events', params);
+  }
+
+  /**
+   * Corporate actions for underlying stocks and affected OKX instruments.
+   * @see GET /api/v5/public/corporate-actions
+   */
+  getCorporateActions(
+    params?: GetCorporateActionsRequest,
+  ): Promise<CorporateAction[]> {
+    return this.get('/api/v5/public/corporate-actions', params);
   }
 
   /**
