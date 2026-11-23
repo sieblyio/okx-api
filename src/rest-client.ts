@@ -84,6 +84,7 @@ import {
   GetDepositHistoryRequest,
   GetDepositWithdrawStatusRequest,
   GetFundingRateRequest,
+  UnlockTravelRuleDepositRequest,
   WithdrawRequest,
 } from './types/rest/request/funding.js';
 import {
@@ -306,7 +307,9 @@ import {
   FundingCurrency,
   FundTransferResult,
   FundTransferState,
+  LockedTravelRuleDeposit,
   NonTradableAsset,
+  UnlockTravelRuleDepositResponse,
   WithdrawResponse,
 } from './types/rest/response/private-funding.js';
 import {
@@ -2662,6 +2665,24 @@ export class RestClient extends BaseRestClient {
     params?: GetDepositHistoryRequest,
   ): Promise<DepositHistory[]> {
     return this.getPrivate('/api/v5/asset/deposit-history', params);
+  }
+
+  /**
+   * Get deposits locked under the Travel Rule (up to 50). Requires API key authentication.
+   * @see https://www.okx.com/docs-v5/en/#funding-account-rest-api-get-locked-travel-rule-deposits
+   */
+  getLockedTravelRuleDeposits(): Promise<LockedTravelRuleDeposit[]> {
+    return this.getPrivate('/api/v5/asset/travel-rule/get-locked');
+  }
+
+  /**
+   * Submit originator information to unlock a Travel Rule deposit. Requires Withdraw permission.
+   * @see https://www.okx.com/docs-v5/en/#funding-account-rest-api-unlock-travel-rule-deposit
+   */
+  unlockTravelRuleDeposit(
+    params: UnlockTravelRuleDepositRequest,
+  ): Promise<UnlockTravelRuleDepositResponse[]> {
+    return this.postPrivate('/api/v5/asset/travel-rule/unlock', params);
   }
 
   submitWithdraw(params: WithdrawRequest): Promise<WithdrawResponse[]> {
