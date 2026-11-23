@@ -22,7 +22,9 @@
 > [!TIP]
 > Upcoming change: As part of the [Siebly.io](https://siebly.io/?ref=ghokx) brand, this SDK is now hosted under our [Siebly.io GitHub organisation](https://github.com/sieblyio). The migration is seamless and requires no user changes.
 
-Complete, updated & performant Node.js SDK for the OKX(OKEX) APIs and WebSockets:
+Complete, updated & performant Node.js SDK for the OKX(OKEX) APIs and WebSockets.
+
+Take a look at our dedicated [OKX API quickstart guides for major frameworks and JavaScript runtimes](#frameworks--quickstart-guides).
 
 - Complete integration with OKX REST APIs, WebSockets & WebSocket APIs.
 - TypeScript support (with type declarations for most API requests & responses).
@@ -50,6 +52,7 @@ Complete, updated & performant Node.js SDK for the OKX(OKEX) APIs and WebSockets
 ## Table of Contents
 
 - [Installation](#installation)
+  - [Frameworks & Quickstart Guides](#frameworks--quickstart-guides)
 - [Issues & Discussion](#issues--discussion)
 - [Related Projects](#related-projects)
 - [Documentation](#documentation)
@@ -77,6 +80,20 @@ Complete, updated & performant Node.js SDK for the OKX(OKEX) APIs and WebSockets
 ```bash
 npm install okx-api
 ```
+
+### Frameworks & Quickstart Guides
+
+Our complete OKX SDK supports all the major JavaScript runtimes. For maximum convenience, we've included guides to quickly get you started with the most popular runtimes. If you're not sure how to use this SDK with a runtime or framework not listed here, feel free to [open an issue on GitHub](https://github.com/sieblyio/okx-api/issues).
+
+| Runtime                    | Details                                                                                                                                                                                                                                                                                                                                                                                      |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Backend (trading bots)     | Using [Node.js and JavaScript](https://sieblyio.github.io/docs/okx/environments/node.html), [Node.js and TypeScript](https://sieblyio.github.io/docs/okx/environments/typescript.html), [Bun](https://sieblyio.github.io/docs/okx/environments/bun.html), or [Deno](https://sieblyio.github.io/docs/okx/environments/deno.html). This is the recommendation for algorithmic trading systems. |
+| Frontend / Web Development | Using [React with Vite](https://sieblyio.github.io/docs/okx/environments/react.html) or [Vite with plain JavaScript](https://sieblyio.github.io/docs/okx/environments/vite.html). Display REST and WebSocket prices in the browser.                                                                                                                                                          |
+| Next.js App Router         | Using the [Next.js App Router](https://sieblyio.github.io/docs/okx/environments/next.html) to serve the price from a Route Handler running on Node.js.                                                                                                                                                                                                                                       |
+| Mobile (iOS & Android)     | Using [React Native with Expo for iOS and Android](https://sieblyio.github.io/docs/okx/environments/expo.html). The example guides you to display the current BTC-USDT price from OKX and stream updates over WebSockets.                                                                                                                                                                    |
+| Cloudflare Workers         | [Cloudflare Workers](https://sieblyio.github.io/docs/okx/environments/cloudflare-workers.html). Return a public price from a Worker, with a separate example for authenticated orders.                                                                                                                                                                                                       |
+
+Refer to [runtime setup](https://sieblyio.github.io/docs/okx/compatibility.html) for installation commands, project configuration, and public price examples.
 
 ## Issues & Discussion
 
@@ -110,10 +127,12 @@ Check out our JavaScript/TypeScript/Node.js SDKs & Projects:
 
 ## Documentation
 
+The [OKX SDK documentation](https://sieblyio.github.io/docs/okx/) covers installation, client setup, public market data, authenticated trading, and WebSocket subscriptions.
+
 Most methods accept JS objects. These can be populated using parameters specified by okx's API documentation, or check the type definition in the rest-client class methods.
 
 - [RestClient](src/rest-client.ts)
-- [OKX API Documentation](https://www.okx.com/docs-v5/en/#rest-api)
+- [OKX exchange API reference](https://www.okx.com/docs-v5/en/#rest-api)
 - [REST Endpoint Function List](./docs/endpointFunctionList.md)
 
 ## Contributions & Thanks
