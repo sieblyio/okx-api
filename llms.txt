@@ -1458,183 +1458,6 @@ export interface GetPrivateLeadTraderRanksResult {
 }
 
 ================
-File: src/types/rest/response/private-funding.ts
-================
-import { ASSET_BILL_TYPE } from '../../../constants/funding.js';
-⋮----
-export interface FundingCurrency {
-  ccy: string; // Currency code (e.g., "BTC")
-  name: string; // Currency name
-  logoLink: string; // Currency logo URL
-  chain: string; // Chain name (e.g., "BTC-Bitcoin")
-  ctAddr: string; // Contract address
-  canDep: boolean; // Deposit availability
-  canWd: boolean; // Withdrawal availability
-  canInternal: boolean; // Internal transfer availability
-  depEstOpenTime: string; // Estimated deposit opening time (timestamp)
-  wdEstOpenTime: string; // Estimated withdrawal opening time (timestamp)
-  minDep: string; // Minimum deposit amount
-  minWd: string; // Minimum withdrawal amount
-  minInternal: string; // Minimum internal transfer amount
-  maxWd: string; // Maximum withdrawal amount per transaction
-  wdTickSz: string; // Withdrawal precision (decimal places)
-  wdQuota: string; // 24h withdrawal limit in USD
-  usedWdQuota: string; // Used withdrawal quota in USD
-  fee: string; // Fixed withdrawal fee
-  minFee: string; // Minimum withdrawal fee (deprecated)
-  maxFee: string; // Maximum withdrawal fee (deprecated)
-  minFeeForCtAddr: string; // Minimum contract address withdrawal fee (deprecated)
-  maxFeeForCtAddr: string; // Maximum contract address withdrawal fee (deprecated)
-  burningFeeRate: string; // Burning fee rate (e.g., "0.05" for 5%)
-  mainNet: boolean; // Is main network
-  needTag: boolean; // Requires tag/memo for withdrawal
-  minDepArrivalConfirm: string; // Min confirmations for deposit credit
-  minWdUnlockConfirm: string; // Min confirmations for withdrawal unlock
-  depQuotaFixed: string; // Fixed deposit limit in USD
-  usedDepQuotaFixed: string; // Used fixed deposit quota in USD
-  depQuoteDailyLayer2: string; // Layer2 daily deposit limit
-}
-⋮----
-ccy: string; // Currency code (e.g., "BTC")
-name: string; // Currency name
-logoLink: string; // Currency logo URL
-chain: string; // Chain name (e.g., "BTC-Bitcoin")
-ctAddr: string; // Contract address
-canDep: boolean; // Deposit availability
-canWd: boolean; // Withdrawal availability
-canInternal: boolean; // Internal transfer availability
-depEstOpenTime: string; // Estimated deposit opening time (timestamp)
-wdEstOpenTime: string; // Estimated withdrawal opening time (timestamp)
-minDep: string; // Minimum deposit amount
-minWd: string; // Minimum withdrawal amount
-minInternal: string; // Minimum internal transfer amount
-maxWd: string; // Maximum withdrawal amount per transaction
-wdTickSz: string; // Withdrawal precision (decimal places)
-wdQuota: string; // 24h withdrawal limit in USD
-usedWdQuota: string; // Used withdrawal quota in USD
-fee: string; // Fixed withdrawal fee
-minFee: string; // Minimum withdrawal fee (deprecated)
-maxFee: string; // Maximum withdrawal fee (deprecated)
-minFeeForCtAddr: string; // Minimum contract address withdrawal fee (deprecated)
-maxFeeForCtAddr: string; // Maximum contract address withdrawal fee (deprecated)
-burningFeeRate: string; // Burning fee rate (e.g., "0.05" for 5%)
-mainNet: boolean; // Is main network
-needTag: boolean; // Requires tag/memo for withdrawal
-minDepArrivalConfirm: string; // Min confirmations for deposit credit
-minWdUnlockConfirm: string; // Min confirmations for withdrawal unlock
-depQuotaFixed: string; // Fixed deposit limit in USD
-usedDepQuotaFixed: string; // Used fixed deposit quota in USD
-depQuoteDailyLayer2: string; // Layer2 daily deposit limit
-⋮----
-export interface FundingBalance {
-  availBal: string;
-  bal: string;
-  ccy: string;
-  frozenBal: string;
-}
-⋮----
-export interface AccountAssetValuation {
-  details: {
-    classic: string;
-    earn: string;
-    funding: string;
-    trading: string;
-  };
-  totalBal: string;
-  ts: string;
-}
-⋮----
-export interface FundTransferResult {
-  transId: string;
-  ccy: string;
-  clientId: string;
-  from: string;
-  amt: string;
-  to: string;
-}
-export interface FundTransferState {
-  amt: string;
-  ccy: string;
-  clientId: string;
-  from: string;
-  instId: never; // deprecated
-  state: string;
-  subAcct: string;
-  to: string;
-  toInstId: never; // deprecated
-  transId: string;
-  type: string;
-}
-⋮----
-instId: never; // deprecated
-⋮----
-toInstId: never; // deprecated
-⋮----
-export interface AssetBillDetails {
-  billId: string;
-  ccy: string;
-  clientId: string;
-  balChg: string;
-  bal: string;
-  type: `${ASSET_BILL_TYPE}`;
-  notes: string;
-  ts: string;
-}
-⋮----
-export interface WithdrawResponse {
-  ccy: string;
-  chain: string;
-  amt: string;
-  wdId: string;
-  clientId: string;
-}
-⋮----
-export interface NonTradableAsset {
-  ccy: string;
-  name: string;
-  logoLink: string;
-  bal: string;
-  canWd: boolean;
-  chain: string;
-  minWd: string;
-  wdAll: boolean;
-  fee: string;
-  ctAddr: string;
-  wdTickSz: string;
-  needTag: boolean;
-  burningFeeRate: string;
-  feeCcy: string;
-}
-⋮----
-export interface DepositHistory {
-  ccy: string; // Currency, e.g. BTC
-  chain: string; // Chain name
-  amt: string; // Deposit amount
-  from: string; // Deposit account. If the deposit comes from internal transfer, displays account info (phone/email, masked). Returns "" otherwise.
-  areaCodeFrom: string; // If from is a phone number, this parameter returns area code of the phone number
-  to: string; // Deposit address. If the deposit comes from on-chain, displays the on-chain address. Returns "" otherwise.
-  txId: string; // Hash record of the deposit
-  ts: string; // Timestamp that the deposit record is created, Unix timestamp format in milliseconds, e.g. 1655251200000
-  state: string; // Status of deposit: 0=waiting for confirmation, 1=deposit credited, 2=deposit successful, 8=pending due to temp suspension, 11=match blacklist, 12=account/deposit frozen, 13=sub-account deposit interception, 14=KYC limit
-  depId: string; // Deposit ID
-  fromWdId: string; // Internal transfer initiator's withdrawal ID. If deposit comes from internal transfer, displays the withdrawal ID, returns "" otherwise
-  actualDepBlkConfirm: string; // The actual amount of blockchain confirmed in a single deposit
-}
-⋮----
-ccy: string; // Currency, e.g. BTC
-chain: string; // Chain name
-amt: string; // Deposit amount
-from: string; // Deposit account. If the deposit comes from internal transfer, displays account info (phone/email, masked). Returns "" otherwise.
-areaCodeFrom: string; // If from is a phone number, this parameter returns area code of the phone number
-to: string; // Deposit address. If the deposit comes from on-chain, displays the on-chain address. Returns "" otherwise.
-txId: string; // Hash record of the deposit
-ts: string; // Timestamp that the deposit record is created, Unix timestamp format in milliseconds, e.g. 1655251200000
-state: string; // Status of deposit: 0=waiting for confirmation, 1=deposit credited, 2=deposit successful, 8=pending due to temp suspension, 11=match blacklist, 12=account/deposit frozen, 13=sub-account deposit interception, 14=KYC limit
-depId: string; // Deposit ID
-fromWdId: string; // Internal transfer initiator's withdrawal ID. If deposit comes from internal transfer, displays the withdrawal ID, returns "" otherwise
-actualDepBlkConfirm: string; // The actual amount of blockchain confirmed in a single deposit
-
-================
 File: src/types/rest/response/private-recurring-buy.ts
 ================
 export interface RecurringBuyOrderResult {
@@ -3645,128 +3468,6 @@ export interface GetDcdOrderHistoryRequest {
 }
 
 ================
-File: src/types/rest/request/funding.ts
-================
-export interface FundsTransferRequest {
-  ccy: string;
-  amt: string;
-  from: '6' | '18';
-  to: '6' | '18';
-  subAcct?: string;
-  type?: '0' | '1' | '2' | '3' | '4';
-  loanTrans?: boolean;
-  clientId?: string;
-  omitPosRisk?: string;
-}
-⋮----
-export interface WithdrawRequest {
-  ccy: string;
-  amt: string;
-  dest: '3' | '4';
-  toAddr: string;
-  /**
-   * Address type:
-   * - 1: wallet address, email, phone, or login account name
-   * - 2: UID (only for whitelisted users; applicable only when dest=3)
-   */
-  toAddrType?: '1' | '2';
-  chain?: string;
-  areaCode?: string;
-  clientId?: string;
-  // Recipient information for specific entity users doing on-chain/lightning withdrawal
-  rcvrInfo?: {
-    // Required: 'exchange' for exchange wallet, 'private' for private wallet
-    walletType: 'exchange' | 'private';
-    // Exchange ID (required if walletType = 'exchange'). Use '0' if exchange not in list
-    exchId?: string;
-    // Receiver's first name (required if walletType = 'exchange')
-    rcvrFirstName?: string;
-    // Receiver's last name (required if walletType = 'exchange')
-    rcvrLastName?: string;
-    // Recipient's country - English name or ISO 3166-1 two-letter code
-    rcvrCountry?: string;
-    // State/Province of the recipient
-    rcvrCountrySubDivision?: string;
-    // Town/city where the recipient is located
-    rcvrTownName?: string;
-    // Recipient's street address
-    rcvrStreetName?: string;
-  };
-}
-⋮----
-/**
-   * Address type:
-   * - 1: wallet address, email, phone, or login account name
-   * - 2: UID (only for whitelisted users; applicable only when dest=3)
-   */
-⋮----
-// Recipient information for specific entity users doing on-chain/lightning withdrawal
-⋮----
-// Required: 'exchange' for exchange wallet, 'private' for private wallet
-⋮----
-// Exchange ID (required if walletType = 'exchange'). Use '0' if exchange not in list
-⋮----
-// Receiver's first name (required if walletType = 'exchange')
-⋮----
-// Receiver's last name (required if walletType = 'exchange')
-⋮----
-// Recipient's country - English name or ISO 3166-1 two-letter code
-⋮----
-// State/Province of the recipient
-⋮----
-// Town/city where the recipient is located
-⋮----
-// Recipient's street address
-⋮----
-/**
- * @see GET /api/v5/public/funding-rate
- * `instId` may be a specific instrument, or the literal `ANY` for all perpetuals and X-Perp (FUTURES) contracts.
- */
-export interface GetFundingRateRequest {
-  instId: string;
-}
-⋮----
-export interface FundingRateRequest {
-  /** Perpetual or X-Perp FUTURES instrument id (not `ANY` on this route). */
-  instId: string;
-  before?: string;
-  after?: string;
-  limit?: string;
-}
-⋮----
-/** Perpetual or X-Perp FUTURES instrument id (not `ANY` on this route). */
-⋮----
-export interface GetDepositWithdrawStatusRequest {
-  wdId?: string;
-  txId?: string;
-  ccy?: string;
-  to?: string;
-  chain?: string;
-}
-⋮----
-export interface GetDepositHistoryRequest {
-  ccy?: string; // Currency, e.g. BTC
-  depId?: string; // Deposit ID
-  fromWdId?: string; // Internal transfer initiator's withdrawal ID
-  txId?: string; // Hash record of the deposit
-  type?: '3' | '4'; // Deposit Type: 3=internal transfer, 4=deposit from chain
-  state?: '0' | '1' | '2' | '8' | '11' | '12' | '13' | '14' | '17'; // Status of deposit
-  after?: string; // Pagination of data to return records earlier than the requested ts (Unix timestamp in milliseconds)
-  before?: string; // Pagination of data to return records newer than the requested ts (Unix timestamp in milliseconds)
-  limit?: string; // Number of results per request. Max is 100; default is 100
-}
-⋮----
-ccy?: string; // Currency, e.g. BTC
-depId?: string; // Deposit ID
-fromWdId?: string; // Internal transfer initiator's withdrawal ID
-txId?: string; // Hash record of the deposit
-type?: '3' | '4'; // Deposit Type: 3=internal transfer, 4=deposit from chain
-state?: '0' | '1' | '2' | '8' | '11' | '12' | '13' | '14' | '17'; // Status of deposit
-after?: string; // Pagination of data to return records earlier than the requested ts (Unix timestamp in milliseconds)
-before?: string; // Pagination of data to return records newer than the requested ts (Unix timestamp in milliseconds)
-limit?: string; // Number of results per request. Max is 100; default is 100
-
-================
 File: src/types/rest/request/okusd.ts
 ================
 export interface SubscribeOkusdRequest {
@@ -4072,6 +3773,204 @@ export interface AccruedInterestItem {
   interestRate: string;
   ts: string;
 }
+
+================
+File: src/types/rest/response/private-funding.ts
+================
+import { ASSET_BILL_TYPE } from '../../../constants/funding.js';
+⋮----
+export interface FundingCurrency {
+  ccy: string; // Currency code (e.g., "BTC")
+  name: string; // Currency name
+  logoLink: string; // Currency logo URL
+  chain: string; // Chain name (e.g., "BTC-Bitcoin")
+  ctAddr: string; // Contract address
+  canDep: boolean; // Deposit availability
+  canWd: boolean; // Withdrawal availability
+  canInternal: boolean; // Internal transfer availability
+  depEstOpenTime: string; // Estimated deposit opening time (timestamp)
+  wdEstOpenTime: string; // Estimated withdrawal opening time (timestamp)
+  minDep: string; // Minimum deposit amount
+  minWd: string; // Minimum withdrawal amount
+  minInternal: string; // Minimum internal transfer amount
+  maxWd: string; // Maximum withdrawal amount per transaction
+  wdTickSz: string; // Withdrawal precision (decimal places)
+  wdQuota: string; // 24h withdrawal limit in USD
+  usedWdQuota: string; // Used withdrawal quota in USD
+  fee: string; // Fixed withdrawal fee
+  minFee: string; // Minimum withdrawal fee (deprecated)
+  maxFee: string; // Maximum withdrawal fee (deprecated)
+  minFeeForCtAddr: string; // Minimum contract address withdrawal fee (deprecated)
+  maxFeeForCtAddr: string; // Maximum contract address withdrawal fee (deprecated)
+  burningFeeRate: string; // Burning fee rate (e.g., "0.05" for 5%)
+  mainNet: boolean; // Is main network
+  needTag: boolean; // Requires tag/memo for withdrawal
+  minDepArrivalConfirm: string; // Min confirmations for deposit credit
+  minWdUnlockConfirm: string; // Min confirmations for withdrawal unlock
+  depQuotaFixed: string; // Fixed deposit limit in USD
+  usedDepQuotaFixed: string; // Used fixed deposit quota in USD
+  depQuoteDailyLayer2: string; // Layer2 daily deposit limit
+}
+⋮----
+ccy: string; // Currency code (e.g., "BTC")
+name: string; // Currency name
+logoLink: string; // Currency logo URL
+chain: string; // Chain name (e.g., "BTC-Bitcoin")
+ctAddr: string; // Contract address
+canDep: boolean; // Deposit availability
+canWd: boolean; // Withdrawal availability
+canInternal: boolean; // Internal transfer availability
+depEstOpenTime: string; // Estimated deposit opening time (timestamp)
+wdEstOpenTime: string; // Estimated withdrawal opening time (timestamp)
+minDep: string; // Minimum deposit amount
+minWd: string; // Minimum withdrawal amount
+minInternal: string; // Minimum internal transfer amount
+maxWd: string; // Maximum withdrawal amount per transaction
+wdTickSz: string; // Withdrawal precision (decimal places)
+wdQuota: string; // 24h withdrawal limit in USD
+usedWdQuota: string; // Used withdrawal quota in USD
+fee: string; // Fixed withdrawal fee
+minFee: string; // Minimum withdrawal fee (deprecated)
+maxFee: string; // Maximum withdrawal fee (deprecated)
+minFeeForCtAddr: string; // Minimum contract address withdrawal fee (deprecated)
+maxFeeForCtAddr: string; // Maximum contract address withdrawal fee (deprecated)
+burningFeeRate: string; // Burning fee rate (e.g., "0.05" for 5%)
+mainNet: boolean; // Is main network
+needTag: boolean; // Requires tag/memo for withdrawal
+minDepArrivalConfirm: string; // Min confirmations for deposit credit
+minWdUnlockConfirm: string; // Min confirmations for withdrawal unlock
+depQuotaFixed: string; // Fixed deposit limit in USD
+usedDepQuotaFixed: string; // Used fixed deposit quota in USD
+depQuoteDailyLayer2: string; // Layer2 daily deposit limit
+⋮----
+export interface FundingBalance {
+  availBal: string;
+  bal: string;
+  ccy: string;
+  frozenBal: string;
+}
+⋮----
+export interface AccountAssetValuation {
+  details: {
+    classic: string;
+    earn: string;
+    funding: string;
+    trading: string;
+  };
+  totalBal: string;
+  ts: string;
+}
+⋮----
+export interface FundTransferResult {
+  transId: string;
+  ccy: string;
+  clientId: string;
+  from: string;
+  amt: string;
+  to: string;
+}
+export interface FundTransferState {
+  amt: string;
+  ccy: string;
+  clientId: string;
+  from: string;
+  instId: never; // deprecated
+  state: string;
+  subAcct: string;
+  to: string;
+  toInstId: never; // deprecated
+  transId: string;
+  type: string;
+}
+⋮----
+instId: never; // deprecated
+⋮----
+toInstId: never; // deprecated
+⋮----
+export interface AssetBillDetails {
+  billId: string;
+  ccy: string;
+  clientId: string;
+  balChg: string;
+  bal: string;
+  type: `${ASSET_BILL_TYPE}`;
+  notes: string;
+  ts: string;
+}
+⋮----
+export interface WithdrawResponse {
+  ccy: string;
+  chain: string;
+  amt: string;
+  wdId: string;
+  clientId: string;
+}
+⋮----
+export interface NonTradableAsset {
+  ccy: string;
+  name: string;
+  logoLink: string;
+  bal: string;
+  canWd: boolean;
+  chain: string;
+  minWd: string;
+  wdAll: boolean;
+  fee: string;
+  ctAddr: string;
+  wdTickSz: string;
+  needTag: boolean;
+  burningFeeRate: string;
+  feeCcy: string;
+}
+⋮----
+export interface DepositHistory {
+  ccy: string; // Currency, e.g. BTC
+  chain: string; // Chain name
+  amt: string; // Deposit amount
+  from: string; // Deposit account. If the deposit comes from internal transfer, displays account info (phone/email, masked). Returns "" otherwise.
+  areaCodeFrom: string; // If from is a phone number, this parameter returns area code of the phone number
+  to: string; // Deposit address. If the deposit comes from on-chain, displays the on-chain address. Returns "" otherwise.
+  txId: string; // Hash record of the deposit
+  ts: string; // Timestamp that the deposit record is created, Unix timestamp format in milliseconds, e.g. 1655251200000
+  state: string; // Status of deposit: 0=waiting for confirmation, 1=deposit credited, 2=deposit successful, 8=pending due to temp suspension, 11=match blacklist, 12=account/deposit frozen, 13=sub-account deposit interception, 14=KYC limit
+  depId: string; // Deposit ID
+  fromWdId: string; // Internal transfer initiator's withdrawal ID. If deposit comes from internal transfer, displays the withdrawal ID, returns "" otherwise
+  actualDepBlkConfirm: string; // The actual amount of blockchain confirmed in a single deposit
+}
+⋮----
+ccy: string; // Currency, e.g. BTC
+chain: string; // Chain name
+amt: string; // Deposit amount
+from: string; // Deposit account. If the deposit comes from internal transfer, displays account info (phone/email, masked). Returns "" otherwise.
+areaCodeFrom: string; // If from is a phone number, this parameter returns area code of the phone number
+to: string; // Deposit address. If the deposit comes from on-chain, displays the on-chain address. Returns "" otherwise.
+txId: string; // Hash record of the deposit
+ts: string; // Timestamp that the deposit record is created, Unix timestamp format in milliseconds, e.g. 1655251200000
+state: string; // Status of deposit: 0=waiting for confirmation, 1=deposit credited, 2=deposit successful, 8=pending due to temp suspension, 11=match blacklist, 12=account/deposit frozen, 13=sub-account deposit interception, 14=KYC limit
+depId: string; // Deposit ID
+fromWdId: string; // Internal transfer initiator's withdrawal ID. If deposit comes from internal transfer, displays the withdrawal ID, returns "" otherwise
+actualDepBlkConfirm: string; // The actual amount of blockchain confirmed in a single deposit
+⋮----
+export interface LockedTravelRuleDeposit {
+  depId: string;
+  txId: string;
+  addr: string;
+  ccy: string; // Empty string if currency lookup fails
+  chain: string; // Empty string if chain lookup fails
+  amt: string;
+  ts: string; // Data generation time, Unix timestamp in milliseconds
+}
+⋮----
+ccy: string; // Empty string if currency lookup fails
+chain: string; // Empty string if chain lookup fails
+⋮----
+ts: string; // Data generation time, Unix timestamp in milliseconds
+⋮----
+export interface UnlockTravelRuleDepositResponse {
+  result: boolean; // true: deposit released or already unlocked; an empty data array indicates failure
+}
+⋮----
+result: boolean; // true: deposit released or already unlocked; an empty data array indicates failure
 
 ================
 File: src/types/rest/response/private-okusd.ts
@@ -6955,6 +6854,164 @@ export interface GetAffiliateSubAffiliateListRequest {
 }
 
 ================
+File: src/types/rest/request/funding.ts
+================
+export interface FundsTransferRequest {
+  ccy: string;
+  amt: string;
+  from: '6' | '18';
+  to: '6' | '18';
+  subAcct?: string;
+  type?: '0' | '1' | '2' | '3' | '4';
+  loanTrans?: boolean;
+  clientId?: string;
+  omitPosRisk?: string;
+}
+⋮----
+export interface WithdrawRequest {
+  ccy: string;
+  amt: string;
+  dest: '3' | '4';
+  toAddr: string;
+  /**
+   * Address type:
+   * - 1: wallet address, email, phone, or login account name
+   * - 2: UID (only for whitelisted users; applicable only when dest=3)
+   */
+  toAddrType?: '1' | '2';
+  chain?: string;
+  areaCode?: string;
+  clientId?: string;
+  // Recipient information for specific entity users doing on-chain/lightning withdrawal
+  rcvrInfo?: {
+    // Required: 'exchange' for exchange wallet, 'private' for private wallet
+    walletType: 'exchange' | 'private';
+    // Exchange ID (required if walletType = 'exchange'). Use '0' if exchange not in list
+    exchId?: string;
+    // Receiver's first name (required if walletType = 'exchange')
+    rcvrFirstName?: string;
+    // Receiver's last name (required if walletType = 'exchange')
+    rcvrLastName?: string;
+    // Recipient's country - English name or ISO 3166-1 two-letter code
+    rcvrCountry?: string;
+    // State/Province of the recipient
+    rcvrCountrySubDivision?: string;
+    // Town/city where the recipient is located
+    rcvrTownName?: string;
+    // Recipient's street address
+    rcvrStreetName?: string;
+  };
+}
+⋮----
+/**
+   * Address type:
+   * - 1: wallet address, email, phone, or login account name
+   * - 2: UID (only for whitelisted users; applicable only when dest=3)
+   */
+⋮----
+// Recipient information for specific entity users doing on-chain/lightning withdrawal
+⋮----
+// Required: 'exchange' for exchange wallet, 'private' for private wallet
+⋮----
+// Exchange ID (required if walletType = 'exchange'). Use '0' if exchange not in list
+⋮----
+// Receiver's first name (required if walletType = 'exchange')
+⋮----
+// Receiver's last name (required if walletType = 'exchange')
+⋮----
+// Recipient's country - English name or ISO 3166-1 two-letter code
+⋮----
+// State/Province of the recipient
+⋮----
+// Town/city where the recipient is located
+⋮----
+// Recipient's street address
+⋮----
+/**
+ * @see GET /api/v5/public/funding-rate
+ * `instId` may be a specific instrument, or the literal `ANY` for all perpetuals and X-Perp (FUTURES) contracts.
+ */
+export interface GetFundingRateRequest {
+  instId: string;
+}
+⋮----
+export interface FundingRateRequest {
+  /** Perpetual or X-Perp FUTURES instrument id (not `ANY` on this route). */
+  instId: string;
+  before?: string;
+  after?: string;
+  limit?: string;
+}
+⋮----
+/** Perpetual or X-Perp FUTURES instrument id (not `ANY` on this route). */
+⋮----
+export interface GetDepositWithdrawStatusRequest {
+  wdId?: string;
+  txId?: string;
+  ccy?: string;
+  to?: string;
+  chain?: string;
+}
+⋮----
+export interface GetDepositHistoryRequest {
+  ccy?: string; // Currency, e.g. BTC
+  depId?: string; // Deposit ID
+  fromWdId?: string; // Internal transfer initiator's withdrawal ID
+  txId?: string; // Hash record of the deposit
+  type?: '3' | '4'; // Deposit Type: 3=internal transfer, 4=deposit from chain
+  state?: '0' | '1' | '2' | '8' | '11' | '12' | '13' | '14' | '17'; // Status of deposit
+  after?: string; // Pagination of data to return records earlier than the requested ts (Unix timestamp in milliseconds)
+  before?: string; // Pagination of data to return records newer than the requested ts (Unix timestamp in milliseconds)
+  limit?: string; // Number of results per request. Max is 100; default is 100
+}
+⋮----
+ccy?: string; // Currency, e.g. BTC
+depId?: string; // Deposit ID
+fromWdId?: string; // Internal transfer initiator's withdrawal ID
+txId?: string; // Hash record of the deposit
+type?: '3' | '4'; // Deposit Type: 3=internal transfer, 4=deposit from chain
+state?: '0' | '1' | '2' | '8' | '11' | '12' | '13' | '14' | '17'; // Status of deposit
+after?: string; // Pagination of data to return records earlier than the requested ts (Unix timestamp in milliseconds)
+before?: string; // Pagination of data to return records newer than the requested ts (Unix timestamp in milliseconds)
+limit?: string; // Number of results per request. Max is 100; default is 100
+⋮----
+export interface UnlockTravelRuleDepositRequest {
+  depId: string;
+  // Required originator information depends on the user's entity.
+  questionnaire: {
+    personType: '1' | '2'; // 1: self, 2: third party
+    walletType: 'exchange' | 'private';
+    exchId?: string; // Required for exchange wallets; use '0' if not listed
+    exchName?: string; // Required when exchId = '0'
+    origFirstName?: string; // Required for a natural person without origCompanyName
+    origLastName?: string; // Required for a natural person without origCompanyName
+    origCompanyName?: string; // Required for a legal entity without origFirstName and origLastName
+    origCountry?: string; // Country of residence or registration, ISO 3166-1 alpha-2
+    origGeoAddress?: string; // Full address on one line
+    origDob?: string; // Date of birth or incorporation / registration, YYYY-MM-DD
+    origPob?: string; // Place of birth or country of registration, ISO 3166-1 alpha-2
+    origNationality?: string; // Required for a natural person, ISO 3166-1 alpha-2
+    brazilClassificationCode?: string; // Transfer purpose: Annex I below USD 50,000, Annex II otherwise; currently optional for OKX Brazil
+  };
+}
+⋮----
+// Required originator information depends on the user's entity.
+⋮----
+personType: '1' | '2'; // 1: self, 2: third party
+⋮----
+exchId?: string; // Required for exchange wallets; use '0' if not listed
+exchName?: string; // Required when exchId = '0'
+origFirstName?: string; // Required for a natural person without origCompanyName
+origLastName?: string; // Required for a natural person without origCompanyName
+origCompanyName?: string; // Required for a legal entity without origFirstName and origLastName
+origCountry?: string; // Country of residence or registration, ISO 3166-1 alpha-2
+origGeoAddress?: string; // Full address on one line
+origDob?: string; // Date of birth or incorporation / registration, YYYY-MM-DD
+origPob?: string; // Place of birth or country of registration, ISO 3166-1 alpha-2
+origNationality?: string; // Required for a natural person, ISO 3166-1 alpha-2
+brazilClassificationCode?: string; // Transfer purpose: Annex I below USD 50,000, Annex II otherwise; currently optional for OKX Brazil
+
+================
 File: src/types/rest/request/glp.ts
 ================
 export type GlpProgram = 'SPOT' | 'PERP' | 'FUT_NTO';
@@ -8336,6 +8393,130 @@ export interface CancelAllAfterResponse {
 }
 
 ================
+File: src/types/rest/shared.ts
+================
+export type numberInString<T = string> = T;
+⋮----
+export interface APIResponse<T> {
+  code: '0';
+  msg: '';
+  data: T;
+}
+⋮----
+export type AlgoOrderType =
+  | 'conditional'
+  | 'oco'
+  | 'trigger'
+  | 'move_order_stop'
+  | 'iceberg'
+  | 'twap'
+  | 'chase';
+⋮----
+export type AlgoOrderState =
+  | 'live'
+  | 'pause'
+  | 'partially_effective'
+  | 'effective'
+  | 'canceled'
+  | 'order_failed'
+  | 'partially_failed';
+⋮----
+export type AlgoPositionSide = 'long' | 'short';
+⋮----
+export type ContractGridDirection = 'long' | 'short' | 'neutral';
+⋮----
+export type GridAlgoSubOrderType = 'live' | 'filled';
+⋮----
+export type InstrumentType =
+  | 'SPOT'
+  | 'MARGIN'
+  | 'SWAP'
+  | 'FUTURES'
+  | 'OPTION'
+  | 'EVENTS';
+⋮----
+export type MarginMode = 'cross' | 'isolated';
+⋮----
+export type OrderSide = 'buy' | 'sell';
+⋮----
+export type OrderType =
+  | 'market'
+  | 'limit'
+  | 'post_only'
+  | 'fok'
+  | 'ioc'
+  | 'optimal_limit_ioc'
+  | 'mmp'
+  | 'mmp_and_post_only'
+  /** @deprecated Use `rpi`. ELP alias accepted until 2026-10-31. */
+  | 'elp'
+  /** RPI maker (replaces `elp`; ELP alias accepted until 2026-10-31) */
+  | 'rpi';
+⋮----
+/** @deprecated Use `rpi`. ELP alias accepted until 2026-10-31. */
+⋮----
+/** RPI maker (replaces `elp`; ELP alias accepted until 2026-10-31) */
+⋮----
+export type OrderState =
+  | 'canceled'
+  | 'live'
+  | 'partially_filled'
+  | 'filled'
+  | 'mmp_canceled';
+⋮----
+export type PositionSide = 'net' | 'long' | 'short';
+⋮----
+export type PriceTriggerType = 'last' | 'index' | 'mark';
+⋮----
+export interface RFQLeg {
+  instId: string;
+  sz: string;
+  side: OrderSide;
+  tgtCcy?: string;
+}
+⋮----
+export interface RFQQuoteLegExtended {
+  px: string;
+  sz: string;
+  instId: string;
+  side: string;
+  fee: string;
+  feeCcy: string;
+  tradeId: string;
+}
+⋮----
+export type TradeMode = 'cross' | 'isolated' | 'cash' | 'spot_isolated';
+⋮----
+export interface TimestampObject {
+  ts: numberInString;
+}
+⋮----
+export interface Pagination {
+  after?: string;
+  before?: string;
+  limit?: string;
+}
+⋮----
+export type PosMode = 'long_short_mode' | 'net_mode';
+⋮----
+export type AccountLevel = '1' | '2' | '3' | '4';
+⋮----
+export type WithdrawState =
+  | '-3'
+  | '-2'
+  | '-1'
+  | '0'
+  | '1'
+  | '2'
+  | '4'
+  | '5'
+  | '6'
+  | '8'
+  | '9'
+  | '10'
+  | '12';
+
+================
 File: src/types/rest/request/public.ts
 ================
 export interface EconomicCalendarRequest {
@@ -8494,130 +8675,6 @@ export interface GetInsuranceFundRequest {
   after?: string;
   limit?: string;
 }
-
-================
-File: src/types/rest/shared.ts
-================
-export type numberInString<T = string> = T;
-⋮----
-export interface APIResponse<T> {
-  code: '0';
-  msg: '';
-  data: T;
-}
-⋮----
-export type AlgoOrderType =
-  | 'conditional'
-  | 'oco'
-  | 'trigger'
-  | 'move_order_stop'
-  | 'iceberg'
-  | 'twap'
-  | 'chase';
-⋮----
-export type AlgoOrderState =
-  | 'live'
-  | 'pause'
-  | 'partially_effective'
-  | 'effective'
-  | 'canceled'
-  | 'order_failed'
-  | 'partially_failed';
-⋮----
-export type AlgoPositionSide = 'long' | 'short';
-⋮----
-export type ContractGridDirection = 'long' | 'short' | 'neutral';
-⋮----
-export type GridAlgoSubOrderType = 'live' | 'filled';
-⋮----
-export type InstrumentType =
-  | 'SPOT'
-  | 'MARGIN'
-  | 'SWAP'
-  | 'FUTURES'
-  | 'OPTION'
-  | 'EVENTS';
-⋮----
-export type MarginMode = 'cross' | 'isolated';
-⋮----
-export type OrderSide = 'buy' | 'sell';
-⋮----
-export type OrderType =
-  | 'market'
-  | 'limit'
-  | 'post_only'
-  | 'fok'
-  | 'ioc'
-  | 'optimal_limit_ioc'
-  | 'mmp'
-  | 'mmp_and_post_only'
-  /** @deprecated Use `rpi`. ELP alias accepted until 2026-10-31. */
-  | 'elp'
-  /** RPI maker (replaces `elp`; ELP alias accepted until 2026-10-31) */
-  | 'rpi';
-⋮----
-/** @deprecated Use `rpi`. ELP alias accepted until 2026-10-31. */
-⋮----
-/** RPI maker (replaces `elp`; ELP alias accepted until 2026-10-31) */
-⋮----
-export type OrderState =
-  | 'canceled'
-  | 'live'
-  | 'partially_filled'
-  | 'filled'
-  | 'mmp_canceled';
-⋮----
-export type PositionSide = 'net' | 'long' | 'short';
-⋮----
-export type PriceTriggerType = 'last' | 'index' | 'mark';
-⋮----
-export interface RFQLeg {
-  instId: string;
-  sz: string;
-  side: OrderSide;
-  tgtCcy?: string;
-}
-⋮----
-export interface RFQQuoteLegExtended {
-  px: string;
-  sz: string;
-  instId: string;
-  side: string;
-  fee: string;
-  feeCcy: string;
-  tradeId: string;
-}
-⋮----
-export type TradeMode = 'cross' | 'isolated' | 'cash' | 'spot_isolated';
-⋮----
-export interface TimestampObject {
-  ts: numberInString;
-}
-⋮----
-export interface Pagination {
-  after?: string;
-  before?: string;
-  limit?: string;
-}
-⋮----
-export type PosMode = 'long_short_mode' | 'net_mode';
-⋮----
-export type AccountLevel = '1' | '2' | '3' | '4';
-⋮----
-export type WithdrawState =
-  | '-3'
-  | '-2'
-  | '-1'
-  | '0'
-  | '1'
-  | '2'
-  | '4'
-  | '5'
-  | '6'
-  | '8'
-  | '9'
-  | '10'
-  | '12';
 
 ================
 File: src/types/websockets/ws-api-request.ts
@@ -11025,8 +11082,10 @@ Complete, updated & performant Node.js SDK for the OKX(OKEX) APIs and WebSockets
     - [Public Events](#public-events)
     - [Private Events](#private-events)
 - [Browser/Frontend Usage](#browserfrontend-usage)
-  - [Import](#import)
-  - [Webpack](#webpack)
+  - [Vite and React](#vite-and-react)
+  - [Next.js and server-side requests](#nextjs-and-server-side-requests)
+  - [React Native and Expo](#react-native-and-expo)
+  - [Standalone Webpack bundle](#standalone-webpack-bundle)
 - [Use with LLMs & AI](#use-with-llms--ai)
 - [Contributions & Pull Requests](#contributions--pull-requests)
 - [Used By](#used-by)
@@ -11474,43 +11533,37 @@ See [examples/ws-private.ts](./examples/ws-private.ts) for a full example:
 
 ## Browser/Frontend Usage
 
-### Import
+The npm package includes ES module and CommonJS builds. You do not need to build the SDK's standalone Webpack bundle to use it in a frontend project. Choose the setup for your application below.
 
-This is the "modern" way, allowing the package to be directly imported into frontend projects with full typescript support.
+### Vite and React
 
-1. Install these dependencies
-   ```sh
-   npm install crypto-browserify stream-browserify
-   ```
-2. Add this to your `tsconfig.json`
-   ```json
-   {
-     "compilerOptions": {
-       "paths": {
-         "crypto": [
-           "./node_modules/crypto-browserify"
-         ],
-         "stream": [
-           "./node_modules/stream-browserify"
-         ]
-   }
-   ```
-3. Declare this in the global context of your application (ex: in polyfills for angular)
-   ```js
-   (window as any).global = window;
-   ```
+Use the [Vite guide](https://sieblyio.github.io/docs/okx/environments/vite.html) or [React guide](https://sieblyio.github.io/docs/okx/environments/react.html) for a complete public market-data project that imports `okx-api` from npm.
 
-### Webpack
+Keep the supplied bundler configuration with the example: it provides EventEmitter and replaces the SDK's Node-only HTTPS agent with a helper that rejects unsupported use. Browsers manage connections, so omit `keepAlive`. These browser examples use public OKX market data. Keep API credentials in a secure server-side environment and make authenticated calls there.
 
-This is the "old" way of using this package on webpages. This will build a minified js bundle that can be pulled in using a script tag on a website.
+Browser REST requests also depend on OKX's CORS policy. If a request is blocked, call the SDK through your application's server route instead. A development proxy does not solve CORS for a deployed application.
 
-Build a bundle using webpack:
+### Next.js and server-side requests
 
-- `npm install`
-- `npm build`
-- `npm pack`
+The [Next.js guide](https://sieblyio.github.io/docs/okx/environments/next.html) runs the SDK in a Node.js Route Handler and returns the result to the frontend. Use this pattern when requests need credentials or cannot be made directly from the browser.
 
-The bundle can be found in `dist/`. Altough usage should be largely consistent, smaller differences will exist. Documentation is still TODO.
+### React Native and Expo
+
+Follow the [Expo guide](https://sieblyio.github.io/docs/okx/environments/expo.html) for its Metro configuration and required HTTP, HTTPS and URL polyfills. Browser bundler configuration is not interchangeable with Metro configuration. The example uses public OKX market data; keep authenticated operations on your server.
+
+### Standalone Webpack bundle
+
+If you need a standalone UMD bundle rather than npm imports in your application, the SDK repository includes a [Webpack configuration](./webpack/webpack.config.cjs). From a checkout of this repository:
+
+```sh
+npm install
+npm run build
+npm run pack
+```
+
+The configuration writes `dist/okxapi.js` with the `okxapi` global name. This is a separate packaging option, not a required step for the framework guides above. Browser-specific configuration and API access restrictions still apply.
+
+The older browser setup used `crypto-browserify` and `stream-browserify` to polyfill Node's `crypto` and `stream` modules. The current SDK uses Web Crypto for signing, and the supplied Webpack configuration disables Node's `http` and `https` modules; it does not configure those legacy polyfills.
 
 ## Use with LLMs & AI
 
@@ -11655,6 +11708,7 @@ import {
   GetDepositHistoryRequest,
   GetDepositWithdrawStatusRequest,
   GetFundingRateRequest,
+  UnlockTravelRuleDepositRequest,
   WithdrawRequest,
 } from './types/rest/request/funding.js';
 import {
@@ -11877,7 +11931,9 @@ import {
   FundingCurrency,
   FundTransferResult,
   FundTransferState,
+  LockedTravelRuleDeposit,
   NonTradableAsset,
+  UnlockTravelRuleDepositResponse,
   WithdrawResponse,
 } from './types/rest/response/private-funding.js';
 import {
@@ -13452,6 +13508,20 @@ getDepositHistory(
     params?: GetDepositHistoryRequest,
   ): Promise<DepositHistory[]>
 ⋮----
+/**
+   * Get deposits locked under the Travel Rule (up to 50). Requires API key authentication.
+   * @see https://www.okx.com/docs-v5/en/#funding-account-rest-api-get-locked-travel-rule-deposits
+   */
+getLockedTravelRuleDeposits(): Promise<LockedTravelRuleDeposit[]>
+⋮----
+/**
+   * Submit originator information to unlock a Travel Rule deposit. Requires Withdraw permission.
+   * @see https://www.okx.com/docs-v5/en/#funding-account-rest-api-unlock-travel-rule-deposit
+   */
+unlockTravelRuleDeposit(
+    params: UnlockTravelRuleDepositRequest,
+  ): Promise<UnlockTravelRuleDepositResponse[]>
+⋮----
 submitWithdraw(params: WithdrawRequest): Promise<WithdrawResponse[]>
 ⋮----
 submitWithdrawLightning(params: {
@@ -13931,7 +14001,7 @@ File: package.json
 ================
 {
   "name": "okx-api",
-  "version": "3.2.10",
+  "version": "3.2.11",
   "description": "Complete Node.js SDK for OKX's REST APIs and WebSockets, with TypeScript & end-to-end tests",
   "scripts": {
     "test": "jest",

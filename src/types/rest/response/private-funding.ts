@@ -123,3 +123,17 @@ export interface DepositHistory {
   fromWdId: string; // Internal transfer initiator's withdrawal ID. If deposit comes from internal transfer, displays the withdrawal ID, returns "" otherwise
   actualDepBlkConfirm: string; // The actual amount of blockchain confirmed in a single deposit
 }
+
+export interface LockedTravelRuleDeposit {
+  depId: string;
+  txId: string;
+  addr: string;
+  ccy: string; // Empty string if currency lookup fails
+  chain: string; // Empty string if chain lookup fails
+  amt: string;
+  ts: string; // Data generation time, Unix timestamp in milliseconds
+}
+
+export interface UnlockTravelRuleDepositResponse {
+  result: boolean; // true: deposit released or already unlocked; an empty data array indicates failure
+}

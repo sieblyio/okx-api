@@ -80,3 +80,23 @@ export interface GetDepositHistoryRequest {
   before?: string; // Pagination of data to return records newer than the requested ts (Unix timestamp in milliseconds)
   limit?: string; // Number of results per request. Max is 100; default is 100
 }
+
+export interface UnlockTravelRuleDepositRequest {
+  depId: string;
+  // Required originator information depends on the user's entity.
+  questionnaire: {
+    personType: '1' | '2'; // 1: self, 2: third party
+    walletType: 'exchange' | 'private';
+    exchId?: string; // Required for exchange wallets; use '0' if not listed
+    exchName?: string; // Required when exchId = '0'
+    origFirstName?: string; // Required for a natural person without origCompanyName
+    origLastName?: string; // Required for a natural person without origCompanyName
+    origCompanyName?: string; // Required for a legal entity without origFirstName and origLastName
+    origCountry?: string; // Country of residence or registration, ISO 3166-1 alpha-2
+    origGeoAddress?: string; // Full address on one line
+    origDob?: string; // Date of birth or incorporation / registration, YYYY-MM-DD
+    origPob?: string; // Place of birth or country of registration, ISO 3166-1 alpha-2
+    origNationality?: string; // Required for a natural person, ISO 3166-1 alpha-2
+    brazilClassificationCode?: string; // Transfer purpose: Annex I below USD 50,000, Annex II otherwise; currently optional for OKX Brazil
+  };
+}
